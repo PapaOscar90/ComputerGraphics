@@ -56,6 +56,8 @@ private slots:
 
 private:
     void createShaderProgram();
+    void loadCube();
+    void loadPyramid();
 
 };
 

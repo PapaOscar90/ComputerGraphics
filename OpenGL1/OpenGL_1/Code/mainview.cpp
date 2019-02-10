@@ -1,5 +1,6 @@
 #include "mainview.h"
 #include "math.h"
+#include "vertex.h"
 
 #include <QDateTime>
 
@@ -69,6 +70,10 @@ void MainView::initializeGL() {
     glClearColor(0.2f, 0.5f, 0.7f, 0.0f);
 
     createShaderProgram();
+
+
+    loadCube();
+    loadPyramid();
 }
 
 void MainView::createShaderProgram()
@@ -80,6 +85,26 @@ void MainView::createShaderProgram()
                                            ":/shaders/fragshader.glsl");
     shaderProgram.link();
 }
+
+void MainView::loadCube(){
+    Vertex cube[8] = {
+        {{1,1,-1},{1,0,0}},
+        {{1,-1,-1},{1,0,1}},
+        {{-1,1,-1},{0,1,1}},
+        {{-1,-1,-1},{0,0,1}},
+        {{1,1,1},{0,0,1}},
+        {{1,-1,1},{1,1,1}},
+        {{-1,1,1},{0,1,0}},
+        {{-1,-1,1},{0,0,0}}
+    };
+
+
+}
+
+void MainView::loadPyramid(){
+
+}
+
 
 // --- OpenGL drawing
 

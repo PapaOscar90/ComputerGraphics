@@ -87,6 +87,7 @@ void MainView::createShaderProgram()
 }
 
 void MainView::loadCube(){
+    // This defines the cube to be rendered
     Vertex cube[8] = {
         {{1,1,-1},{1,0,0}},
         {{1,-1,-1},{1,0,1}},
@@ -98,7 +99,24 @@ void MainView::loadCube(){
         {{-1,-1,1},{0,0,0}}
     };
 
+    // Generate the buffer and vertex array, and return the IDs to upload the cube to
+    glGenBuffers(1,&vertexBufferID);
+    glGenVertexArrays(1,&vertexArrayID);
 
+    // Now send the vertices(cube) to the GPU vind bind
+    glBindVertexArray(vertexArrayID);
+    glBindBuffer(GL_ARRAY_BUFFER,vertexBufferID);
+    glBufferData(GL_ARRAY_BUFFER,8*(sizeof(Vertex)),cube,GL_STATIC_DRAW);
+
+    // Now inform the GPU what attributes to use for received arrays
+    // via the contents of the shader files
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+    // Finally inform the layout of the data for the attributes
+    // With OFFSET equal to the size of the coordinate array
+    glVertexAttribPointer(0,8,GL_FLOAT,GL_FALSE,sizeof(Vertex),nullptr);
+    glVertexAttribPointer(1,8,GL_FLOAT,GL_FALSE,sizeof(Vertex), reinterpret_cast<void*>(sizeof(Vertex::coordinates)));
 }
 
 void MainView::loadPyramid(){

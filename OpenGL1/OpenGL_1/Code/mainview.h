@@ -21,6 +21,9 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
     QOpenGLShaderProgram shaderProgram;
 
+    GLuint vertexBufferID;
+    GLuint vertexArrayID;
+
 public:
     enum ShadingMode : GLuint
     {

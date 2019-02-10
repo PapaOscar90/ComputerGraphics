@@ -18,6 +18,7 @@ MainWindow::~MainWindow()
 // --- Functions that listen for widget events
 // forewards to the mainview
 
+// Set X,Y,Z to value 0 when ResetRotation is clicked
 void MainWindow::on_ResetRotationButton_clicked(bool checked)
 {
     Q_UNUSED(checked);
@@ -27,6 +28,8 @@ void MainWindow::on_ResetRotationButton_clicked(bool checked)
     ui->mainView->setRotation(0, 0, 0);
 }
 
+// When a Dial is changed, update the one changed with 'value'
+// and the others keep the value stored within the ui element
 void MainWindow::on_RotationDialX_sliderMoved(int value)
 {
     ui->mainView->setRotation(value,

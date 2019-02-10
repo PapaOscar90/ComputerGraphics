@@ -20,7 +20,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     mainview.h \
-    model.h
+    model.h \
+    vertex.h
 
 FORMS    += mainwindow.ui
 

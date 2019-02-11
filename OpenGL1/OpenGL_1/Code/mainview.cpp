@@ -29,6 +29,14 @@ MainView::~MainView() {
     debugLogger->stopLogging();
 
     qDebug() << "MainView destructor";
+
+    // Free VBOs
+    glDeleteBuffers(1,&VBO_Cube);
+    glDeleteBuffers(1,&VBO_Pyramid);
+
+    // Free VAOs
+    glDeleteVertexArrays(1,&VAO_Cube);
+    glDeleteVertexArrays(1,&VAO_Cube);
 }
 
 // --- OpenGL initialization
@@ -73,6 +81,7 @@ void MainView::initializeGL() {
 
 
     loadCube();
+    loadPyramid();
 }
 
 void MainView::createShaderProgram()
@@ -99,7 +108,7 @@ void MainView::paintGL() {
 
     shaderProgram.bind();
 
-    glBindVertexArray(vertexArrayID);
+    glBindVertexArray(VAO_Cube);
     glDrawArrays(GL_TRIANGLES,0,36);
 
     shaderProgram.release();
@@ -155,6 +164,8 @@ void MainView::onMessageLogged( QOpenGLDebugMessage Message ) {
 
 // Creates and loads a unit cube into the GPU buffer
 void MainView::loadCube(){
+    cubeVertexCount = 36;
+
     // This defines the cube to be rendered
     Vertex cube[36] = {
         {{-1,-1,-1},{1,0,1}}, // Front
@@ -196,13 +207,58 @@ void MainView::loadCube(){
     };
 
     // Generate the buffer and vertex array, and return the IDs to upload the cube to
-    glGenBuffers(1,&vertexBufferID);
-    glGenVertexArrays(1,&vertexArrayID);
+    glGenBuffers(1,&VBO_Cube);
+    glGenVertexArrays(1,&VAO_Cube);
 
     // Now send the vertices(cube) to the GPU vind bind
-    glBindVertexArray(vertexArrayID);
-    glBindBuffer(GL_ARRAY_BUFFER,vertexBufferID);
-    glBufferData(GL_ARRAY_BUFFER,36*(sizeof(Vertex)),cube,GL_STATIC_DRAW);
+    glBindVertexArray(VAO_Cube);
+    glBindBuffer(GL_ARRAY_BUFFER,VBO_Cube);
+    glBufferData(GL_ARRAY_BUFFER,cubeVertexCount*(sizeof(Vertex)),cube,GL_STATIC_DRAW);
+
+    // Now inform the GPU what attributes to use for received arrays
+    // via the contents of the shader files
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+    // Finally inform the layout of the data for the attributes
+    // With OFFSET equal to the size of the coordinate array
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(Vertex),nullptr);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(Vertex), reinterpret_cast<void*>(sizeof(Vertex::coordinates)));
+}
+
+void MainView::loadPyramid(){
+    pyramidVertexCount = 18;
+
+    // This defines the cube to be rendered
+    Vertex pyramid[18] = {
+        {{-1,-1,-1},{0,1,1}}, // Bottom
+        {{1,-1,-1},{1,1,0}},
+        {{1,-1,1},{0,1,0}},
+        {{1,-1,1},{1,1,1}},
+        {{-1,-1,1},{0,0,1}},
+        {{-1,-1,-1},{1,1,0}},
+        {{-1,-1,-1},{1,0,0}}, // Front
+        {{1,-1,-1},{1,0,1}},
+        {{0,1,0},{0,1,0}},
+        {{-1,-1,1},{0,0,1}}, // Back
+        {{1,-1,1},{1,1,1}},
+        {{0,1,0},{0,0,0}},
+        {{-1,-1,1},{1,1,0}}, // Left
+        {{-1,-1,-1},{0,1,1}},
+        {{0,1,0},{1,0,1}},
+        {{1,-1,-1},{0,0,1}}, // Right
+        {{1,-1,1},{1,0,0}},
+        {{0,1,0},{1,0,1}},
+    };
+
+    // Generate the buffer and vertex array, and return the IDs to upload the cube to
+    glGenBuffers(1,&VBO_Pyramid);
+    glGenVertexArrays(1,&VAO_Pyramid);
+
+    // Now send the vertices(cube) to the GPU vind bind
+    glBindVertexArray(VAO_Pyramid);
+    glBindBuffer(GL_ARRAY_BUFFER,VBO_Pyramid);
+    glBufferData(GL_ARRAY_BUFFER,pyramidVertexCount*(sizeof(Vertex)),pyramid,GL_STATIC_DRAW);
 
     // Now inform the GPU what attributes to use for received arrays
     // via the contents of the shader files

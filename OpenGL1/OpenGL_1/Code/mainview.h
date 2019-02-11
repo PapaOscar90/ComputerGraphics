@@ -31,6 +31,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   size_t cubeVertexCount;
   size_t pyramidVertexCount;
 
+  float scaleFactor = 1.0f;
   QMatrix4x4 cubeTransform;
   QMatrix4x4 pyramidTransform;
   QMatrix4x4 projectionTransform;

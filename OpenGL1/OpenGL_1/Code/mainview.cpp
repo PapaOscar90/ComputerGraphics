@@ -160,8 +160,9 @@ void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
 }
 
 void MainView::setScale(int scale) {
-  qDebug() << "Scale changed to " << scale;
-  Q_UNIMPLEMENTED();
+  scaleFactor = static_cast<float>(scale) / 100.;
+  setInitialTranslation();
+  update();
 }
 
 void MainView::setShadingMode(ShadingMode shading) {
@@ -321,6 +322,10 @@ void MainView::setInitialTranslation() {
   // Translate to beginig position (2,0,-6) and (-2,0,-6)
   cubeTransform.translate(2, 0, -6);
   pyramidTransform.translate(-2, 0, -6);
+
+  // Apply the scale factor 1.0 or provided by the GUI
+  cubeTransform.scale(scaleFactor);
+  pyramidTransform.scale(scaleFactor);
 }
 
 void MainView::setProjection() {

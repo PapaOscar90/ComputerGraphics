@@ -100,7 +100,7 @@ void MainView::paintGL() {
     shaderProgram.bind();
 
     glBindVertexArray(vertexArrayID);
-    glDrawArrays(GL_TRIANGLES,0,8);
+    glDrawArrays(GL_TRIANGLES,0,36);
 
     shaderProgram.release();
 }
@@ -202,7 +202,7 @@ void MainView::loadCube(){
     // Now send the vertices(cube) to the GPU vind bind
     glBindVertexArray(vertexArrayID);
     glBindBuffer(GL_ARRAY_BUFFER,vertexBufferID);
-    glBufferData(GL_ARRAY_BUFFER,8*(sizeof(Vertex)),cube,GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,36*(sizeof(Vertex)),cube,GL_STATIC_DRAW);
 
     // Now inform the GPU what attributes to use for received arrays
     // via the contents of the shader files
@@ -211,6 +211,6 @@ void MainView::loadCube(){
 
     // Finally inform the layout of the data for the attributes
     // With OFFSET equal to the size of the coordinate array
-    glVertexAttribPointer(0,8,GL_FLOAT,GL_FALSE,sizeof(Vertex),nullptr);
-    glVertexAttribPointer(1,8,GL_FLOAT,GL_FALSE,sizeof(Vertex), reinterpret_cast<void*>(sizeof(Vertex::coordinates)));
+    glVertexAttribPointer(0,36,GL_FLOAT,GL_FALSE,sizeof(Vertex),nullptr);
+    glVertexAttribPointer(1,36,GL_FLOAT,GL_FALSE,sizeof(Vertex), reinterpret_cast<void*>(sizeof(Vertex::coordinates)));
 }

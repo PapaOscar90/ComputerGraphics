@@ -21,8 +21,8 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
     QOpenGLShaderProgram shaderProgram;
 
-    GLint modelUniform;
-    GLint projectionUniform;
+    GLint uniformTransform;
+    GLint uniformProjection;
 
     GLuint VBO_Cube;
     GLuint VAO_Cube;

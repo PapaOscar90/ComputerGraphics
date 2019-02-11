@@ -96,8 +96,8 @@ void MainView::createShaderProgram()
     shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
                                            ":/shaders/fragshader.glsl");
 
-    modelUniform = shaderProgram.uniformLocation("modelTransform");
-    projectionUniform = shaderProgram.uniformLocation("modelProjection");
+    uniformTransform = shaderProgram.uniformLocation("modelTransform");
+    uniformProjection = shaderProgram.uniformLocation("modelProjection");
 
     shaderProgram.link();
 }
@@ -117,15 +117,15 @@ void MainView::paintGL() {
     shaderProgram.bind();
 
     // Set the projection path for the data
-    glUniformMatrix4fv(projectionUniform,1,GL_FALSE,projectionTransform.data());
+    glUniformMatrix4fv(uniformProjection,1,GL_FALSE,projectionTransform.data());
 
     // Set the transform location for the cube
-    glUniformMatrix4fv(modelUniform,1,GL_FALSE,cubeTransform.data());
+    glUniformMatrix4fv(uniformTransform,1,GL_FALSE,cubeTransform.data());
     glBindVertexArray(VAO_Cube);
     glDrawArrays(GL_TRIANGLES,0,36);
 
     // Set the transform location for the pyramid
-    glUniformMatrix4fv(modelUniform,1,GL_FALSE,pyramidTransform.data());
+    glUniformMatrix4fv(uniformTransform,1,GL_FALSE,pyramidTransform.data());
     glBindVertexArray(VAO_Pyramid);
     glDrawArrays(GL_TRIANGLES,0,18);
 
@@ -297,15 +297,15 @@ void MainView::setInitialTranslation(){
     pyramidTransform.setToIdentity();
 
     // Translate to beginig position (2,0,-6) and (-2,0,-6)
-    //cubeTransform.translate(2,0,-6);
-    //pyramidTransform.translate(-2,0,-6);
+    //cubeTransform.translate(0,0,0);
+    //pyramidTransform.translate(0,0,0);
 }
 
 void MainView::setInitialProjection(){
     // This sets the POV and position of camera initial camera
-    aspectRatio = static_cast<float>(width()) / static_cast<float>(height());
+    //aspectRatio = static_cast<float>(width()) / static_cast<float>(height());
 
     // Set perspective
     projectionTransform.setToIdentity();
-    //projectionTransform.perspective(60.0, aspectRatio, -10, 10);
+    //projectionTransform.perspective(60.0, aspectRatio, 0.0, 40.0);
 }

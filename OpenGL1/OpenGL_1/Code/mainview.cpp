@@ -36,7 +36,7 @@ MainView::~MainView() {
 
     // Free VAOs
     glDeleteVertexArrays(1,&VAO_Cube);
-    glDeleteVertexArrays(1,&VAO_Cube);
+    glDeleteVertexArrays(1,&VAO_Pyramid);
 }
 
 // --- OpenGL initialization
@@ -110,6 +110,9 @@ void MainView::paintGL() {
 
     glBindVertexArray(VAO_Cube);
     glDrawArrays(GL_TRIANGLES,0,36);
+
+    glBindVertexArray(VAO_Pyramid);
+    glDrawArrays(GL_TRIANGLES,0,18);
 
     shaderProgram.release();
 }

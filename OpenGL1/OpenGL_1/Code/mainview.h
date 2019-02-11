@@ -21,8 +21,13 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
     QOpenGLShaderProgram shaderProgram;
 
-    GLuint vertexBufferID;
-    GLuint vertexArrayID;
+    GLuint VBO_Cube;
+    GLuint VAO_Cube;
+    GLuint VBO_Pyramid;
+    GLuint VAO_Pyramid;
+    size_t cubeVertexCount;
+    size_t pyramidVertexCount;
+
 
 public:
     enum ShadingMode : GLuint

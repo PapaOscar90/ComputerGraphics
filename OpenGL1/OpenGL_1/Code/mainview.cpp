@@ -123,13 +123,11 @@ void MainView::paintGL() {
   // Set the transform location for the cube
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, cubeTransform.data());
   glBindVertexArray(VAO_Cube);
-  qDebug() << cubeTransform;
   glDrawArrays(GL_TRIANGLES, 0, 36);
 
   // Set the transform location for the pyramid
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, pyramidTransform.data());
   glBindVertexArray(VAO_Pyramid);
-  qDebug() << pyramidTransform;
   glDrawArrays(GL_TRIANGLES, 0, 18);
 
   shaderProgram.release();

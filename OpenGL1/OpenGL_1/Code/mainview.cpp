@@ -79,9 +79,13 @@ void MainView::initializeGL() {
 
     createShaderProgram();
 
-
+    // Load the two shapes
     loadCube();
     loadPyramid();
+
+    // Set the initial position
+    setInitialTranslation();
+    setInitialProjection();
 }
 
 void MainView::createShaderProgram()
@@ -91,6 +95,10 @@ void MainView::createShaderProgram()
                                            ":/shaders/vertshader.glsl");
     shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
                                            ":/shaders/fragshader.glsl");
+
+    modelUniform = shaderProgram.uniformLocation("modelTransform");
+    projectionUniform = shaderProgram.uniformLocation("modelProjection");
+
     shaderProgram.link();
 }
 
@@ -108,9 +116,16 @@ void MainView::paintGL() {
 
     shaderProgram.bind();
 
+    // Set the projection path for the data
+    glUniformMatrix4fv(projectionUniform,1,GL_FALSE,projectionTransform.data());
+
+    // Set the transform location for the cube
+    glUniformMatrix4fv(modelUniform,1,GL_FALSE,cubeTransform.data());
     glBindVertexArray(VAO_Cube);
     glDrawArrays(GL_TRIANGLES,0,36);
 
+    // Set the transform location for the pyramid
+    glUniformMatrix4fv(modelUniform,1,GL_FALSE,pyramidTransform.data());
     glBindVertexArray(VAO_Pyramid);
     glDrawArrays(GL_TRIANGLES,0,18);
 
@@ -130,6 +145,8 @@ void MainView::resizeGL(int newWidth, int newHeight)
     // TODO: Update projection to fit the new aspect ratio
     Q_UNUSED(newWidth)
     Q_UNUSED(newHeight)
+
+    aspectRatio = static_cast<float>(width()) / static_cast<float>(height());
 }
 
 // --- Public interface
@@ -272,4 +289,23 @@ void MainView::loadPyramid(){
     // With OFFSET equal to the size of the coordinate array
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(Vertex),nullptr);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(Vertex), reinterpret_cast<void*>(sizeof(Vertex::coordinates)));
+}
+
+void MainView::setInitialTranslation(){
+    // Initialize as identify matrix
+    cubeTransform.setToIdentity();
+    pyramidTransform.setToIdentity();
+
+    // Translate to beginig position (2,0,-6) and (-2,0,-6)
+    //cubeTransform.translate(2,0,-6);
+    //pyramidTransform.translate(-2,0,-6);
+}
+
+void MainView::setInitialProjection(){
+    // This sets the POV and position of camera initial camera
+    aspectRatio = static_cast<float>(width()) / static_cast<float>(height());
+
+    // Set perspective
+    projectionTransform.setToIdentity();
+    //projectionTransform.perspective(60.0, aspectRatio, -10, 10);
 }

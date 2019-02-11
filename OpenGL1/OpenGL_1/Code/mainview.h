@@ -21,6 +21,9 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
     QOpenGLShaderProgram shaderProgram;
 
+    GLint modelUniform;
+    GLint projectionUniform;
+
     GLuint VBO_Cube;
     GLuint VAO_Cube;
     GLuint VBO_Pyramid;
@@ -32,6 +35,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     QMatrix4x4 pyramidTransform;
     QMatrix4x4 projectionTransform;
 
+    float aspectRatio;
 public:
     enum ShadingMode : GLuint
     {
@@ -69,7 +73,8 @@ private:
     void createShaderProgram();
     void loadCube();
     void loadPyramid();
-
+    void setInitialTranslation();
+    void setInitialProjection();
 };
 
 #endif // MAINVIEW_H

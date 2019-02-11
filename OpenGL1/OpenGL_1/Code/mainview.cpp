@@ -211,6 +211,6 @@ void MainView::loadCube(){
 
     // Finally inform the layout of the data for the attributes
     // With OFFSET equal to the size of the coordinate array
-    glVertexAttribPointer(0,36,GL_FLOAT,GL_FALSE,sizeof(Vertex),nullptr);
-    glVertexAttribPointer(1,36,GL_FLOAT,GL_FALSE,sizeof(Vertex), reinterpret_cast<void*>(sizeof(Vertex::coordinates)));
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(Vertex),nullptr);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(Vertex), reinterpret_cast<void*>(sizeof(Vertex::coordinates)));
 }

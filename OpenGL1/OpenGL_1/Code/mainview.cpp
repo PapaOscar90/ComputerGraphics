@@ -75,7 +75,7 @@ void MainView::initializeGL() {
     glDepthFunc(GL_LEQUAL);
 
     // Set the color of the screen to be black on clear (new frame)
-    glClearColor(0.2f, 0.5f, 0.7f, 0.0f);
+    glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
 
     createShaderProgram();
 
@@ -85,7 +85,7 @@ void MainView::initializeGL() {
 
     // Set the initial position
     setInitialTranslation();
-    setInitialProjection();
+    setProjection();
 }
 
 void MainView::createShaderProgram()
@@ -96,10 +96,12 @@ void MainView::createShaderProgram()
     shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
                                            ":/shaders/fragshader.glsl");
 
+    shaderProgram.link();
+
+    // Fetch location of modelTransform and modelProjection uniform
     uniformTransform = shaderProgram.uniformLocation("modelTransform");
     uniformProjection = shaderProgram.uniformLocation("modelProjection");
 
-    shaderProgram.link();
 }
 
 
@@ -122,11 +124,13 @@ void MainView::paintGL() {
     // Set the transform location for the cube
     glUniformMatrix4fv(uniformTransform,1,GL_FALSE,cubeTransform.data());
     glBindVertexArray(VAO_Cube);
+    qDebug()<<cubeTransform;
     glDrawArrays(GL_TRIANGLES,0,36);
 
     // Set the transform location for the pyramid
     glUniformMatrix4fv(uniformTransform,1,GL_FALSE,pyramidTransform.data());
     glBindVertexArray(VAO_Pyramid);
+    qDebug()<<pyramidTransform;
     glDrawArrays(GL_TRIANGLES,0,18);
 
     shaderProgram.release();
@@ -146,7 +150,7 @@ void MainView::resizeGL(int newWidth, int newHeight)
     Q_UNUSED(newWidth)
     Q_UNUSED(newHeight)
 
-    aspectRatio = static_cast<float>(width()) / static_cast<float>(height());
+    setProjection();
 }
 
 // --- Public interface
@@ -297,15 +301,15 @@ void MainView::setInitialTranslation(){
     pyramidTransform.setToIdentity();
 
     // Translate to beginig position (2,0,-6) and (-2,0,-6)
-    //cubeTransform.translate(0,0,0);
-    //pyramidTransform.translate(0,0,0);
+    cubeTransform.translate(2,0,-6);
+    pyramidTransform.translate(-2,0,-6);
 }
 
-void MainView::setInitialProjection(){
+void MainView::setProjection(){
     // This sets the POV and position of camera initial camera
-    //aspectRatio = static_cast<float>(width()) / static_cast<float>(height());
+    float aspectRatio = static_cast<float>(width()) / static_cast<float>(height());
 
     // Set perspective
     projectionTransform.setToIdentity();
-    //projectionTransform.perspective(60.0, aspectRatio, 0.0, 40.0);
+    projectionTransform.perspective(60.0, aspectRatio, 0, 30);
 }

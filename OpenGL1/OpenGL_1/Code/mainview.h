@@ -35,7 +35,6 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     QMatrix4x4 pyramidTransform;
     QMatrix4x4 projectionTransform;
 
-    float aspectRatio;
 public:
     enum ShadingMode : GLuint
     {
@@ -74,7 +73,7 @@ private:
     void loadCube();
     void loadPyramid();
     void setInitialTranslation();
-    void setInitialProjection();
+    void setProjection();
 };
 
 #endif // MAINVIEW_H

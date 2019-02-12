@@ -28,10 +28,12 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLuint VAO_Cube;
   GLuint VBO_Pyramid;
   GLuint VAO_Pyramid;
-  size_t cubeVertexCount;
-  size_t pyramidVertexCount;
+
+  size_t numberOfVerticesCube;
+  size_t numberOfVerticesPyramid;
 
   float scaleFactor = 1.0f;
+  QVector3D rotationFactor = {1.0, 1.0, 1.0};
   QMatrix4x4 cubeTransform;
   QMatrix4x4 pyramidTransform;
   QMatrix4x4 projectionTransform;

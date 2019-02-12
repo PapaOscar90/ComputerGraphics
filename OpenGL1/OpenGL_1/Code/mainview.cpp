@@ -4,6 +4,7 @@
 #include "vertex.h"
 
 #include <QDateTime>
+#include <vector>
 
 /**
  * @brief MainView::MainView
@@ -123,12 +124,12 @@ void MainView::paintGL() {
   // Set the transform location for the cube
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, cubeTransform.data());
   glBindVertexArray(VAO_Cube);
-  glDrawArrays(GL_TRIANGLES, 0, 36);
+  glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesCube);
 
   // Set the transform location for the pyramid
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, pyramidTransform.data());
   glBindVertexArray(VAO_Pyramid);
-  glDrawArrays(GL_TRIANGLES, 0, 18);
+  glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesPyramid);
 
   shaderProgram.release();
 }
@@ -152,9 +153,10 @@ void MainView::resizeGL(int newWidth, int newHeight) {
 // --- Public interface
 
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
-  qDebug() << "Rotation changed to (" << rotateX << "," << rotateY << ","
-           << rotateZ << ")";
-  Q_UNIMPLEMENTED();
+  rotationFactor = {static_cast<float>(rotateX), static_cast<float>(rotateY),
+                    static_cast<float>(rotateZ)};
+  setInitialTranslation();
+  update();
 }
 
 void MainView::setScale(int scale) {
@@ -183,57 +185,57 @@ void MainView::onMessageLogged(QOpenGLDebugMessage Message) {
 
 // Creates and loads a unit cube into the GPU buffer
 void MainView::loadCube() {
-  cubeVertexCount = 36;
-
   // This defines the cube to be rendered
-  Vertex cube[36] = {// Bottom-Right
-                     {{1, -1, 1}, {0, 0, 0}},
-                     {{-1, -1, -1}, {0, 0, 0}},
-                     {{1, -1, -1}, {0, 0, 0}},
-                     // Top-Right
-                     {{-1, 1, -1}, {1, 0, 0}},
-                     {{1, 1, 1}, {1, 0, 0}},
-                     {{1, 1, -1}, {1, 0, 0}},
-                     // Right-Right
-                     {{1, 1, -1}, {0, 0, 1}},
-                     {{1, -1, 1}, {0, 1, 0}},
-                     {{1, -1, -1}, {0, 0, 1}},
-                     // Front-Right
-                     {{1, 1, 1}, {0, 0, 1}},
-                     {{-1, -1, 1}, {0, 1, 0}},
-                     {{1, -1, 1}, {0, 0, 1}},
-                     // Left-Left
-                     {{-1, -1, 1}, {0, 1, 0}},
-                     {{-1, 1, -1}, {1, 0, 0}},
-                     {{-1, -1, -1}, {1, 0, 0}},
-                     // Back-Right
-                     {{1, -1, -1}, {0, 0, 0}},
-                     {{-1, 1, -1}, {0, 0, 0}},
-                     {{1, 1, -1}, {0, 1, 0}},
-                     // Bottom-Left
-                     {{1, -1, 1}, {0, 0, 0}},
-                     {{-1, -1, 1}, {0, 0, 0}},
-                     {{-1, -1, -1}, {0, 0, 0}},
-                     // Top-Left
-                     {{-1, 1, -1}, {0, 1, 1}},
-                     {{-1, 1, 1}, {0, 1, 1}},
-                     {{1, 1, 1}, {0, 1, 1}},
-                     // Right-Left
-                     {{1, 1, -1}, {0, 0, 1}},
-                     {{1, 1, 1}, {0, 0, 1}},
-                     {{1, -1, 1}, {0, 1, 0}},
-                     // Front-Left
-                     {{1, 1, 1}, {0, 0, 1}},
-                     {{-1, 1, 1}, {1, 0, 0}},
-                     {{-1, -1, 1}, {0, 1, 0}},
-                     // Left-Right
-                     {{-1, -1, 1}, {0, 1, 0}},
-                     {{-1, 1, 1}, {1, 0, 0}},
-                     {{-1, 1, -1}, {1, 0, 0}},
-                     // Back-Left
-                     {{1, -1, -1}, {0, 0, 0}},
-                     {{-1, -1, -1}, {0, 0, 0}},
-                     {{-1, 1, -1}, {0, 0, 0}}};
+  std::vector<Vertex> cube = {// Bottom-Right
+                              {{1, -1, 1}, {0, 0, 0}},
+                              {{-1, -1, -1}, {0, 0, 0}},
+                              {{1, -1, -1}, {0, 0, 0}},
+                              // Top-Right
+                              {{-1, 1, -1}, {1, 0, 0}},
+                              {{1, 1, 1}, {1, 0, 0}},
+                              {{1, 1, -1}, {1, 0, 0}},
+                              // Right-Right
+                              {{1, 1, -1}, {0, 0, 1}},
+                              {{1, -1, 1}, {0, 1, 0}},
+                              {{1, -1, -1}, {0, 0, 1}},
+                              // Front-Right
+                              {{1, 1, 1}, {0, 0, 1}},
+                              {{-1, -1, 1}, {0, 1, 0}},
+                              {{1, -1, 1}, {0, 0, 1}},
+                              // Left-Left
+                              {{-1, -1, 1}, {0, 1, 0}},
+                              {{-1, 1, -1}, {1, 0, 0}},
+                              {{-1, -1, -1}, {1, 0, 0}},
+                              // Back-Right
+                              {{1, -1, -1}, {0, 0, 0}},
+                              {{-1, 1, -1}, {0, 0, 0}},
+                              {{1, 1, -1}, {0, 1, 0}},
+                              // Bottom-Left
+                              {{1, -1, 1}, {0, 0, 0}},
+                              {{-1, -1, 1}, {0, 0, 0}},
+                              {{-1, -1, -1}, {0, 0, 0}},
+                              // Top-Left
+                              {{-1, 1, -1}, {0, 1, 1}},
+                              {{-1, 1, 1}, {0, 1, 1}},
+                              {{1, 1, 1}, {0, 1, 1}},
+                              // Right-Left
+                              {{1, 1, -1}, {0, 0, 1}},
+                              {{1, 1, 1}, {0, 0, 1}},
+                              {{1, -1, 1}, {0, 1, 0}},
+                              // Front-Left
+                              {{1, 1, 1}, {0, 0, 1}},
+                              {{-1, 1, 1}, {1, 0, 0}},
+                              {{-1, -1, 1}, {0, 1, 0}},
+                              // Left-Right
+                              {{-1, -1, 1}, {0, 1, 0}},
+                              {{-1, 1, 1}, {1, 0, 0}},
+                              {{-1, 1, -1}, {1, 0, 0}},
+                              // Back-Left
+                              {{1, -1, -1}, {0, 0, 0}},
+                              {{-1, -1, -1}, {0, 0, 0}},
+                              {{-1, 1, -1}, {0, 0, 0}}};
+
+  numberOfVerticesCube = cube.size();
 
   // Generate the buffer and vertex array, and return the IDs to upload the cube
   // to
@@ -243,7 +245,7 @@ void MainView::loadCube() {
   // Now send the vertices(cube) to the GPU vind bind
   glBindVertexArray(VAO_Cube);
   glBindBuffer(GL_ARRAY_BUFFER, VBO_Cube);
-  glBufferData(GL_ARRAY_BUFFER, cubeVertexCount * (sizeof(Vertex)), cube,
+  glBufferData(GL_ARRAY_BUFFER, cube.size() * (sizeof(Vertex)), cube.data(),
                GL_STATIC_DRAW);
 
   // Now inform the GPU what attributes to use for received arrays
@@ -259,10 +261,8 @@ void MainView::loadCube() {
 }
 
 void MainView::loadPyramid() {
-  pyramidVertexCount = 18;
-
   // This defines the pyramid to be rendered
-  Vertex pyramid[18] = {
+  std::vector<Vertex> pyramid = {
       // Left
       {{0, 1, 0}, {0, 1, 0}},
       {{-1, -1, -1}, {0, 1, 0}},
@@ -289,6 +289,8 @@ void MainView::loadPyramid() {
       {{1, -1, 1}, {0, 0, 1}},
   };
 
+  numberOfVerticesPyramid = pyramid.size();
+
   // Generate the buffer and vertex array, and return the IDs to upload the cube
   // to
   glGenBuffers(1, &VBO_Pyramid);
@@ -297,7 +299,21 @@ void MainView::loadPyramid() {
   // Now send the vertices(cube) to the GPU vind bind
   glBindVertexArray(VAO_Pyramid);
   glBindBuffer(GL_ARRAY_BUFFER, VBO_Pyramid);
-  glBufferData(GL_ARRAY_BUFFER, pyramidVertexCount * (sizeof(Vertex)), pyramid,
+  glBufferData(GL_ARRAY_BUFFER, pyramid.size() * (sizeof(Vertex)),
+               pyramid.data(), GL_STATIC_DRAW);
+
+  // Now inform the GPU what attributes to use for received arrays
+  // via the contents of the shader files
+  glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
+
+  // Finally inform the layout of the data for the attributes
+  // With OFFSET equal to the size of the coordinate array
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                        reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
+}
+
                GL_STATIC_DRAW);
 
   // Now inform the GPU what attributes to use for received arrays
@@ -324,6 +340,9 @@ void MainView::setInitialTranslation() {
   // Apply the scale factor 1.0 or provided by the GUI
   cubeTransform.scale(scaleFactor);
   pyramidTransform.scale(scaleFactor);
+  // Apply the rotations
+  cubeTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));
+  pyramidTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));
 }
 
 void MainView::setProjection() {

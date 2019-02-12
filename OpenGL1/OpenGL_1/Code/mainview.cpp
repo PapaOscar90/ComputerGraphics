@@ -373,7 +373,7 @@ void MainView::setInitialTranslation() {
   // Apply the scale factor 1.0 or provided by the GUI
   cubeTransform.scale(scaleFactor);
   pyramidTransform.scale(scaleFactor);
-  sphereTransform.scale(0.04 * scaleFactor);
+  sphereTransform.scale(0.04 * scaleFactor); // Scaled down by 0.04 to fit
 
   // Apply the rotations
   cubeTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));

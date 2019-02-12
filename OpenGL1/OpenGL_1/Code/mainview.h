@@ -36,7 +36,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   size_t numberOfVerticesSphere;
 
   float scaleFactor = 1.0f;
-  QVector3D rotationFactor = {1.0, 1.0, 1.0};
+  QVector3D rotationFactor = {0.0, 0.0, 0.0};
   QMatrix4x4 cubeTransform;
   QMatrix4x4 pyramidTransform;
   QMatrix4x4 sphereTransform;

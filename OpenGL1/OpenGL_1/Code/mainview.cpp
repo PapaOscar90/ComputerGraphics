@@ -83,18 +83,18 @@ void MainView::initializeGL() {
 
   createShaderProgram();
 
-  // Load the two shapes
+  // Load the three shapes
   loadCube();
   loadPyramid();
   loadSphere();
 
-  // Set the initial position
+  // Set the initial positions of shapes and set perspective
   setInitialTranslation();
   setProjection();
 }
 
 void MainView::createShaderProgram() {
-  // Create shader program
+  // Create shader program from contents of source files
   shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
                                         ":/shaders/vertshader.glsl");
   shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
@@ -103,6 +103,7 @@ void MainView::createShaderProgram() {
   shaderProgram.link();
 
   // Fetch location of modelTransform and modelProjection uniform
+  // store ID for later
   uniformTransform = shaderProgram.uniformLocation("modelTransform");
   uniformProjection = shaderProgram.uniformLocation("modelProjection");
 }
@@ -124,12 +125,14 @@ void MainView::paintGL() {
   glUniformMatrix4fv(uniformProjection, 1, GL_FALSE,
                      projectionTransform.data());
 
-  // Set the transform location for the cube
+  // Set the transform location using the ID for the cube, for the shader computation
+  // Then set the Cube for render, and render
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, cubeTransform.data());
   glBindVertexArray(VAO_Cube);
   glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesCube);
 
-  // Set the transform location for the pyramid
+  // Set the transform location for the pyramid, for the shader computation
+  // Then set the pyramid for render and render
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, pyramidTransform.data());
   glBindVertexArray(VAO_Pyramid);
   glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesPyramid);
@@ -151,15 +154,16 @@ void MainView::paintGL() {
  * @param newHeight
  */
 void MainView::resizeGL(int newWidth, int newHeight) {
-  // TODO: Update projection to fit the new aspect ratio
-  Q_UNUSED(newWidth)
-  Q_UNUSED(newHeight)
-
-  setProjection();
+    // Simply call the setProjection function to automatically
+    // fetch and set the projection aspect ratio to new size
+    Q_UNUSED(newWidth);
+    Q_UNUSED(newHeight);
+    setProjection();
 }
 
 // --- Public interface
-
+// Takes the values from the GUI and updates the rotationFactor vector
+// Then it calls the set...Translation function to update the objects with update
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
   rotationFactor = {static_cast<float>(rotateX), static_cast<float>(rotateY),
                     static_cast<float>(rotateZ)};
@@ -167,6 +171,7 @@ void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
   update();
 }
 
+// This is the same as rotation, but it changes the scaleFactor multiplyer
 void MainView::setScale(int scale) {
   scaleFactor = static_cast<float>(scale) / 100.;
   setInitialTranslation();

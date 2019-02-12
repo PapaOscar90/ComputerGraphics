@@ -83,18 +83,18 @@ void MainView::initializeGL() {
 
   createShaderProgram();
 
-  // Load the two shapes
+  // Load the three shapes
   loadCube();
   loadPyramid();
   loadSphere();
 
-  // Set the initial position
+  // Set the initial positions of shapes and set perspective
   setInitialTranslation();
   setProjection();
 }
 
 void MainView::createShaderProgram() {
-  // Create shader program
+  // Create shader program from contents of source files
   shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
                                         ":/shaders/vertshader.glsl");
   shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
@@ -103,6 +103,7 @@ void MainView::createShaderProgram() {
   shaderProgram.link();
 
   // Fetch location of modelTransform and modelProjection uniform
+  // store ID for later
   uniformTransform = shaderProgram.uniformLocation("modelTransform");
   uniformProjection = shaderProgram.uniformLocation("modelProjection");
 }
@@ -124,12 +125,14 @@ void MainView::paintGL() {
   glUniformMatrix4fv(uniformProjection, 1, GL_FALSE,
                      projectionTransform.data());
 
-  // Set the transform location for the cube
+  // Set the transform location using the ID for the cube, for the shader computation
+  // Then set the Cube for render, and render
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, cubeTransform.data());
   glBindVertexArray(VAO_Cube);
   glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesCube);
 
-  // Set the transform location for the pyramid
+  // Set the transform location for the pyramid, for the shader computation
+  // Then set the pyramid for render and render
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, pyramidTransform.data());
   glBindVertexArray(VAO_Pyramid);
   glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesPyramid);

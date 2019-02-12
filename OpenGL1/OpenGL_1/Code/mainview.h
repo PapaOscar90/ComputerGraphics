@@ -21,9 +21,11 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
   QOpenGLShaderProgram shaderProgram;
 
+  // Store the ID of the uniforms
   GLint uniformTransform;
   GLint uniformProjection;
 
+  // Store the ID of each VAO and VBO
   GLuint VBO_Cube;
   GLuint VAO_Cube;
   GLuint VBO_Pyramid;
@@ -31,12 +33,15 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLuint VBO_Sphere;
   GLuint VAO_Sphere;
 
+  // Store the number of vertices for each shape
   size_t numberOfVerticesCube;
   size_t numberOfVerticesPyramid;
   size_t numberOfVerticesSphere;
 
   float scaleFactor = 1.0f;
   QQuaternion rotationFactor = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+
+  // Store a transform matrix for each object, including projection
   QMatrix4x4 cubeTransform;
   QMatrix4x4 pyramidTransform;
   QMatrix4x4 sphereTransform;

@@ -161,8 +161,8 @@ void MainView::resizeGL(int newWidth, int newHeight) {
 // --- Public interface
 
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
-  rotationFactor = {static_cast<float>(rotateX), static_cast<float>(rotateY),
-                    static_cast<float>(rotateZ)};
+  rotationFactor = QQuaternion::fromEulerAngles({static_cast<float>(rotateX), static_cast<float>(rotateY),
+                    static_cast<float>(rotateZ)});
   setInitialTranslation();
   update();
 }
@@ -376,9 +376,9 @@ void MainView::setInitialTranslation() {
   sphereTransform.scale(0.04 * scaleFactor); // Scaled down by 0.04 to fit
 
   // Apply the rotations
-  cubeTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));
-  pyramidTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));
-  sphereTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));
+  cubeTransform.rotate(rotationFactor);
+  pyramidTransform.rotate(rotationFactor);
+  sphereTransform.rotate(rotationFactor);
 }
 
 void MainView::setProjection() {

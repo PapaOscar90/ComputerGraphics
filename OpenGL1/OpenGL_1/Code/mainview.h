@@ -34,12 +34,21 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLuint VAO_Sphere;
 
   // Store the number of vertices for each shape
+<<<<<<< HEAD
   int numberOfVerticesCube;
   int numberOfVerticesPyramid;
   int numberOfVerticesSphere;
 
   float scaleFactor = 1.0f;
   QVector3D rotationFactor = {0.0, 0.0, 0.0};
+=======
+  size_t numberOfVerticesCube;
+  size_t numberOfVerticesPyramid;
+  size_t numberOfVerticesSphere;
+
+  float scaleFactor = 1.0f;
+  QQuaternion rotationFactor = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+>>>>>>> 103234505f7d53f83926777824b721fa562bcc62
 
   // Store a transform matrix for each object, including projection
   QMatrix4x4 cubeTransform;

@@ -28,14 +28,18 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLuint VAO_Cube;
   GLuint VBO_Pyramid;
   GLuint VAO_Pyramid;
+  GLuint VBO_Sphere;
+  GLuint VAO_Sphere;
 
   size_t numberOfVerticesCube;
   size_t numberOfVerticesPyramid;
+  size_t numberOfVerticesSphere;
 
   float scaleFactor = 1.0f;
   QVector3D rotationFactor = {1.0, 1.0, 1.0};
   QMatrix4x4 cubeTransform;
   QMatrix4x4 pyramidTransform;
+  QMatrix4x4 sphereTransform;
   QMatrix4x4 projectionTransform;
 
 public:
@@ -72,6 +76,7 @@ private:
   void createShaderProgram();
   void loadCube();
   void loadPyramid();
+  void loadSphere();
   void setInitialTranslation();
   void setProjection();
 };

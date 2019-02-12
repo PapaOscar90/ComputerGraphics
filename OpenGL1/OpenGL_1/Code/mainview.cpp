@@ -35,10 +35,12 @@ MainView::~MainView() {
   // Free VBOs
   glDeleteBuffers(1, &VBO_Cube);
   glDeleteBuffers(1, &VBO_Pyramid);
+  glDeleteBuffers(1, &VBO_Sphere);
 
   // Free VAOs
   glDeleteVertexArrays(1, &VAO_Cube);
   glDeleteVertexArrays(1, &VAO_Pyramid);
+  glDeleteVertexArrays(1, &VAO_Sphere);
 }
 
 // --- OpenGL initialization
@@ -84,6 +86,7 @@ void MainView::initializeGL() {
   // Load the two shapes
   loadCube();
   loadPyramid();
+  loadSphere();
 
   // Set the initial position
   setInitialTranslation();
@@ -130,6 +133,11 @@ void MainView::paintGL() {
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, pyramidTransform.data());
   glBindVertexArray(VAO_Pyramid);
   glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesPyramid);
+
+  // Set the transform location for the sphere
+  glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, sphereTransform.data());
+  glBindVertexArray(VAO_Sphere);
+  glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesSphere);
 
   shaderProgram.release();
 }
@@ -314,6 +322,29 @@ void MainView::loadPyramid() {
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
 
+void MainView::loadSphere() {
+  Model model(":/models/sphere.obj");
+  QVector<QVector3D> sphereVertices = model.getVertices();
+  std::vector<Vertex> sphere;
+  for (auto node : sphereVertices) {
+    Vertex vertex = {{node.x(), node.y(), node.z()},
+                     {static_cast<float>(rand()) / RAND_MAX,
+                      static_cast<float>(rand()) / RAND_MAX,
+                      static_cast<float>(rand()) / RAND_MAX}};
+    sphere.push_back(vertex);
+  }
+
+  numberOfVerticesSphere = sphere.size();
+
+  // Generate the buffer and vertex array, and return the IDs to upload the
+  // sphere to
+  glGenBuffers(1, &VBO_Sphere);
+  glGenVertexArrays(1, &VAO_Sphere);
+
+  // Now send the vertices(sphere) to the GPU vind bind
+  glBindVertexArray(VAO_Sphere);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO_Sphere);
+  glBufferData(GL_ARRAY_BUFFER, sphere.size() * (sizeof(Vertex)), sphere.data(),
                GL_STATIC_DRAW);
 
   // Now inform the GPU what attributes to use for received arrays
@@ -332,17 +363,22 @@ void MainView::setInitialTranslation() {
   // Initialize as identify matrix
   cubeTransform.setToIdentity();
   pyramidTransform.setToIdentity();
+  sphereTransform.setToIdentity();
 
   // Translate to beginig position (2,0,-6) and (-2,0,-6)
   cubeTransform.translate(2, 0, -6);
   pyramidTransform.translate(-2, 0, -6);
+  sphereTransform.translate(0, 0, -10);
 
   // Apply the scale factor 1.0 or provided by the GUI
   cubeTransform.scale(scaleFactor);
   pyramidTransform.scale(scaleFactor);
+  sphereTransform.scale(0.04*scaleFactor);
+
   // Apply the rotations
   cubeTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));
   pyramidTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));
+  sphereTransform.rotate(QQuaternion::fromEulerAngles(rotationFactor));
 }
 
 void MainView::setProjection() {

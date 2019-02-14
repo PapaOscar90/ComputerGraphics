@@ -1,8 +1,10 @@
-This is a README file
+README
 
-When submitting your assignment, describe (briefly) the changes you made and what difficulties you encountered in this file.
+Description:
+Following the instructions, we imported our triangle program and began to extend it with the needed Z addition. Then we simply added in more triangles that would describe the objects we were creating. However, we initially struggled with our objects not displaying correctly. Some faces were rendering behind or infront of others when they should do the opposite. After a tip from the TAs, we discovered how OpenGL handles the right/left handedness. So we re-did our shapes in counter-clockwise fashion, and then added the final parts. Using Q's built in functions made the process of transforming the scene very straightforward.
 
-Also describe what controls (key short-cuts, mouse clicks, mouse movement etc) and possible bonus assignments you implemented, so we can check them more easily.
+Controls:
+The controls implemented are just the default GUI controls that were given to us. No physical keys have been mapped yet.
 
-If you have any suggestions/feedback for improving the practical assignments or support from teaching assistants, you may include it here OR post in anonymously on Nestor under Feedback.
-
+Feedback:
+This was a nice step forward in learning OpenGL overall. But it was very confusing with regard to the counter clockwise declaration. Though it is in the docs (buried deep), maybe a nudge in the instructions would save us a lot of hassle with trying to find the issue.

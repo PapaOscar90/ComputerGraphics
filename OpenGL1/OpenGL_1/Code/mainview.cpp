@@ -93,6 +93,13 @@ void MainView::initializeGL() {
   setProjection();
 }
 
+/**
+ * @brief MainView::createShaderProgram
+ *
+ * Called upon shader program creation
+ * Created and links a shader program with attached
+ * shader files vertshader and fragshader
+ */
 void MainView::createShaderProgram() {
   // Create shader program from contents of source files
   shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
@@ -162,9 +169,14 @@ void MainView::resizeGL(int newWidth, int newHeight) {
 }
 
 // --- Public interface
-// Takes the values from the GUI and updates the rotationFactor vector
-// Then it calls the set...Translation function to update the objects with
-// update
+// 
+/*
+ * @brief MainView::setRotation
+ * 
+ * Takes the values from the GUI and updates the rotationFactor vector
+ * Then it calls the set...Translation function to update the objects with
+ * update
+ */
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
   rotationFactor = QQuaternion::fromEulerAngles({static_cast<float>(rotateX),
                                                  static_cast<float>(rotateY),
@@ -173,13 +185,20 @@ void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
   update();
 }
 
-// This is the same as rotation, but it changes the scaleFactor multiplyer
+/*
+ * @brief MainView::setScale
+ * 
+ * This is the same as rotation, but it changes the scaleFactor multiplyer
+ * 
+ * @param scale
+ */
 void MainView::setScale(int scale) {
   scaleFactor = static_cast<float>(scale) / 100.f;
   setInitialTranslation();
   update();
 }
 
+// Not part of current lab
 void MainView::setShadingMode(ShadingMode shading) {
   qDebug() << "Changed shading to" << shading;
   Q_UNIMPLEMENTED();
@@ -198,7 +217,11 @@ void MainView::onMessageLogged(QOpenGLDebugMessage Message) {
   qDebug() << " → Log:" << Message;
 }
 
-// Creates and loads a unit cube into the GPU buffer
+/*
+ * @brief MainView::loadCube
+ * 
+ * Creates and loads a unit cube into the GPU buffer
+ */
 void MainView::loadCube() {
   // This defines the cube to be rendered
   std::vector<Vertex> cube = {// Bottom-Right
@@ -276,6 +299,11 @@ void MainView::loadCube() {
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
 
+/*
+ * @brief MainView::loadPyramid
+ * 
+ * This creates and load a pyramid into the VBO/VAO
+ */ 
 void MainView::loadPyramid() {
   // This defines the pyramid to be rendered
   std::vector<Vertex> pyramid = {
@@ -331,6 +359,11 @@ void MainView::loadPyramid() {
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
 
+/*
+ * @brief MainVIew::loadSphere
+ * 
+ * Loads a sphere from an obj file and adds to VAO/VBO
+ */
 void MainView::loadSphere() {
   Model model(":/models/sphere.obj");
   QVector<QVector3D> sphereVertices = model.getVertices();
@@ -369,6 +402,13 @@ void MainView::loadSphere() {
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
 
+/*
+ * @brief MainView::setInitialTranslation
+ * 
+ * This function applys the transformations to every vector before
+ * being rendered. In other words, this sets the objects position (translate),
+ * size (scale), and orientation (rotate) 
+ */
 void MainView::setInitialTranslation() {
   // Initialize as identify matrix
   cubeTransform.setToIdentity();
@@ -391,6 +431,12 @@ void MainView::setInitialTranslation() {
   sphereTransform.rotate(rotationFactor);
 }
 
+/*
+ * @brief MainView::setProjection
+ * 
+ * This will set the aspect ratio and the perspective matrix
+ * that will be applied to the objects as well
+ */
 void MainView::setProjection() {
   // This sets the POV and position of camera initial camera
   float aspectRatio =

@@ -3,6 +3,11 @@ README
 Description:
 Following the instructions, we imported our triangle program and began to extend it with the needed Z addition. Then we simply added in more triangles that would describe the objects we were creating. However, we initially struggled with our objects not displaying correctly. Some faces were rendering behind or infront of others when they should do the opposite. After a tip from the TAs, we discovered how OpenGL handles the right/left handedness. So we re-did our shapes in counter-clockwise fashion, and then added the final parts. Using Q's built in functions made the process of transforming the scene very straightforward.
 
+Screenshots:
+The FullWindow image outlines the entire application, including the default settings and resulting output. The three shapes can be seen here in their basic translated positions. One thing not visible due to no overlap, is that the shapes will be drawn over each other, since there is no relation between them.
+
+The Settings and ShapeCustomSettings images show the resulting changes to the objects when the settings UI objects are changed. Here we rotate them in each direction and show the output. The reset position will return the objects to their default location. The same holds true for the scale slider and reset button.
+
 Controls:
 The controls implemented are just the default GUI controls that were given to us. No physical keys have been mapped yet.
 

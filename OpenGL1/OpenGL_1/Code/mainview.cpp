@@ -125,8 +125,8 @@ void MainView::paintGL() {
   glUniformMatrix4fv(uniformProjection, 1, GL_FALSE,
                      projectionTransform.data());
 
-  // Set the transform location using the ID for the cube, for the shader computation
-  // Then set the Cube for render, and render
+  // Set the transform location using the ID for the cube, for the shader
+  // computation Then set the Cube for render, and render
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, cubeTransform.data());
   glBindVertexArray(VAO_Cube);
   glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesCube);
@@ -154,26 +154,28 @@ void MainView::paintGL() {
  * @param newHeight
  */
 void MainView::resizeGL(int newWidth, int newHeight) {
-    // Simply call the setProjection function to automatically
-    // fetch and set the projection aspect ratio to new size
-    Q_UNUSED(newWidth);
-    Q_UNUSED(newHeight);
-    setProjection();
+  // Simply call the setProjection function to automatically
+  // fetch and set the projection aspect ratio to new size
+  Q_UNUSED(newWidth);
+  Q_UNUSED(newHeight);
+  setProjection();
 }
 
 // --- Public interface
 // Takes the values from the GUI and updates the rotationFactor vector
-// Then it calls the set...Translation function to update the objects with update
+// Then it calls the set...Translation function to update the objects with
+// update
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
-  rotationFactor = QQuaternion::fromEulerAngles({static_cast<float>(rotateX), static_cast<float>(rotateY),
-                    static_cast<float>(rotateZ)});
+  rotationFactor = QQuaternion::fromEulerAngles({static_cast<float>(rotateX),
+                                                 static_cast<float>(rotateY),
+                                                 static_cast<float>(rotateZ)});
   setInitialTranslation();
   update();
 }
 
 // This is the same as rotation, but it changes the scaleFactor multiplyer
 void MainView::setScale(int scale) {
-  scaleFactor = static_cast<float>(scale) / 100.;
+  scaleFactor = static_cast<float>(scale) / 100.f;
   setInitialTranslation();
   update();
 }
@@ -268,7 +270,8 @@ void MainView::loadCube() {
 
   // Finally inform the layout of the data for the attributes
   // With OFFSET equal to the size of the coordinate array
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                        reinterpret_cast<void *>(0));
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
@@ -322,7 +325,8 @@ void MainView::loadPyramid() {
 
   // Finally inform the layout of the data for the attributes
   // With OFFSET equal to the size of the coordinate array
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                        reinterpret_cast<void *>(0));
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
@@ -359,7 +363,8 @@ void MainView::loadSphere() {
 
   // Finally inform the layout of the data for the attributes
   // With OFFSET equal to the size of the coordinate array
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                        reinterpret_cast<void *>(0));
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }

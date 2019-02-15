@@ -81,12 +81,11 @@ void MainView::initializeGL() {
   // Set the color of the screen to be black on clear (new frame)
   glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
 
+  // Initialize the shaders in the `shaders` subdirectory
   createShaderProgram();
 
-  // Load the three shapes
-  loadCube();
-  loadPyramid();
-  loadSphere();
+  // Load the shapes into the OpenGL buffers.
+  loadShapes();
 
   // Set the initial positions of shapes and set perspective
   setInitialTranslation();
@@ -169,15 +168,16 @@ void MainView::resizeGL(int newWidth, int newHeight) {
 }
 
 // --- Public interface
-// 
+//
 /*
  * @brief MainView::setRotation
- * 
+ *
  * Takes the values from the GUI and updates the rotationFactor vector
  * Then it calls the set...Translation function to update the objects with
  * update
  */
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
+  // Create the quarternion storing the rotation information
   rotationFactor = QQuaternion::fromEulerAngles({static_cast<float>(rotateX),
                                                  static_cast<float>(rotateY),
                                                  static_cast<float>(rotateZ)});
@@ -187,9 +187,9 @@ void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
 
 /*
  * @brief MainView::setScale
- * 
+ *
  * This is the same as rotation, but it changes the scaleFactor multiplyer
- * 
+ *
  * @param scale
  */
 void MainView::setScale(int scale) {
@@ -218,8 +218,19 @@ void MainView::onMessageLogged(QOpenGLDebugMessage Message) {
 }
 
 /*
+ * @brief MainView::loadShapes
+ *
+ * Load the shapes in the GPU buffer
+ */
+void MainView::loadShapes() {
+  loadCube();
+  loadPyramid();
+  loadSphere();
+}
+
+/*
  * @brief MainView::loadCube
- * 
+ *
  * Creates and loads a unit cube into the GPU buffer
  */
 void MainView::loadCube() {
@@ -275,35 +286,36 @@ void MainView::loadCube() {
 
   numberOfVerticesCube = cube.size();
 
-  // Generate the buffer and vertex array, and return the IDs to upload the cube
-  // to
+  // Generate the vertex buffer object and vertex array object, and return the
+  // IDs to upload the cube to.
   glGenBuffers(1, &VBO_Cube);
   glGenVertexArrays(1, &VAO_Cube);
 
-  // Now send the vertices(cube) to the GPU vind bind
+  // Now send the vertices(cube) to the GPU buffer.
   glBindVertexArray(VAO_Cube);
   glBindBuffer(GL_ARRAY_BUFFER, VBO_Cube);
   glBufferData(GL_ARRAY_BUFFER, cube.size() * (sizeof(Vertex)), cube.data(),
                GL_STATIC_DRAW);
 
   // Now inform the GPU what attributes to use for received arrays
-  // via the contents of the shader files
+  // via the contents of the shader files.
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
 
-  // Finally inform the layout of the data for the attributes
-  // With OFFSET equal to the size of the coordinate array
+  // Finally inform the GPU of the layout of the data for the attributes.
+  //   To get the `coordinates` we need an offset of 0
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(0));
+  //   To get the `color` we need an an offset the size of the coordinates.
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
 
 /*
  * @brief MainView::loadPyramid
- * 
- * This creates and load a pyramid into the VBO/VAO
- */ 
+ *
+ * Creates and loads a pyramid into the GPU buffer.
+ */
 void MainView::loadPyramid() {
   // This defines the pyramid to be rendered
   std::vector<Vertex> pyramid = {
@@ -335,55 +347,63 @@ void MainView::loadPyramid() {
 
   numberOfVerticesPyramid = pyramid.size();
 
-  // Generate the buffer and vertex array, and return the IDs to upload the cube
-  // to
+  // Generate the vertex buffer object and vertex array object, and return the
+  // IDs to upload the pyramid to.
   glGenBuffers(1, &VBO_Pyramid);
   glGenVertexArrays(1, &VAO_Pyramid);
 
-  // Now send the vertices(cube) to the GPU vind bind
+  // Now send the vertices(pyramid) to the GPU buffer.
   glBindVertexArray(VAO_Pyramid);
   glBindBuffer(GL_ARRAY_BUFFER, VBO_Pyramid);
   glBufferData(GL_ARRAY_BUFFER, pyramid.size() * (sizeof(Vertex)),
                pyramid.data(), GL_STATIC_DRAW);
 
   // Now inform the GPU what attributes to use for received arrays
-  // via the contents of the shader files
+  // via the contents of the shader files.
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
 
-  // Finally inform the layout of the data for the attributes
-  // With OFFSET equal to the size of the coordinate array
+  // Finally inform the GPU of the layout of the data for the attributes.
+  //   To get the `coordinates` we need an offset of 0
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(0));
+  //   To get the `color` we need an an offset the size of the coordinates.
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
 
 /*
- * @brief MainVIew::loadSphere
- * 
- * Loads a sphere from an obj file and adds to VAO/VBO
+ * @brief MainView::loadSphere
+ *
+ * Loads a sphere from an obj file and then into the GPU buffer.
  */
 void MainView::loadSphere() {
+  // Load the provided sphere from an obj file.
   Model model(":/models/sphere.obj");
-  QVector<QVector3D> sphereVertices = model.getVertices();
+
+  // Prepare the sphere to be loaded into the GPU buffer
   std::vector<Vertex> sphere;
-  for (auto node : sphereVertices) {
+
+  // Iterate through each vertex in the model and convert that vertex to our
+  // `Vertex` class.
+  for (auto node : model.getVertices()) {
+    // Get the coordinates and set a random color, capped to a max of 1.0.
     Vertex vertex = {{node.x(), node.y(), node.z()},
                      {static_cast<float>(rand()) / RAND_MAX,
                       static_cast<float>(rand()) / RAND_MAX,
                       static_cast<float>(rand()) / RAND_MAX}};
+    // Insert the vertex.
     sphere.push_back(vertex);
   }
 
   numberOfVerticesSphere = sphere.size();
 
-  // Generate the buffer and vertex array, and return the IDs to upload the
-  // sphere to
+  // Now inform the GPU what attributes to use for received arrays
+  // via the contents of the shader files.
   glGenBuffers(1, &VBO_Sphere);
   glGenVertexArrays(1, &VAO_Sphere);
 
-  // Now send the vertices(sphere) to the GPU vind bind
+  // Now send the vertices(pyramid) to the GPU buffer.
   glBindVertexArray(VAO_Sphere);
   glBindBuffer(GL_ARRAY_BUFFER, VBO_Sphere);
   glBufferData(GL_ARRAY_BUFFER, sphere.size() * (sizeof(Vertex)), sphere.data(),
@@ -394,28 +414,32 @@ void MainView::loadSphere() {
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
 
-  // Finally inform the layout of the data for the attributes
-  // With OFFSET equal to the size of the coordinate array
+  // Finally inform the GPU of the layout of the data for the attributes.
+  //   To get the `coordinates` we need an offset of 0
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(0));
+  //   To get the `color` we need an an offset the size of the coordinates.
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         reinterpret_cast<void *>(sizeof(Vertex::coordinates)));
 }
 
 /*
  * @brief MainView::setInitialTranslation
- * 
- * This function applys the transformations to every vector before
- * being rendered. In other words, this sets the objects position (translate),
- * size (scale), and orientation (rotate) 
+ *
+ * This function applies transformations to the matrices that transform the
+ * objects being rendered. In other words, this sets the objects position
+ * (`translate`), size (`scale`), and orientation (`rotate`).
  */
 void MainView::setInitialTranslation() {
-  // Initialize as identify matrix
+  // Initialize transformations to the identity matrix
   cubeTransform.setToIdentity();
   pyramidTransform.setToIdentity();
   sphereTransform.setToIdentity();
 
-  // Translate to beginig position (2,0,-6) and (-2,0,-6)
+  // Translate to initial positions provided in specification:
+  //   Cube: (2, 0, -6)
+  //   Pyramid: (-2, 0, -6)
+  //   Sphere: (0, 0, -10)
   cubeTransform.translate(2, 0, -6);
   pyramidTransform.translate(-2, 0, -6);
   sphereTransform.translate(0, 0, -10);
@@ -433,16 +457,17 @@ void MainView::setInitialTranslation() {
 
 /*
  * @brief MainView::setProjection
- * 
+ *
  * This will set the aspect ratio and the perspective matrix
- * that will be applied to the objects as well
+ * that will be applied to the objects.
  */
 void MainView::setProjection() {
-  // This sets the POV and position of camera initial camera
+  // This sets the POV and position of the initial camera
   float aspectRatio =
       static_cast<float>(width()) / static_cast<float>(height());
 
-  // Set perspective
+  // Set the projection to the identity matrix
   projectionTransform.setToIdentity();
+  // Set perspective
   projectionTransform.perspective(60.0, aspectRatio, 0, 1);
 }

@@ -84,6 +84,7 @@ private:
   void loadCube();
   void loadPyramid();
   void loadSphere();
+  void loadShapes();
   void setInitialTranslation();
   void setProjection();
 };

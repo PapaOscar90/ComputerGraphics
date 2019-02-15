@@ -26,6 +26,41 @@ void MainView::keyReleaseEvent(QKeyEvent *ev) {
   case 'A':
     qDebug() << "A released";
     break;
+  case 16777234:
+      qDebug() << "Left released";
+      translationFactor.setX(translationFactor.x()-0.1f);
+      qDebug() << translationFactor;
+      setInitialTranslation();
+      break;
+  case 16777235:
+      qDebug() << "Up released";
+      translationFactor.setZ(translationFactor.z()+0.1f);
+      setInitialTranslation();
+      break;
+  case 16777236:
+      qDebug() << "Right released";
+      translationFactor.setX(translationFactor.x()+0.1f);
+      qDebug() << translationFactor;
+      setInitialTranslation();
+      break;
+  case 16777237:
+      qDebug() << "Down released";
+      translationFactor.setZ(translationFactor.z()-0.1f);
+      qDebug() << translationFactor;
+      setInitialTranslation();
+      break;
+  case 16777238:
+      qDebug() << "PgUp Left released";
+      translationFactor.setY(translationFactor.y()+0.1f);
+      qDebug() << translationFactor;
+      setInitialTranslation();
+      break;
+  case 16777239:
+      qDebug() << "PgDn released";
+      translationFactor.setY(translationFactor.y()-0.1f);
+      qDebug() << translationFactor;
+      setInitialTranslation();
+      break;
   default:
     qDebug() << ev->key() << "released";
     break;

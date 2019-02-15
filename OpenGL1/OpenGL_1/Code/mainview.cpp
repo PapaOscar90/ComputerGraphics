@@ -131,6 +131,11 @@ void MainView::paintGL() {
   glUniformMatrix4fv(uniformProjection, 1, GL_FALSE,
                      projectionTransform.data());
 
+  // Set the transform location for the sphere
+  glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, sphereTransform.data());
+  glBindVertexArray(VAO_Sphere);
+  glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesSphere);
+
   // Set the transform location using the ID for the cube, for the shader
   // computation Then set the Cube for render, and render
   glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, cubeTransform.data());
@@ -143,10 +148,7 @@ void MainView::paintGL() {
   glBindVertexArray(VAO_Pyramid);
   glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesPyramid);
 
-  // Set the transform location for the sphere
-  glUniformMatrix4fv(uniformTransform, 1, GL_FALSE, sphereTransform.data());
-  glBindVertexArray(VAO_Sphere);
-  glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesSphere);
+
 
   shaderProgram.release();
 }
@@ -443,6 +445,11 @@ void MainView::setInitialTranslation() {
   cubeTransform.translate(2, 0, -6);
   pyramidTransform.translate(-2, 0, -6);
   sphereTransform.translate(0, 0, -10);
+
+  // Translate from any key press
+  cubeTransform.translate(translationFactor);
+  pyramidTransform.translate(translationFactor);
+  sphereTransform.translate(translationFactor);
 
   // Apply the scale factor 1.0 or provided by the GUI
   cubeTransform.scale(scaleFactor);

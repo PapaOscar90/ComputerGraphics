@@ -42,6 +42,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   float scaleFactor = 1.0f;
   // Store the rotation applied to each shape
   QQuaternion rotationFactor = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+  QVector3D translationFactor = {0,0,0};
 
   // Store a transform matrix for each object, including projection
   QMatrix4x4 cubeTransform;

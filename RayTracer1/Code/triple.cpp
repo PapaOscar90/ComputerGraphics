@@ -2,7 +2,7 @@
 
 #include "json/json.h"
 
-#include <cmath>        // fmin
+#include <cmath> // fmin
 #include <exception>
 #include <iostream>
 
@@ -12,11 +12,11 @@ using json = nlohmann::json;
 // --- Constructors ------------------------------------------------------------
 
 Triple::Triple(double X, double Y, double Z)
-:
-    x(X),
-    y(Y),
-    z(Z)
-{}
+    : x(X),
+      y(Y),
+      z(Z)
+{
+}
 
 Triple::Triple(json const &node)
 {
@@ -135,9 +135,9 @@ double Triple::dot(Triple const &t) const
 
 Triple Triple::cross(Triple const &t) const
 {
-    return Triple(y*t.z - z*t.y,
-                  z*t.x - x*t.z,
-                  x*t.y - y*t.x);
+    return Triple(y * t.z - z * t.y,
+                  z * t.x - x * t.z,
+                  x * t.y - y * t.x);
 }
 
 double Triple::length() const
@@ -224,7 +224,7 @@ istream &operator>>(istream &is, Triple &t)
     is >> x;
     is >> y;
     is >> z;
-    t.set(x, y, z);             // only assign if everything is extracted
+    t.set(x, y, z); // only assign if everything is extracted
     return is;
 }
 

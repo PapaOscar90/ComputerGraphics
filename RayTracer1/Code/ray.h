@@ -5,20 +5,20 @@
 
 class Ray
 {
-    public:
-        Point O;        // origin
-        Vector D;       // direction of the ray
+  public:
+    Point O;  // origin
+    Vector D; // direction of the ray
 
-        Ray(Point const &from, Vector const &dir)
-        :
-            O(from),
-            D(dir)
-        {}
+    Ray(Point const &from, Vector const &dir)
+        : O(from),
+          D(dir)
+    {
+    }
 
-        Point at(double t) const
-        {
-            return O + t * D;
-        }
+    Point at(double t) const
+    {
+        return O + t * D;
+    }
 };
 
 #endif

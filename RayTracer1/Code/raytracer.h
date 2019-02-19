@@ -15,17 +15,15 @@ class Raytracer
 {
     Scene scene;
 
-    public:
+  public:
+    bool readScene(std::string const &ifname);
+    void renderToFile(std::string const &ofname);
 
-        bool readScene(std::string const &ifname);
-        void renderToFile(std::string const &ofname);
+  private:
+    bool parseObjectNode(nlohmann::json const &node);
 
-    private:
-
-        bool parseObjectNode(nlohmann::json const &node);
-
-        Light parseLightNode(nlohmann::json const &node) const;
-        Material parseMaterialNode(nlohmann::json const &node) const;
+    Light parseLightNode(nlohmann::json const &node) const;
+    Material parseMaterialNode(nlohmann::json const &node) const;
 };
 
 #endif

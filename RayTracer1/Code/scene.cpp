@@ -26,12 +26,13 @@ Color Scene::trace(Ray const &ray)
     }
 
     // No hit? Return background color.
-    if (!obj) return Color(0.0, 0.0, 0.0);
+    if (!obj)
+        return Color(0.0, 0.0, 0.0);
 
-    Material material = obj->material;          //the hit objects material
-    Point hit = ray.at(min_hit.t);                 //the hit point
-    Vector N = min_hit.N;                          //the normal at hit point
-    Vector V = -ray.D;                             //the view vector
+    Material material = obj->material; //the hit objects material
+    Point hit = ray.at(min_hit.t);     //the hit point
+    Vector N = min_hit.N;              //the normal at hit point
+    Vector V = -ray.D;                 //the view vector
 
     /****************************************************
     * This is where you should insert the color
@@ -51,7 +52,7 @@ Color Scene::trace(Ray const &ray)
     *        pow(a,b)           a to the power of b
     ****************************************************/
 
-    Color color = material.color;                  // place holder
+    Color color = material.color; // place holder
 
     return color;
 }

@@ -21,16 +21,16 @@
 #include <fstream>
 #include <iostream>
 
-using namespace std;        // no std:: required
+using namespace std; // no std:: required
 using json = nlohmann::json;
 
 bool Raytracer::parseObjectNode(json const &node)
 {
     ObjectPtr obj = nullptr;
 
-// =============================================================================
-// -- Determine type and parse object parametrers ------------------------------
-// =============================================================================
+    // =============================================================================
+    // -- Determine type and parse object parametrers ------------------------------
+    // =============================================================================
 
     if (node["type"] == "sphere")
     {
@@ -43,9 +43,9 @@ bool Raytracer::parseObjectNode(json const &node)
         cerr << "Unknown object type: " << node["type"] << ".\n";
     }
 
-// =============================================================================
-// -- End of object reading ----------------------------------------------------
-// =============================================================================
+    // =============================================================================
+    // -- End of object reading ----------------------------------------------------
+    // =============================================================================
 
     if (!obj)
         return false;
@@ -69,22 +69,22 @@ Material Raytracer::parseMaterialNode(json const &node) const
     double ka = node["ka"];
     double kd = node["kd"];
     double ks = node["ks"];
-    double n  = node["n"];
+    double n = node["n"];
     return Material(color, ka, kd, ks, n);
 }
 
-bool Raytracer::readScene(string const &ifname)
-try
+bool Raytracer::readScene(string const &ifname) try
 {
     // Read and parse input json file
     ifstream infile(ifname);
-    if (!infile) throw runtime_error("Could not open input file for reading.");
+    if (!infile)
+        throw runtime_error("Could not open input file for reading.");
     json jsonscene;
     infile >> jsonscene;
 
-// =============================================================================
-// -- Read your scene data in this section -------------------------------------
-// =============================================================================
+    // =============================================================================
+    // -- Read your scene data in this section -------------------------------------
+    // =============================================================================
 
     Point eye(jsonscene["Eye"]);
     scene.setEye(eye);
@@ -101,9 +101,9 @@ try
 
     cout << "Parsed " << objCount << " objects.\n";
 
-// =============================================================================
-// -- End of scene data reading ------------------------------------------------
-// =============================================================================
+    // =============================================================================
+    // -- End of scene data reading ------------------------------------------------
+    // =============================================================================
 
     return true;
 }

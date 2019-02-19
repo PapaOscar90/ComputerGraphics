@@ -7,11 +7,11 @@
 using namespace std;
 
 Image::Image(unsigned width, unsigned height)
-:
-    d_pixels(width * height),
-    d_width(width),
-    d_height(height)
-{}
+    : d_pixels(width * height),
+      d_width(width),
+      d_height(height)
+{
+}
 
 Image::Image(string const &filename)
 {
@@ -31,7 +31,7 @@ Color Image::get_pixel(unsigned x, unsigned y) const
 // Handier accessors
 // Usage: color = img(x,y);
 //        img(x,y) = color;
-Color const&Image::operator()(unsigned x, unsigned y) const
+Color const &Image::operator()(unsigned x, unsigned y) const
 {
     return d_pixels.at(index(x, y));
 }
@@ -65,13 +65,13 @@ Color const &Image::colorAt(float x, float y) const
 void Image::write_png(std::string const &filename) const
 {
     vector<unsigned char> image;
-    image.reserve(size() * 4);  // reserves size (less allocations)
+    image.reserve(size() * 4); // reserves size (less allocations)
     for (Color pixel : d_pixels)
     {
         image.push_back(static_cast<unsigned char>(pixel.r * 255.0));
         image.push_back(static_cast<unsigned char>(pixel.g * 255.0));
         image.push_back(static_cast<unsigned char>(pixel.b * 255.0));
-        image.push_back(255);   // alpha is always 1
+        image.push_back(255); // alpha is always 1
     }
 
     lodepng::encode(filename, image, d_width, d_height);

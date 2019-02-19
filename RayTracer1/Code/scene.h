@@ -14,24 +14,22 @@ class Image;
 class Scene
 {
     std::vector<ObjectPtr> objects;
-    std::vector<LightPtr> lights;   // no ptr needed, but kept for consistency
+    std::vector<LightPtr> lights; // no ptr needed, but kept for consistency
     Point eye;
 
-    public:
+  public:
+    // trace a ray into the scene and return the color
+    Color trace(Ray const &ray);
 
-        // trace a ray into the scene and return the color
-        Color trace(Ray const &ray);
+    // render the scene to the given image
+    void render(Image &img);
 
-        // render the scene to the given image
-        void render(Image &img);
+    void addObject(ObjectPtr obj);
+    void addLight(Light const &light);
+    void setEye(Triple const &position);
 
-
-        void addObject(ObjectPtr obj);
-        void addLight(Light const &light);
-        void setEye(Triple const &position);
-
-        unsigned getNumObject();
-        unsigned getNumLights();
+    unsigned getNumObject();
+    unsigned getNumLights();
 };
 
 #endif

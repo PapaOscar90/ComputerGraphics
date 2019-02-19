@@ -14,13 +14,13 @@ typedef std::shared_ptr<Object> ObjectPtr;
 
 class Object
 {
-    public:
-        Material material;
+  public:
+    Material material;
 
-        virtual ~Object() = default;
+    virtual ~Object() = default;
 
-        virtual Hit intersect(Ray const &ray) = 0;  // must be implemented
-                                                    // in derived class
+    virtual Hit intersect(Ray const &ray) = 0; // must be implemented
+                                               // in derived class
 };
 
 #endif

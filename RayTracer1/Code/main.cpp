@@ -20,8 +20,7 @@ int main(int argc, char *argv[])
     // read the scene
     if (!raytracer.readScene(argv[1]))
     {
-        cerr << "Error: reading scene from " << argv[1] <<
-            " failed - no output generated.\n";
+        cerr << "Error: reading scene from " << argv[1] << " failed - no output generated.\n";
         return 1;
     }
 
@@ -29,11 +28,11 @@ int main(int argc, char *argv[])
     string ofname;
     if (argc >= 3)
     {
-        ofname = argv[2];   // use the provided name
+        ofname = argv[2]; // use the provided name
     }
     else
     {
-        ofname = argv[1];   // replace .json with .png
+        ofname = argv[1]; // replace .json with .png
         ofname.erase(ofname.begin() + ofname.find_last_of('.'), ofname.end());
         ofname += ".png";
     }

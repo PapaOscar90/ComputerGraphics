@@ -48,47 +48,44 @@ class OBJLoader
 
     typedef std::vector<std::string> StringList;
 
-    public:
-
-        /**
+  public:
+    /**
          * @brief OBJLoader
          * @param filename
          */
-        explicit OBJLoader(std::string const &filename);
+    explicit OBJLoader(std::string const &filename);
 
-        /**
+    /**
          * @brief vertex_data
          * @return interleaved vertex data, see vertex.h
          *
          * @note texCoord is only valid when hasTexCoords() returns
          *  true
          */
-        std::vector<Vertex> vertex_data() const;
+    std::vector<Vertex> vertex_data() const;
 
-        unsigned numTriangles() const;
+    unsigned numTriangles() const;
 
-        bool hasTexCoords() const;
+    bool hasTexCoords() const;
 
-        /**
+    /**
          * @brief unitize: scale mesh to fit in unitcube
          *
          * TODO: Implement this method yourself!
          */
-        void unitize();
+    void unitize();
 
-    private:
+  private:
+    void parseFile(std::string const &filename);
+    void parseLine(std::string const &line);
+    void parseVertex(StringList const &tokens);
+    void parseNormal(StringList const &tokens);
+    void parseTexCoord(StringList const &tokens);
+    void parseFace(StringList const &tokens);
 
-        void parseFile(std::string const &filename);
-        void parseLine(std::string const &line);
-        void parseVertex(StringList const &tokens);
-        void parseNormal(StringList const &tokens);
-        void parseTexCoord(StringList const &tokens);
-        void parseFace(StringList const &tokens);
-
-        StringList split(std::string const &str,
-                             char splitChar,
-                             bool keepEmpty = true);
-
+    StringList split(std::string const &str,
+                     char splitChar,
+                     bool keepEmpty = true);
 };
 
 #endif // OBJLOADER_H_

@@ -10,15 +10,15 @@ typedef std::shared_ptr<Light> LightPtr;
 
 class Light
 {
-    public:
-        Point const position;
-        Color const color;
+  public:
+    Point const position;
+    Color const color;
 
-        Light(Point const &pos, Color const &c)
-        :
-            position(pos),
-            color(c)
-        {}
+    Light(Point const &pos, Color const &c)
+        : position(pos),
+          color(c)
+    {
+    }
 };
 
 #endif

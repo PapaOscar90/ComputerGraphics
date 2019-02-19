@@ -36,32 +36,40 @@ Hit Sphere::intersect(Ray const &ray)
     * 
     *  t = (-d*(e-c) +/- sqrt(D)) / (d*d)
     ***************************************************************************/
-   Vector hitVector;
-   double r2 = r*r;
-   Point eMc = ray.O - position;
+    double t0,t1,t;
+    double d2 = ray.D.dot(ray.D);
+    double r2 = r*r; 
+    Vector eMinusC = ray.O - position;
 
-   hitVector = (ray.D.dot(eMc)*ray.D.dot(eMc)) - (ray.D.dot(ray.D.dot)*((eMc*eMc) - r2));
-   
-   Vector OC = (position - ray.O).normalized();
-   if (OC.dot(ray.D) < 0.999)
-   {
-       return Hit::NO_HIT();
-   }
-   double t = 1000;
+    double discriminate = (ray.D.dot(eMinusC) * ray.D.dot(eMinusC)) - (d2*(eMinusC.dot(eMinusC) * r2));
+    if(discriminate < 0.0){
+        return Hit::NO_HIT();
+    } else if(discriminate == 0) {
+        // One hit, but for now just 2D for testing
+        t = 1000;
+    } else {
+        // Two hits, needs to find closest, but 2D now for testing
+        t = 1000;
+    }
 
-   /**************************************************************************
-    * RT1.2: NORMAL CALCULATION
-    *
-    * Given: t, C, r
-    * Sought: N
-    *
-    * The normal at point p ()= e+td) on the surface, is given by:
-    * 
-    * N = 2(p-c) 
-    * 
-    **************************************************************************/
-    
-   Vector N /* = ... */;
+    Vector OC = (position - ray.O).normalized();
+    if (OC.dot(ray.D) < 0.999)
+    {
+        return Hit::NO_HIT();
+    }
+ 
+    /**************************************************************************
+     * RT1.2: NORMAL CALCULATION
+     *
+     * Given: t, C, r
+     * Sought: N
+     *
+     * The normal at point p ()= e+td) on the surface, is given by:
+     * 
+     * N = 2(p-c) 
+     * 
+     **************************************************************************/   
+    Vector N /* = ... */;
 
     return Hit(t, N);
 }

@@ -36,14 +36,13 @@ Hit Sphere::intersect(Ray const &ray)
     * 
     *  t = (-d*(e-c) +/- sqrt(D)) / (d*d)
     ***************************************************************************/
-   double discriminant;
+   Vector hitVector;
    double r2 = r*r;
    Point eMc = ray.O - position;
 
-   discriminant = (ray.D.dot(eMc)*ray.D.dot(eMc)) - (ray.D.dot(ray.D.dot)*((eMc*eMc) - r2));
+   hitVector = (ray.D.dot(eMc)*ray.D.dot(eMc)) - (ray.D.dot(ray.D.dot)*((eMc*eMc) - r2));
+   
    Vector OC = (position - ray.O).normalized();
-
-
    if (OC.dot(ray.D) < 0.999)
    {
        return Hit::NO_HIT();

@@ -15,8 +15,9 @@ Hit Sphere::intersect(Ray const &ray) {
    * You have the sphere's center (C) and radius (r) as well as
    * the ray's origin (ray.O) and direction (ray.D).
    *
-   * If the ray does not intersect the sphere, return false.
-   * Otherwise, return true and place the distance of the
+   * Computation for Intersection:
+   * If the ray does not intersect the sphere, return NoHit.
+   * Otherwise, return Hit and place the distance of the
    * intersection point from the ray origin in *t (see example).
    *  (e+td-c)*(e+td-c) - R^2 = 0
    * Where e is the origin, t the distance, d the vector of the ray
@@ -25,12 +26,12 @@ Hit Sphere::intersect(Ray const &ray) {
    * This expands into the quadratic solution form, which looks at the
    * discriminant. Specifically if:
    *
-   * D = (d*(e-c))^2 - (d*d)((e-c)*(e-c)- R^2) = 0 -> single solution, ray
-   *grazes > 0 -> Two strikes, get closest < 0 -> The ray misses the sphere
+   * D = (d*(e-c))^2 - (d*d)((e-c)*(e-c)- R^2)
+   *                           = 0 -> single solution, ray grazes
+   *                           > 0 -> Two strikes, get closest
+   *                           < 0 -> The ray misses the sphere
    *
-   * !!!    Below, eMc = (e-c), r2 = R^2   !!!
-   *
-   * The solution for t becomes:
+   * The solution for t is:
    *
    *  t = (-d*(e-c) +/- sqrt(D)) / (d*d)
    ***************************************************************************/
@@ -62,7 +63,7 @@ Hit Sphere::intersect(Ray const &ray) {
    * Given: t, C, r
    * Sought: N
    *
-   * The normal at point p ()= e+td) on the surface, is given by:
+   * The normal at point p = (e+td) on the surface, is given by:
    *
    * N = 2(p-c)
    *

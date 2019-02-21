@@ -49,7 +49,27 @@ Color Scene::trace(Ray const &ray) {
    *        pow(a,b)           a to the power of b
    ****************************************************/
 
-  Color color = material.color; // place holder
+  Vector NHat = N.normalized(); // Normalized N
+  Vector VHat = V.normalized(); // Normalized V
+
+  const float AMBIENT_LIGHT_INTENSITY = 1.0;
+
+  Color color = material.ka * AMBIENT_LIGHT_INTENSITY * material.color;
+
+  for (auto lightPtr : lights) {
+    Vector L = (lightPtr->position - hit).normalized();
+
+    // Diffuse term
+    float NdotL = NHat.dot(L);
+    float intensity = max(min(NdotL, 1.0f), 0.0f);
+    color += material.kd * intensity * material.color * (lightPtr->color);
+
+    // Specular term
+    Vector R = (2 * (NdotL)*NHat - L).normalized();
+    float VdotR = VHat.dot(R);
+    intensity = pow(max(min(VdotR, 1.0f), 0.0f), material.n);
+    color += material.ks * intensity * (lightPtr->color);
+  }
 
   return color;
 }

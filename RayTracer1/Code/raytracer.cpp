@@ -10,6 +10,7 @@
 // =============================================================================
 
 #include "shapes/sphere.h"
+#include "shapes/triangle.h"
 
 // =============================================================================
 // -- End of shape includes ----------------------------------------------------
@@ -36,6 +37,11 @@ bool Raytracer::parseObjectNode(json const &node) {
     Point pos(node["position"]);
     double radius = node["radius"];
     obj = ObjectPtr(new Sphere(pos, radius));
+  } else if (node["type"] == "triangle") {
+    Point vertex1(node["vertices"][0]);
+    Point vertex2(node["vertices"][1]);
+    Point vertex3(node["vertices"][2]);
+    obj = ObjectPtr(new Triangle(vertex1, vertex2, vertex3));
   } else {
     cerr << "Unknown object type: " << node["type"] << ".\n";
   }

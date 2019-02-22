@@ -29,7 +29,7 @@ bool Raytracer::parseObjectNode(json const &node) {
   ObjectPtr obj = nullptr;
 
   // =============================================================================
-  // -- Determine type and parse object parametrers
+  // -- Determine type and parse object parameters
   // ------------------------------
   // =============================================================================
 

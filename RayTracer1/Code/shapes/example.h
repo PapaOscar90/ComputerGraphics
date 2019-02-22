@@ -3,14 +3,13 @@
 
 #include "../object.h"
 
-class Example: public Object
-{
-    public:
-        Example(/* YOUR DATA MEMBERS HERE*/);
+class Example : public Object {
+public:
+  Example(/* YOUR DATA MEMBERS HERE*/);
 
-        virtual Hit intersect(Ray const &ray);
+  virtual Hit intersect(Ray const &ray);
 
-        /* YOUR DATA MEMBERS HERE*/
+  /* YOUR DATA MEMBERS HERE*/
 };
 
 #endif

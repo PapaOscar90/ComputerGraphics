@@ -2,18 +2,17 @@
 #define NLOHMANN_JSON_FWD_HPP
 
 #include <cstdint> // int64_t, uint64_t
-#include <map> // map
-#include <memory> // allocator
-#include <string> // string
-#include <vector> // vector
+#include <map>     // map
+#include <memory>  // allocator
+#include <string>  // string
+#include <vector>  // vector
 
 /*!
 @brief namespace for Niels Lohmann
 @see https://github.com/nlohmann
 @since version 1.0.0
 */
-namespace nlohmann
-{
+namespace nlohmann {
 /*!
 @brief default JSONSerializer template argument
 
@@ -21,19 +20,18 @@ This serializer ignores the template arguments and uses ADL
 ([argument-dependent lookup](http://en.cppreference.com/w/cpp/language/adl))
 for serialization.
 */
-template<typename = void, typename = void>
-struct adl_serializer;
+template <typename = void, typename = void> struct adl_serializer;
 
-template<template<typename U, typename V, typename... Args> class ObjectType =
-         std::map,
-         template<typename U, typename... Args> class ArrayType = std::vector,
-         class StringType = std::string, class BooleanType = bool,
-         class NumberIntegerType = std::int64_t,
-         class NumberUnsignedType = std::uint64_t,
-         class NumberFloatType = double,
-         template<typename U> class AllocatorType = std::allocator,
-         template<typename T, typename SFINAE = void> class JSONSerializer =
-         adl_serializer>
+template <template <typename U, typename V, typename... Args> class ObjectType =
+              std::map,
+          template <typename U, typename... Args> class ArrayType = std::vector,
+          class StringType = std::string, class BooleanType = bool,
+          class NumberIntegerType = std::int64_t,
+          class NumberUnsignedType = std::uint64_t,
+          class NumberFloatType = double,
+          template <typename U> class AllocatorType = std::allocator,
+          template <typename T, typename SFINAE = void> class JSONSerializer =
+              adl_serializer>
 class basic_json;
 
 /*!
@@ -58,6 +56,6 @@ uses the standard template types.
 @since version 1.0.0
 */
 using json = basic_json<>;
-}
+} // namespace nlohmann
 
 #endif

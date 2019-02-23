@@ -9,6 +9,7 @@
 // -- Include all your shapes here ---------------------------------------------
 // =============================================================================
 
+#include "shapes/mesh.h"
 #include "shapes/sphere.h"
 #include "shapes/triangle.h"
 
@@ -21,6 +22,7 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace std; // no std:: required
 using json = nlohmann::json;
@@ -42,6 +44,10 @@ bool Raytracer::parseObjectNode(json const &node) {
     Point vertex2(node["vertices"][1]);
     Point vertex3(node["vertices"][2]);
     obj = ObjectPtr(new Triangle(vertex1, vertex2, vertex3));
+  } else if (node["type"] == "mesh") {
+    std::string filename = node["model"];
+    Vector translation(node["position"]);
+    obj = ObjectPtr(new Mesh(filename, translation));
   } else {
     cerr << "Unknown object type: " << node["type"] << ".\n";
   }

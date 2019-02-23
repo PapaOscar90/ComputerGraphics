@@ -1,0 +1,25 @@
+{
+    "Eye": [200, 200, 1000],
+    "Lights": [
+        {
+            "position": [-200, 600, 1500],
+            "color": [1.0, 1.0, 1.0]
+        }
+    ],
+    "Objects": [
+        {
+            "type": "mesh",
+            "comment": "Cube",
+            "model": "../Scenes/meshes/cube_scaled_rotated.obj",
+            "position": [200, 200, 0],
+            "material":
+            {
+                "color": [1.0,0.0,0.0],
+                "ka": 0.5,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 1
+            }
+        }
+    ]
+}

@@ -29,8 +29,8 @@ Hit Triangle::intersect(Ray const &ray) {
    *
    ***************************************************************************/
 
-  Vector edge1 = vertices[1] - vertices[0];
-  Vector edge2 = vertices[2] - vertices[0];
+  Vector edge1(vertices[1] - vertices[0]);
+  Vector edge2(vertices[2] - vertices[0]);
   Vector pvec = ray.D.cross(edge2);
   double det = edge1.dot(pvec);
 
@@ -66,6 +66,8 @@ Hit Triangle::intersect(Ray const &ray) {
    **************************************************************************/
 
   Vector N = edge2.cross(edge1);
+  if (N.dot(ray.D) > 0)
+    N = -N;
 
   return Hit(t, N);
 }

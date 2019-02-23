@@ -2,8 +2,9 @@
 #define MESH_H_
 
 #include "../object.h"
-#include "../objloader.h"
+#include "triangle.h"
 #include <string>
+#include <vector>
 
 class Mesh : public Object {
 public:
@@ -13,7 +14,7 @@ public:
 
 private:
   std::string const &filename;
-  OBJLoader const model;
+  std::vector<Triangle> triangles;
   Vector const translation;
 };
 

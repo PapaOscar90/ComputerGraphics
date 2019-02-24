@@ -9,7 +9,7 @@
     "Objects": [
         {
             "type": "plane",
-            "comment": "White Plane",
+            "comment": "Gray Plane",
             "point": [0, 0, 0],
             "normal": [0, 0, 1],
             "material": {

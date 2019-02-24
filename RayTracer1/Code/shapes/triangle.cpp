@@ -1,11 +1,11 @@
 #include "triangle.h"
 
 #include <cmath>
+#include <limits>
 
 using namespace std;
-#include <iostream>
 
-const double EPSILON = 0.000001;
+const double EPSILON = numeric_limits<double>::epsilon();
 
 Hit Triangle::intersect(Ray const &ray) {
   /* *********************************************************************

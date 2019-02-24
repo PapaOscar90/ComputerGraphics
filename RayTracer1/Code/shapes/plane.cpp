@@ -3,16 +3,21 @@
 #include <cmath>
 
 Hit Plane::intersect(Ray const &ray) {
-  /* Your intersect calculation goes here */
-  bool hit false;
+  /* Detect ray intersection via normal directions */
+  float denominator = n.dot(ray.D);
+  double t;
 
-  double t = 0 /* = ... */;
-  Vector N /* = ... */;
+  // If the ray is parallel, don't divide by zero
+  // also if the ray is in the opposite direction just return
+  if(denominator < 0.0000001){
+    return Hit::NO_HIT();
+  }else{
+    Vector temp = position - ray.O;
+    t = temp.dot(n) / denominator;
+  }
 
-  return Hit(t, N);
+  // The normal of the plane is always the normal of the plane
+  return Hit(t, n);
 }
 
-Plane::Plane(/* YOUR DATAMEMBERS HERE */)
-//:
-// See sphere.cpp how to initialize your data members
-{}
+Plane::Plane(Point const &pos, Vector const n) : position(pos), n(n){}

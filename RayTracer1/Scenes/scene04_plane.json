@@ -9,15 +9,41 @@
     "Objects": [
         {
             "type": "plane",
-            "comment": "White Plane",
+            "comment": "Gray plane",
             "point": [0, 0, 0],
-            "normal": [0, 0, 1],
+            "normal": [0, 1, 0.1],
             "material": {
                 "color": [0.5, 0.5, 0.5],
                 "ka": 0.5,
                 "kd": 0.8,
-                "ks": 0.0,
+                "ks": 1.0,
                 "n": 64
+            }
+        },
+        {
+            "type": "plane",
+            "comment": "Blue plane",
+            "point": [0, 0, -2500],
+            "normal": [0, 0, 1],
+            "material": {
+                "color": [0.0, 0.0, 0.5],
+                "ka": 0.5,
+                "kd": 0.8,
+                "ks": 1.0,
+                "n": 12
+            }
+        },
+        {
+            "type": "sphere",
+            "comment": "Sun",
+            "position": [10, 350, -2600],
+            "radius": 200,
+            "material": {
+                "color": [1.0, 0.8, 0.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 1
             }
         },
         {
@@ -29,7 +55,7 @@
                 "color": [0.0, 0.0, 1.0],
                 "ka": 0.2,
                 "kd": 0.7,
-                "ks": 0.5,
+                "ks": 1,
                 "n": 64
             }
         },
@@ -49,7 +75,7 @@
         {
             "type": "sphere",
             "comment": "Red sphere",
-            "position": [290, 170, 150],
+            "position": [210, 170, 150],
             "radius": 50,
             "material": {
                 "color": [1.0, 0.0, 0.0],
@@ -62,7 +88,7 @@
         {
             "type": "sphere",
             "comment": "Yellow sphere",
-            "position": [140, 220, 400],
+            "position": [250, 220, 400],
             "radius": 50,
             "material": {
                 "color": [1.0, 0.8, 0.0],

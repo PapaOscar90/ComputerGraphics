@@ -12,6 +12,7 @@
             "comment": "Central White Sphere",
             "model": "../Scenes/meshes/sphere.obj",
             "position": [200, 200, 0],
+            "scale": 2.0,
             "material": {
                 "color": [1.0, 1.0, 1.0],
                 "ka": 0.5,
@@ -25,6 +26,7 @@
             "comment": "Top Right Red Sphere",
             "model": "../Scenes/meshes/sphere.obj",
             "position": [300, 300, -100],
+            "scale": 1.0,
             "material": {
                 "color": [1.0, 0.0, 0.0],
                 "ka": 0.5,
@@ -38,6 +40,7 @@
             "comment": "Top Left Green Sphere",
             "model": "../Scenes/meshes/sphere.obj",
             "position": [100, 300, -100],
+            "scale": 1.0,
             "material": {
                 "color": [0.0, 1.0, 0.0],
                 "ka": 0.5,
@@ -51,6 +54,7 @@
             "comment": "Bottom Right Blue Sphere",
             "model": "../Scenes/meshes/sphere.obj",
             "position": [300, 100, -100],
+            "scale": 1.0,
             "material": {
                 "color": [0.0, 0.0, 1.0],
                 "ka": 0.5,
@@ -64,6 +68,7 @@
             "comment": "Bottom Left Black Sphere",
             "model": "../Scenes/meshes/sphere.obj",
             "position": [100, 100, -100],
+            "scale": 1.0,
             "material": {
                 "color": [0.0, 0.0, 0.0],
                 "ka": 0.5,

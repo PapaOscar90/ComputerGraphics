@@ -11,7 +11,7 @@
             "type": "mesh",
             "comment": "Central White Cube",
             "model": "../Scenes/meshes/cube.obj",
-            "position": [200, 200, 0],
+            "position": [200, 300, 0],
             "scale": 50.0,
             "material": {
                 "color": [1.0, 1.0, 1.0],
@@ -23,24 +23,10 @@
         },
         {
             "type": "mesh",
-            "comment": "Central White Cube",
-            "model": "../Scenes/meshes/cube_scaled.obj",
-            "position": [200, 300, 0],
-            "scale": 1.0,
-            "material": {
-                "color": [1.0, 1.0, 1.0],
-                "ka": 0.5,
-                "kd": 0.5,
-                "ks": 0.5,
-                "n": 1
-            }
-        },
-        {
-            "type": "mesh",
             "comment": "Blue Rotated Cube",
-            "model": "../Scenes/meshes/cube_scaled_rotated.obj",
+            "model": "../Scenes/meshes/cube_rotated.obj",
             "position": [200, 100, 0],
-            "scale": 1.0,
+            "scale": 50.0,
             "material": {
                 "color": [0.0, 0.0, 1.0],
                 "ka": 0.5,

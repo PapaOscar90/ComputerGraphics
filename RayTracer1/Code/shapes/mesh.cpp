@@ -36,7 +36,7 @@ Mesh::Mesh(string const &filename, Vector const &translation)
                           vertices[3 * i + 1].z) +
                     translation;
     Point vertex3 = Point(vertices[3 * i + 2].x, vertices[3 * i + 2].y,
-                          vertices[3 * i + 2].z) = translation;
+                          vertices[3 * i + 2].z) + translation;
     Triangle triangle(vertex1, vertex2, vertex3);
     triangles.push_back(triangle);
   }

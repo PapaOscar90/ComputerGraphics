@@ -76,6 +76,19 @@
                 "ks": 0.5,
                 "n": 1
             }
+        },
+        {
+            "type": "plane",
+            "comment": "Background plane",
+            "point": [0, 0, -200],
+            "normal": [0, 0, 1],
+            "material": {
+                "color": [0.5, 0.5, 0.5],
+                "ka": 1.0,
+                "kd": 0.0,
+                "ks": 0.0,
+                "n": 0
+            }
         }
     ]
 }

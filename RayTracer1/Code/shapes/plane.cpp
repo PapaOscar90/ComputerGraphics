@@ -9,9 +9,9 @@ Hit Plane::intersect(Ray const &ray) {
 
   // If the ray is parallel, don't divide by zero
   // also if the ray is in the opposite direction just return
-  if(denominator < 0.0000001){
+  if (denominator < 0.0000001) {
     return Hit::NO_HIT();
-  }else{
+  } else {
     Vector temp = position - ray.O;
     t = temp.dot(n) / denominator;
   }
@@ -20,4 +20,4 @@ Hit Plane::intersect(Ray const &ray) {
   return Hit(t, n);
 }
 
-Plane::Plane(Point const &pos, Vector const n) : position(pos), n(n){}
+Plane::Plane(Point const &pos, Vector const n) : position(pos), n(n) {}

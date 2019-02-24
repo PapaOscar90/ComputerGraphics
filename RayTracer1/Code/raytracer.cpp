@@ -50,9 +50,9 @@ bool Raytracer::parseObjectNode(json const &node) {
     Vector translation(node["position"]);
     obj = ObjectPtr(new Mesh(filename, translation));
   } else if (node["type"] == "plane") {
-    Point pos(node["position"]);
-    Vector n(node["n"]);
-    obj = ObjectPtr(new Plane(pos, n));
+    Point point(node["point"]);
+    Vector N(node["normal"]);
+    obj = ObjectPtr(new Plane(point, N));
   } else {
     cerr << "Unknown object type: " << node["type"] << ".\n";
   }

@@ -1,23 +1,30 @@
 #include "plane.h"
 
 #include <cmath>
+#include <limits>
+
+using namespace std;
+
+const double EPSILON = numeric_limits<double>::epsilon();
 
 Hit Plane::intersect(Ray const &ray) {
   /* Detect ray intersection via normal directions */
-  float denominator = n.dot(ray.D);
+  double denominator = N.dot(ray.D);
   double t;
 
   // If the ray is parallel, don't divide by zero
-  // also if the ray is in the opposite direction just return
-  if (denominator < 0.0000001) {
+  if (abs(denominator) < EPSILON) {
     return Hit::NO_HIT();
-  } else {
-    Vector temp = position - ray.O;
-    t = temp.dot(n) / denominator;
+  }
+
+  double numerator = (point - ray.O).dot(N);
+  t = numerator / denominator;
+  if (t <= EPSILON) { // Plane is behind the origin of the ray
+    return Hit::NO_HIT();
   }
 
   // The normal of the plane is always the normal of the plane
-  return Hit(t, n);
+  return Hit(t, N);
 }
 
-Plane::Plane(Point const &pos, Vector const n) : position(pos), n(n) {}
+Plane::Plane(Point const &point, Vector const N) : point(point), N(N) {}

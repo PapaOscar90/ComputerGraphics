@@ -10,14 +10,14 @@
         {
             "type": "plane",
             "comment": "White Plane",
-            "position": [0, 0, -100],
-            "n": [0, 1.0, 0],
+            "point": [0, 0, 0],
+            "normal": [0, 0, 1],
             "material":
             {
                 "color": [1.0, 1.0, 1.0],
-                "ka": 0.2,
-                "kd": 0.7,
-                "ks": 0.5,
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
                 "n": 64
             }
         },

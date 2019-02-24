@@ -5,12 +5,12 @@
 
 class Plane : public Object {
 public:
-  Plane(Point const &pos, Vector const n);
+  Plane(Point const &point, Vector const N);
 
   virtual Hit intersect(Ray const &ray);
 
-  Point const position;
-  Vector const n;
+  Point const point;
+  Vector const N;
 };
 
 #endif

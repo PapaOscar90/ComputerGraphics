@@ -24,19 +24,23 @@ Hit Mesh::intersect(Ray const &ray) {
   return hit ? min_hit : Hit::NO_HIT();
 }
 
-Mesh::Mesh(string const &filename, Vector const &translation)
-    : filename(filename), translation(translation) {
+Mesh::Mesh(string const &filename, Vector const &translation,
+           double const &scale)
+    : filename(filename), translation(translation), scale(scale) {
   OBJLoader model(filename);
   auto vertices = model.vertex_data();
   for (size_t i = 0; i < model.numTriangles(); i++) {
     Point vertex1 =
-        Point(vertices[3 * i].x, vertices[3 * i].y, vertices[3 * i].z) +
+        (Point(vertices[3 * i].x, vertices[3 * i].y, vertices[3 * i].z) *
+         scale) +
         translation;
-    Point vertex2 = Point(vertices[3 * i + 1].x, vertices[3 * i + 1].y,
-                          vertices[3 * i + 1].z) +
+    Point vertex2 = (Point(vertices[3 * i + 1].x, vertices[3 * i + 1].y,
+                           vertices[3 * i + 1].z) *
+                     scale) +
                     translation;
-    Point vertex3 = Point(vertices[3 * i + 2].x, vertices[3 * i + 2].y,
-                          vertices[3 * i + 2].z) +
+    Point vertex3 = (Point(vertices[3 * i + 2].x, vertices[3 * i + 2].y,
+                           vertices[3 * i + 2].z) *
+                     scale) +
                     translation;
     Triangle triangle(vertex1, vertex2, vertex3);
     triangles.push_back(triangle);

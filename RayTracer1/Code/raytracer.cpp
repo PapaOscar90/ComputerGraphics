@@ -48,7 +48,8 @@ bool Raytracer::parseObjectNode(json const &node) {
   } else if (node["type"] == "mesh") {
     std::string filename = node["model"];
     Vector translation(node["position"]);
-    obj = ObjectPtr(new Mesh(filename, translation));
+    double scale = node["scale"];
+    obj = ObjectPtr(new Mesh(filename, translation, scale));
   } else if (node["type"] == "plane") {
     Point point(node["point"]);
     Vector N(node["normal"]);

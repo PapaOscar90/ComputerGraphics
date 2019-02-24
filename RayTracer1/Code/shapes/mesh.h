@@ -8,7 +8,8 @@
 
 class Mesh : public Object {
 public:
-  Mesh(std::string const &filename, Vector const &translation);
+  Mesh(std::string const &filename, Vector const &translation,
+       double const &scale);
 
   virtual Hit intersect(Ray const &ray);
 
@@ -16,6 +17,7 @@ private:
   std::string const &filename;
   std::vector<Triangle> triangles;
   Vector const translation;
+  double const scale;
 };
 
 #endif

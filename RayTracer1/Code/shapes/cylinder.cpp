@@ -12,7 +12,7 @@ Hit Cylinder::intersect(Ray const &ray) {
    * Sough: intersect? if true: *t,N
    * 
    * Ray's Origin (ray.O), Ray's direction (ray.D),
-   * cylindar position (C), cylindar direction+ (V), radius(R)
+   * cylindar position start (pointA), cylindar position end (pointB), radius(R)
    * 
    * Computation:
    * The cylindar formula is derived similarly to the sphere,
@@ -20,13 +20,17 @@ Hit Cylinder::intersect(Ray const &ray) {
    * if they are interested. The intersection is determined
    * by the determinate. It informs us if the cylindar is intersected
    * 
-   * Implicitly: (Dx^2 + Dy^2)t^2 + 2(OxDx + OyDy)t + (Ox^2 + Oy^2 - R^2) = 0
-   * where Oi = ray.O.i - C.i
+   * Implicitly: (ca.ca - (ca.rd * ca.rd))t^2 + 2(ca.ca*oc.rd - ca.oc*ca.rd)t + (ca.ca*oc.oc - ca.oc*ca.oc - r^2*ca.ca) = 0
+   * where:
+   * ca = pb-pa  // The direction to the end of cylinder
+   * oc = ro-pa  // The direction to the cylinder
+   * caca = ca.ca
+   * card = ca.rd
+   * caoc = ca.oc
    * 
-   * so:
-   * a =  (Dx^2 + Dy^2)
-   * b = 2(Dx*(ray.O.x - C.x) + Dy*(ray.O.y - C.y))
-   * c =  ((ray.O.x - C.x)^2 + (ray.O.y - C.y)^2 - R^2)
+   * a = caca - card*card
+   * b = caca*(oc.rd) - caoc*card
+   * c = caca*(oc.oc) - caoc*caoc - (r^2*caca)
    * 
    * D = b^2 - 4ac
    * 
@@ -34,33 +38,31 @@ Hit Cylinder::intersect(Ray const &ray) {
    * 
    *******************************************************************/ 
   double t;
-  double Dx2, Dy2, OxCx, OyCy, R2;
   Vector N;
 
-  Dx2 = pow(ray.D.x, 2);
-  Dy2 = pow(ray.D.y, 2);
-  OxCx = ray.O.x - position.x;
-  OyCy = ray.O.y - position.y;
-  R2 = pow(radius,2);
+  Vector ca = pointB - pointA;
+  Vector oc = ray.O - pointA;
 
-  double a = Dx2 + Dy2;
-  double b = 2*(ray.D.x * (OxCx) + ray.D.y * (OyCy));
-  double c = pow(OxCx, 2) + pow(OyCy, 2) - R2;
+  double caca = ca.dot(ca);
+  double card = ca.dot(rd);
+  double caoc = ca.dot(oc);
 
-  double descriminate = pow(b,2) - 4*a*c;
+  double a = caca - card*card;
+  double b = (caca * oc.dot(ray.O)) - (caoc * card);
+  double c = (caca * (oc.dot(oc))) - (caoc * caoc) - (pow(radius, 2) * caca);
 
-  if(descriminate <= 0){
-    return Hit::NO_HIT();
+  double det = pow(b,2) - (a*c);
+
+  if(det < 0.0){
+    return Hit::NO_HIT;
   } else {
-    t = min((b*-1) + sqrt(descriminate), (b*-1) - sqrt(descriminate));
-    t /= (2*a);
+    t = min(-b + sqrt(det), -b - sqrt(det));
+    t /= 2*a;
   }
 
-
-  N = 2 * (ray.at(t) - position);
-
+  N = 2 * (ray.at(t) - oc);
   return Hit(t, N);
 }
 
-Cylinder::Cylinder(Point const &pos, Vector const direction, double const radius, double const height)
-  : position(pos), direction(direction), radius(radius), height(height) {}
+Cylinder::Cylinder(Point const &pointA, Point const &pointB, double const radius)
+  : pointA(pointA), pointB(pointB), radius(radius) {}

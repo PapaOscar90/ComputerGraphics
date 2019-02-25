@@ -9,16 +9,332 @@
     "Objects": [
         {
             "type": "cylinder",
-            "comment": "Blue cylinder",
-            "pointA": [200, 300, 0],
-            "pointB": [200, 200, 0],
-            "radius": 50,
+            "comment": "White cylinder",
+            "pointA": [-5, 300, -300],
+            "pointB": [-5, 100, -300],
+            "radius": 15,
             "material": {
-                "color": [0.0, 0.0, 1.0],
-                "ka": 0.2,
-                "kd": 0.7,
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [55, 300, -300],
+            "pointB": [55, 100, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [115, 300, -300],
+            "pointB": [115, 100, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [175, 300, -300],
+            "pointB": [175, 100, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [235, 300, -300],
+            "pointB": [235, 100, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [295, 300, -300],
+            "pointB": [295, 100, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [355, 300, -300],
+            "pointB": [355, 100, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [410, 300, -300],
+            "pointB": [410, 100, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "Light blue cylinder",
+            "pointA": [-30, 300, -300],
+            "pointB": [435, 300, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 0.9],
+                "ka": 1.0,
+                "kd": 0.5,
                 "ks": 0.5,
-                "n": 64
+                "n": 16
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [15, 300, -350],
+            "pointB": [15, 100, -350],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [75, 300, -350],
+            "pointB": [75, 100, -350],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [135, 300, -350],
+            "pointB": [135, 100, -350],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [205, 300, -350],
+            "pointB": [205, 100, -350],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [275, 300, -350],
+            "pointB": [275, 100, -350],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [335, 300, -350],
+            "pointB": [335, 100, -350],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "White cylinder",
+            "pointA": [395, 300, -350],
+            "pointB": [395, 100, -350],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 8
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "Background cylinder",
+            "pointA": [-25, 200, -510],
+            "pointB": [430, 200, -510],
+            "radius": 100,
+            "material": {
+                "color": [0.4, 0.2, 0.8],
+                "ka": 0.8,
+                "kd": 0.5,
+                "ks": 0.0,
+                "n": 16
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "Light blue cylinder",
+            "pointA": [-30, 300, -300],
+            "pointB": [435, 300, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 0.9],
+                "ka": 1.0,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 16
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "Light blue cylinder",
+            "pointA": [-30, 100, -300],
+            "pointB": [435, 100, -300],
+            "radius": 15,
+            "material": {
+                "color": [0.5, 0.5, 0.9],
+                "ka": 1.0,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 16
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Light blue cylinder",
+            "vertices": [[-30, 315, -300], [435, 315, -300], [200, 400, -300]],
+            "material": {
+                "color": [1.0, 1.0, 1.0],
+                "ka": 1.0,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 16
+            }
+        },
+        {
+            "type": "plane",
+            "comment": "Floor plane",
+            "point": [200, 95.0, -300],
+            "normal": [0, 1, 0],
+            "material": {
+                "color": [0.0, 0.5, 0.2],
+                "ka": 1.0,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 16
+            }
+        },
+        {
+            "type": "plane",
+            "comment": "Background plane",
+            "point": [200, 200, -10000],
+            "normal": [0, 0, 1],
+            "material": {
+                "color": [0.0, 0.2, 0.8],
+                "ka": 1.0,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 16
+            }
+        },
+        {
+            "type": "cylinder",
+            "comment": "Tree trunk",
+            "pointA": [320, 260, 200],
+            "pointB": [320, 90, 200],
+            "radius": 20,
+            "material": {
+                "color": [0.5, 0.3, 0.2],
+                "ka": 0.8,
+                "kd": 0.5,
+                "ks": 0.0,
+                "n": 16
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Tree Branches",
+            "vertices": [[270, 230, 220], [360, 230, 220], [320, 400, 220]],
+            "material": {
+                "color": [0.4, 0.8, 0.2],
+                "ka": 0.8,
+                "kd": 0.5,
+                "ks": 0.0,
+                "n": 16
             }
         }
     ]

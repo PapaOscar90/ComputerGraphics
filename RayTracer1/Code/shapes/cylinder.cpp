@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+using namespace std;
+
 Hit Cylinder::intersect(Ray const &ray) {
   /* ******************************************************************
    * Intersection Calcuation
@@ -55,10 +57,10 @@ Hit Cylinder::intersect(Ray const &ray) {
   }
 
 
-  N = 2*(ray.at(t) - position);
+  N = 2 * (ray.at(t) - position);
 
   return Hit(t, N);
 }
 
-Cylinder::Cylinder(Point const &pos, Vector const direction, double const radius)
-  : position(pos), direction(direction), radius(radius) {}
+Cylinder::Cylinder(Point const &pos, Vector const direction, double const radius, double const height)
+  : position(pos), direction(direction), radius(radius), height(height) {}

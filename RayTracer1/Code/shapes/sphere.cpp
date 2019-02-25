@@ -10,8 +10,6 @@ Hit Sphere::intersect(Ray const &ray) {
    *
    * Given: ray, position, r     * Sought: intersects? if true: *t
    *
-   * Insert calculation of ray/sphere intersection here.
-   *
    * You have the sphere's center (C) and radius (r) as well as
    * the ray's origin (ray.O) and direction (ray.D).
    *

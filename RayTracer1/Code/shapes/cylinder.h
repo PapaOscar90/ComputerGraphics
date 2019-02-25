@@ -5,7 +5,7 @@
 
 class Cylinder : public Object {
 public:
-  Cylinder(Point const &point, Vector const direction, double const radius);
+  Cylinder(Point const &point, Vector const direction, double const radius, double const height);
 
   virtual Hit intersect(Ray const &ray);
 
@@ -15,6 +15,8 @@ public:
   Vector const direction;
   // Radius of the tube
   double const radius;
+  // Height of the cylinder
+  double const height;
 };
 
 #endif

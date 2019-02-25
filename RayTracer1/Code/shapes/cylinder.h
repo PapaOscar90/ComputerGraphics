@@ -5,18 +5,14 @@
 
 class Cylinder : public Object {
 public:
-  Cylinder(Point const &point, Vector const direction, double const radius, double const height);
+  Cylinder(Point const &pointA, Point const &pointB, double const radius);
 
   virtual Hit intersect(Ray const &ray);
 
-  // The begining point of the cylindar
-  Point const position;
-  // The direction the cylindar goes
-  Vector const direction;
-  // Radius of the tube
+  // The cylinder is defined between two points with a radius
+  Point const pointA;
+  Point const pointB;
   double const radius;
-  // Height of the cylinder
-  double const height;
 };
 
 #endif

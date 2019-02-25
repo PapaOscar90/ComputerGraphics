@@ -52,6 +52,7 @@ Color Scene::trace(Ray const &ray) {
   Vector NHat = N.normalized(); // Normalized N
   Vector VHat = V.normalized(); // Normalized V
 
+  // We add an extra scale factor for us to universally adjust if needed
   const float AMBIENT_LIGHT_INTENSITY = 1.0;
 
   Color color = material.ka * AMBIENT_LIGHT_INTENSITY * material.color;

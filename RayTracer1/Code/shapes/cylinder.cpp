@@ -35,6 +35,27 @@ Hit Cylinder::intersect(Ray const &ray) {
   double Dx2, Dy2, OxCx, OyCy, R2;
   Vector N;
 
+  Dx2 = pow(ray.D.x, 2);
+  Dy2 = pow(ray.D.y, 2);
+  OxCx = ray.O.x - position.x;
+  OyCy = ray.O.y - position.y;
+  R2 = pow(radius,2);
+
+  double a = Dx2 + Dy2;
+  double b = 2*(ray.D.x * (OxCx) + ray.D.y * (OyCy));
+  double c = pow(OxCx, 2) + pow(OyCy, 2) - R2;
+
+  double descriminate = pow(b,2) - 4*a*c;
+
+  if(descriminate <= 0){
+    return Hit::NO_HIT();
+  } else {
+    t = min((b*-1) + sqrt(descriminate), (b*-1) - sqrt(descriminate));
+    t /= (2*a);
+  }
+
+
+  N = 2*(ray.at(t) - position);
 
   return Hit(t, N);
 }

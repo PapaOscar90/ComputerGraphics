@@ -45,7 +45,7 @@ Hit Cylinder::intersect(Ray const &ray) {
   double caoc = ca.dot(oc);
 
   double a = caca - card * card;
-  double b = (caca * oc.dot(ray.O)) - (caoc * card);
+  double b = (caca * oc.dot(ray.D)) - (caoc * card);
   double c = (caca * (oc.dot(oc))) - (caoc * caoc) - (pow(radius, 2) * caca);
 
   double det = pow(b, 2) - (a * c);
@@ -69,7 +69,7 @@ Hit Cylinder::intersect(Ray const &ray) {
   }
 
   if (abs(b + a * t) < sqrt(det)) {
-    return Hit(t, (ca * sign(temp)) / caca);
+    return Hit(t, (ca * copysign(1, temp)) / caca);
   }
 
   return Hit::NO_HIT();

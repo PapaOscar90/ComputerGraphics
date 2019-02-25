@@ -44,7 +44,7 @@ Hit Cylinder::intersect(Ray const &ray) {
   Vector oc = ray.O - pointA;
 
   double caca = ca.dot(ca);
-  double card = ca.dot(rd);
+  double card = ca.dot(ray.D);
   double caoc = ca.dot(oc);
 
   double a = caca - card*card;
@@ -54,14 +54,28 @@ Hit Cylinder::intersect(Ray const &ray) {
   double det = pow(b,2) - (a*c);
 
   if(det < 0.0){
-    return Hit::NO_HIT;
-  } else {
-    t = min(-b + sqrt(det), -b - sqrt(det));
-    t /= 2*a;
+    return Hit::NO_HIT();
   }
 
-  N = 2 * (ray.at(t) - oc);
-  return Hit(t, N);
+  t = (-b - sqrt(det)) / a;
+
+  double temp = caoc + t*card;
+
+  if( temp >0.0 && temp < caca){
+    return Hit(t, (oc+(t*ray.D)-((ca*temp)/caca)) / radius);
+  }
+
+  if(temp < 0.0){
+    t = (0.0 - caoc) / card;
+  } else {
+    t = (caca - caoc) / card;
+  }
+
+  if(abs(b+a*t) < sqrt(det)){
+    return Hit(t, (ca*sign(temp)) / caca);
+  }
+
+  return Hit::NO_HIT();
 }
 
 Cylinder::Cylinder(Point const &pointA, Point const &pointB, double const radius)

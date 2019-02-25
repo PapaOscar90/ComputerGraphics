@@ -10,8 +10,8 @@
         {
             "type": "cylinder",
             "comment": "Blue cylinder",
-            "pointA": [200, 200, -100],
-            "pointB": [200, 400, -100],
+            "pointA": [200, 300, 0],
+            "pointB": [200, 200, 0],
             "radius": 50,
             "material": {
                 "color": [0.0, 0.0, 1.0],

@@ -142,6 +142,7 @@ void MainView::paintGL() {
                      projectionTransform.data());
   glUniformMatrix4fv(uniformModelViewTransform, 1, GL_FALSE,
                      meshTransform.data());
+  glUniformMatrix3fv(uniformNormalTransform, 1, GL_FALSE, normalTransform.data());
 
   glBindVertexArray(meshVAO);
   glDrawArrays(GL_TRIANGLES, 0, meshSize);

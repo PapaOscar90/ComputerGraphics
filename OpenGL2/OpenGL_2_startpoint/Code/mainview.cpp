@@ -175,6 +175,7 @@ void MainView::updateModelTransforms() {
   meshTransform.translate(0, 0, -10);
   meshTransform.scale(scale);
   meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
+  normalTransform = meshTransform.normalMatrix();
 
   update();
 }

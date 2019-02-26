@@ -92,7 +92,7 @@ void MainView::createShaderProgram()
 
 void MainView::loadMesh()
 {
-    Model model(":/models/cube.obj");
+    Model model(":/models/cat.obj");
     model.unitize();
     QVector<QVector3D> vertexCoords = model.getVertices();
 

@@ -148,8 +148,6 @@ void MainView::paintGL() {
   glBindVertexArray(VAO_Pyramid);
   glDrawArrays(GL_TRIANGLES, 0, numberOfVerticesPyramid);
 
-
-
   shaderProgram.release();
 }
 
@@ -388,12 +386,11 @@ void MainView::loadSphere() {
 
   // Iterate through each vertex in the model and convert that vertex to our
   // `Vertex` class.
-  for (auto node : model.getVertices()) {
-    // Get the coordinates and set a random color, capped to a max of 1.0.
-    Vertex vertex = {{node.x(), node.y(), node.z()},
-                     {static_cast<float>(rand()) / RAND_MAX,
-                      static_cast<float>(rand()) / RAND_MAX,
-                      static_cast<float>(rand()) / RAND_MAX}};
+  for (auto idx : model.getIndices()) {
+    auto coordinates = model.getVertices_indexed().at(idx);
+    auto normal = model.getNormals_indexed().at(idx);
+    // Set the coordinates and the normal for the Vertex.
+    Vertex vertex(coordinates, normal);
     // Insert the vertex.
     sphere.push_back(vertex);
   }

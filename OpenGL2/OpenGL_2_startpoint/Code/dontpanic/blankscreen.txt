@@ -34,7 +34,7 @@ This also works on uniforms.
 
 
 If you are still having trouble, ask one of the TA's or send an email to 
-rugcomputergraphics17+opengl@gmail.com
+rugcomputergraphics+opengl@gmail.com
 
 If you would like to add a step to this checklist, please do tell us ;)
 

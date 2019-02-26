@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = OpenGL_textures
+TARGET = OpenGL_2_startpoint
 TEMPLATE = app
 CONFIG += c++14
 

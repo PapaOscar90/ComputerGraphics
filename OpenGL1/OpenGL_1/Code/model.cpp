@@ -82,7 +82,53 @@ Model::Model(QString filename) {
  * Usefull for models with different scales
  *
  */
-void Model::unitize() { qDebug() << "TODO: implement this yourself"; }
+void Model::unitize() {
+  double minX, maxX;
+  double minY, maxY;
+  double minZ, maxZ;
+
+  minX = minY = minZ = std::numeric_limits<double>::infinity();
+  maxX = maxY = maxZ = -std::numeric_limits<double>::infinity();
+
+  for (auto vertex : vertices) {
+    if (vertex.x() < minX)
+      minX = vertex.x();
+    if (vertex.x() > maxX)
+      maxX = vertex.x();
+
+    if (vertex.y() < minY)
+      minY = vertex.y();
+    if (vertex.y() > maxY)
+      maxY = vertex.y();
+
+    if (vertex.z() < minZ)
+      minZ = vertex.z();
+    if (vertex.z() > maxZ)
+      maxZ = vertex.z();
+  }
+
+  QVector3D translationFactor =
+      QVector3D((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
+  double unitFactor = std::max(std::max(maxX - minX, maxY - minY), maxZ - minZ)/4.0;
+
+          std::transform(vertices.begin(), vertices.end(), vertices.begin(),
+                         [unitFactor, translationFactor](auto vertex) {
+                           return (vertex - translationFactor) / unitFactor;
+                         });
+
+  std::transform(vertices_indexed.begin(), vertices_indexed.end(),
+                 vertices_indexed.begin(), [unitFactor, translationFactor](auto vertex) {
+                   return (vertex - translationFactor) / unitFactor;
+                 });
+  std::transform(normals.begin(), normals.end(), normals.begin(),
+                 [unitFactor, translationFactor](auto normal) {
+                   return (normal - translationFactor) / unitFactor;
+                 });
+  std::transform(normals_indexed.begin(), normals_indexed.end(),
+                 normals_indexed.begin(), [unitFactor, translationFactor](auto normal) {
+                   return (normal - translationFactor) / unitFactor;
+                 });
+}
 
 QVector<QVector3D> Model::getVertices() { return vertices; }
 

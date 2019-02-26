@@ -76,10 +76,10 @@ void MainView::initializeGL() {
   glEnable(GL_CULL_FACE);
 
   // Default is GL_LESS
-  glDepthFunc(GL_EQUAL);
+  glDepthFunc(GL_LEQUAL);
 
-  // Set the color of the screen to be black on clear (new frame)
-  glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
+  // Set the color of the background
+  glClearColor(0.f, 1.f, 0.f, 1.f);
 
   // Initialize the shaders in the `shaders` subdirectory
   createShaderProgram();
@@ -225,8 +225,8 @@ void MainView::onMessageLogged(QOpenGLDebugMessage Message) {
  * Load the shapes in the GPU buffer
  */
 void MainView::loadShapes() {
-  loadCube();
-  loadPyramid();
+//  loadCube();
+//  loadPyramid();
   loadSphere();
 }
 
@@ -381,7 +381,8 @@ void MainView::loadPyramid() {
  */
 void MainView::loadSphere() {
   // Load the provided sphere from an obj file.
-  Model model(":/models/sphere.obj");
+  Model model(":/models/cat.obj");
+  model.unitize();
 
   // Prepare the sphere to be loaded into the GPU buffer
   std::vector<Vertex> sphere;
@@ -454,7 +455,7 @@ void MainView::setInitialTranslation() {
   // Apply the scale factor 1.0 or provided by the GUI
   cubeTransform.scale(scaleFactor);
   pyramidTransform.scale(scaleFactor);
-  sphereTransform.scale(0.04 * scaleFactor); // Scaled down by 0.04 to fit
+  sphereTransform.scale(scaleFactor); // Scaled down by 0.04 to fit
 
   // Apply the rotations
   cubeTransform.rotate(rotationFactor);

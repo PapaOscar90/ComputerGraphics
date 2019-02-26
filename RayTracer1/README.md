@@ -39,6 +39,9 @@ We render 5 spheres using imported meshes.
 ### scene07_cubes
 We render 2 cubes imported from obj files. Nothing spectacular to note. They are cubes. However, we discovered that we had to export obj files from Blender with triangulate faces toggled on or else we couldn't render the mesh. As this is not the default export option from Blender 2.8 this caused some problems.
 
+## Scenes
+Note we have included the `Scenes` directory so that the images that have been generated for the `Screenshots` directory may be regenerated or cross-references with their scene description.
+
 ## Feedback
 We enjoyed this lab, though it took a lot of time to look up and derive each equation for the shapes.
 

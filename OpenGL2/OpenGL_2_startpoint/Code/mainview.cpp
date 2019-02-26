@@ -88,6 +88,7 @@ void MainView::createShaderProgram() {
       shaderProgram.uniformLocation("modelViewTransform");
   uniformProjectionTransform =
       shaderProgram.uniformLocation("projectionTransform");
+  uniformNormalTransform = shaderProgram.uniformLocation("normalTransform");
 }
 
 void MainView::loadMesh() {

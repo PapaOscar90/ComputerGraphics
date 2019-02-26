@@ -23,6 +23,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   QOpenGLShaderProgram shaderProgram;
   GLint uniformModelViewTransform;
   GLint uniformProjectionTransform;
+  GLint uniformNormalTransform;
 
   // Mesh values
   GLuint meshVAO;

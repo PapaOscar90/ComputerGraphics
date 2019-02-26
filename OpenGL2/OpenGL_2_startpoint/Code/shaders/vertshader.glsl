@@ -10,6 +10,7 @@ layout (location = 1) in vec3 vertNormal_in;
 // Specify the Uniforms of the vertex shader
  uniform mat4 modelViewTransform;
  uniform mat4 projectionTransform;
+ uniform mat3 normalTransform;
 
 // Specify the output of the vertex stage
 out vec3 vertNormal;

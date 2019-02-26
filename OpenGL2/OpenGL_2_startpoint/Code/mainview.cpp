@@ -164,19 +164,56 @@ void MainView::paintGL() {
   glClearColor(0.2f, 0.5f, 0.7f, 0.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  normalShaderProgram.bind();
+  switch (activeShader) {
+  case NORMAL:
+    normalShaderProgram.bind();
 
-  // Set the projection matrix
-  glUniformMatrix4fv(uniformProjectionTransform, 1, GL_FALSE,
-                     projectionTransform.data());
-  glUniformMatrix4fv(uniformModelViewTransform, 1, GL_FALSE,
-                     meshTransform.data());
-  glUniformMatrix3fv(uniformNormalTransform, 1, GL_FALSE, normalTransform.data());
+    // Set the projection matrix
+    glUniformMatrix4fv(normalUniformProjectionTransform, 1, GL_FALSE,
+                       projectionTransform.data());
+    glUniformMatrix4fv(normalUniformModelViewTransform, 1, GL_FALSE,
+                       meshTransform.data());
+    glUniformMatrix3fv(normalUniformNormalTransform, 1, GL_FALSE,
+                       normalTransform.data());
 
-  glBindVertexArray(meshVAO);
-  glDrawArrays(GL_TRIANGLES, 0, meshSize);
+    glBindVertexArray(meshVAO);
+    glDrawArrays(GL_TRIANGLES, 0, meshSize);
 
-  normalShaderProgram.release();
+    normalShaderProgram.release();
+    break;
+  case PHONG:
+    phongShaderProgram.bind();
+
+    // Set the projection matrix
+    glUniformMatrix4fv(phongUniformProjectionTransform, 1, GL_FALSE,
+                       projectionTransform.data());
+    glUniformMatrix4fv(phongUniformModelViewTransform, 1, GL_FALSE,
+                       meshTransform.data());
+    glUniformMatrix3fv(phongUniformNormalTransform, 1, GL_FALSE,
+                       normalTransform.data());
+
+    glBindVertexArray(meshVAO);
+    glDrawArrays(GL_TRIANGLES, 0, meshSize);
+
+    phongShaderProgram.release();
+    break;
+  case GOURAUD:
+    gourandlShaderProgram.bind();
+
+    // Set the projection matrix
+    glUniformMatrix4fv(gourandUniformProjectionTransform, 1, GL_FALSE,
+                       projectionTransform.data());
+    glUniformMatrix4fv(gourandUniformModelViewTransform, 1, GL_FALSE,
+                       meshTransform.data());
+    glUniformMatrix3fv(gourandUniformNormalTransform, 1, GL_FALSE,
+                       normalTransform.data());
+
+    glBindVertexArray(meshVAO);
+    glDrawArrays(GL_TRIANGLES, 0, meshSize);
+
+    gourandlShaderProgram.release();
+    break;
+  }
 }
 
 /**
@@ -232,7 +269,7 @@ void MainView::setScale(int newScale) {
 
 void MainView::setShadingMode(ShadingMode shading) {
   qDebug() << "Changed shading to" << shading;
-  Q_UNIMPLEMENTED();
+  activeShader = shading;
 }
 
 // --- Private helpers

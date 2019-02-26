@@ -78,6 +78,9 @@ private slots:
   void onMessageLogged(QOpenGLDebugMessage Message);
 
 private:
+  // The active shader program
+  ShadingMode activeShader = ShadingMode::PHONG;
+
   void createShaderProgram();
   void loadMesh();
 

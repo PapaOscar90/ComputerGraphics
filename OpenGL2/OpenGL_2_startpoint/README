@@ -1,5 +1,17 @@
 This is a README file
 
+## Changlog
+### Normal Shader
+  - Change references to color to normal where necessary.
+  - Store additional normal transform data.
+  - Pass this data to the shaders.
+  - Apply normal data in vertex shader.
+  - Normalize color modifier in fragment shader.
+
+## Questions
+### Normal Shader
+  - Without the normal uniform is not applied in the vertex shader, the cat has vibrant bands of color dominating particular faces. Its right sides are a vibrant blue, its front-facing sides are a vibrant red, its top is a vibrant green, its left sides are black, as are its back and bottom-facing sides. This colors of the sides remain constant irrespective of the orientation of the cat (e.g. in its default orientation or on its side the cats belly is black). When the normal uniform is applied the cat seems to shimmer as it rotates. The colors are now dependent on the orientation of the cat. In its default orientation the cat's face is red and when the cat is reoriented so that it's belly faces the right, it's belly turns red.
+
 When submitting your assignment, describe (briefly) the changes you made and what difficulties you encountered in this file.
 
 Also describe what controls (key short-cuts, mouse clicks, mouse movement etc) and possible bonus assignments you implemented, so we can check them more easily.

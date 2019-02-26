@@ -34,6 +34,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   float scale = 1.f;
   QVector3D rotation;
   QMatrix4x4 projectionTransform;
+  QMatrix3x3 normalTransform;
 
 public:
   enum ShadingMode : GLuint { PHONG = 0, NORMAL, GOURAUD };

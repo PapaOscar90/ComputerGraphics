@@ -35,6 +35,7 @@ bool Raytracer::parseObjectNode(json const &node) {
   // =============================================================================
   // -- Determine type and parse object parameters
   // ------------------------------
+  // -- For each object, load it's data members
   // =============================================================================
 
   if (node["type"] == "sphere") {

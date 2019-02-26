@@ -71,11 +71,11 @@ Model::Model(QString filename) {
 }
 
 /**
- * @brief Model::unitze Not Implemented yet!
+ * @brief Model::unitize Not Implemented yet!
  *
  * Unitize the model by scaling so that it fits a box with sides 1
  * and origin at 0,0,0
- * Usefull for models with different scales
+ * Useful for models with different scales
  *
  */
 void Model::unitize() {

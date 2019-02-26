@@ -25,7 +25,7 @@ Also the same as the other scene. Nothing new to highlight besides the "black" s
 The spheres are now shiny.
 
 ### scene03_triangles
-Here we demonstrate the rendering of triangles.
+Here we demonstrate the rendering of triangles. Note that there is one triangle in the center of the screen that is parallel to the Eye's viewpoint. As a result the triangle is invisible.
 
 ### scene04_plane
 With the addition of planes, we decided to make a "sunset" style render. 
@@ -34,10 +34,10 @@ With the addition of planes, we decided to make a "sunset" style render.
 We demonstrate the rendering of a cylinder with a greek style columned building.
 
 ### scene06_obj_grouped_spheres
-We render 5 spheres using imported meshes. We found that we must use object files of a certain version of blender or else they do not render correctly.
+We render 5 spheres using imported meshes.
 
 ### scene07_cubes
-We render 2 cubes. Nothing spectacular to note. They are cubes.
+We render 2 cubes imported from obj files. Nothing spectacular to note. They are cubes. However, we discovered that we had to export obj files from Blender with triangulate faces toggled on or else we couldn't render the mesh. As this is not the default export option from Blender 2.8 this caused some problems.
 
 ## Feedback
 We enjoyed this lab, though it took a lot of time to look up and derive each equation for the shapes.

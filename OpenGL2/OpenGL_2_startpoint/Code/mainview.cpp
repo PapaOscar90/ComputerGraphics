@@ -78,30 +78,46 @@ void MainView::initializeGL() {
 void MainView::createShaderProgram() {
   // Create shader programs
   // Normal
-  normalShaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                        ":/shaders/vertshader_normal.glsl");
-  normalShaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                        ":/shaders/fragshader_normal.glsl");
+  normalShaderProgram.addShaderFromSourceFile(
+      QOpenGLShader::Vertex, ":/shaders/vertshader_normal.glsl");
+  normalShaderProgram.addShaderFromSourceFile(
+      QOpenGLShader::Fragment, ":/shaders/fragshader_normal.glsl");
   normalShaderProgram.link();
   // Phong
   phongShaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                        ":/shaders/vertshader_phong.glsl");
+                                             ":/shaders/vertshader_phong.glsl");
   phongShaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                        ":/shaders/fragshader_phong.glsl");
+                                             ":/shaders/fragshader_phong.glsl");
   phongShaderProgram.link();
   // Gourand
-  gourandlShaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                        ":/shaders/vertshader_gourand.glsl");
-  gourandlShaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                        ":/shaders/fragshader_gourand.glsl");
+  gourandlShaderProgram.addShaderFromSourceFile(
+      QOpenGLShader::Vertex, ":/shaders/vertshader_gourand.glsl");
+  gourandlShaderProgram.addShaderFromSourceFile(
+      QOpenGLShader::Fragment, ":/shaders/fragshader_gourand.glsl");
   gourandlShaderProgram.link();
 
   // Get the uniforms
-  uniformModelViewTransform =
+  // Normal
+  normalUniformModelViewTransform =
       normalShaderProgram.uniformLocation("modelViewTransform");
-  uniformProjectionTransform =
+  normalUniformProjectionTransform =
       normalShaderProgram.uniformLocation("projectionTransform");
-  uniformNormalTransform = normalShaderProgram.uniformLocation("normalTransform");
+  normalUniformNormalTransform =
+      normalShaderProgram.uniformLocation("normalTransform");
+  // Phong
+  phongUniformModelViewTransform =
+      phongShaderProgram.uniformLocation("modelViewTransform");
+  phongUniformProjectionTransform =
+      phongShaderProgram.uniformLocation("projectionTransform");
+  phongUniformNormalTransform =
+      phongShaderProgram.uniformLocation("normalTransform");
+  // Gourand
+  gourandUniformModelViewTransform =
+      gourandlShaderProgram.uniformLocation("modelViewTransform");
+  gourandUniformProjectionTransform =
+      gourandlShaderProgram.uniformLocation("projectionTransform");
+  gourandUniformNormalTransform =
+      gourandlShaderProgram.uniformLocation("normalTransform");
 }
 
 void MainView::loadMesh() {

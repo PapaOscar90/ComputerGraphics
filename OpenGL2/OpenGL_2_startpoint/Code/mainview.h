@@ -21,11 +21,19 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   QTimer timer; // timer used for animation
 
   QOpenGLShaderProgram normalShaderProgram;
+  GLint normalUniformModelViewTransform;
+  GLint normalUniformProjectionTransform;
+  GLint normalUniformNormalTransform;
+
   QOpenGLShaderProgram phongShaderProgram;
+  GLint phongUniformModelViewTransform;
+  GLint phongUniformProjectionTransform;
+  GLint phongUniformNormalTransform;
+
   QOpenGLShaderProgram gourandlShaderProgram;
-  GLint uniformModelViewTransform;
-  GLint uniformProjectionTransform;
-  GLint uniformNormalTransform;
+  GLint gourandUniformModelViewTransform;
+  GLint gourandUniformProjectionTransform;
+  GLint gourandUniformNormalTransform;
 
   // Mesh values
   GLuint meshVAO;

@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <limits>
+#include<algorithm>
 
 
 // A Private Vertex class for vertex comparison
@@ -79,6 +81,33 @@ Model::Model(QString filename) {
  *
  */
 void Model::unitize() {
+    float minX, minY, minZ;
+    minX = minY = minZ = std::numeric_limits<float>::infinity();
+    float maxX, maxY, maxZ;
+    maxX = maxY = maxZ = -std::numeric_limits<float>::infinity();
+
+    for (auto vertex: vertices) {
+        if (vertex.x() < minX) minX = vertex.x();
+        if (vertex.x() > maxX) maxX = vertex.x();
+
+        if (vertex.y() < minY) minY = vertex.y();
+        if (vertex.y() > maxY) maxY = vertex.y();
+
+        if (vertex.z() < minZ) minZ = vertex.z();
+        if (vertex.z() > maxZ) maxZ = vertex.z();
+    }
+
+    QVector3D unitizeTranslation = QVector3D( (maxX+minX)/2, (maxY+minY)/2, (maxZ+minZ)/2 );
+    float unitizeScaleFactor = std::max(std::max(maxX - minX, maxY - minY), maxZ - minZ);
+
+    // NOTE we actually unitize to a cube 4 times the size of the unit cube to make the defaults fit better on screen.
+    unitizeScaleFactor /= 4.f;
+
+    std::transform(vertices.begin(), vertices.end(), vertices.begin(), [unitizeTranslation, unitizeScaleFactor](auto vertex){return (vertex-unitizeTranslation)/unitizeScaleFactor;});
+    std::transform(normals.begin(), normals.end(), normals.begin(), [unitizeTranslation, unitizeScaleFactor](auto normal){return (normal-unitizeTranslation)/unitizeScaleFactor;});
+    std::transform(vertices_indexed.begin(), vertices_indexed.end(), vertices_indexed.begin(), [unitizeTranslation, unitizeScaleFactor](auto vertex){return (vertex-unitizeTranslation)/unitizeScaleFactor;});
+    std::transform(normals_indexed.begin(), normals_indexed.end(), normals_indexed.begin(), [unitizeTranslation, unitizeScaleFactor](auto normal){return (normal-unitizeTranslation)/unitizeScaleFactor;});
+
     qDebug() << "TODO: implement this yourself";
 }
 

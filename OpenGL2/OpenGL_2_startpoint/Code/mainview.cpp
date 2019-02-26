@@ -76,19 +76,32 @@ void MainView::initializeGL() {
 }
 
 void MainView::createShaderProgram() {
-  // Create shader program
-  shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                        ":/shaders/vertshader.glsl");
-  shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                        ":/shaders/fragshader.glsl");
-  shaderProgram.link();
+  // Create shader programs
+  // Normal
+  normalShaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                        ":/shaders/vertshader_normal.glsl");
+  normalShaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                        ":/shaders/fragshader_normal.glsl");
+  normalShaderProgram.link();
+  // Phong
+  phongShaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                        ":/shaders/vertshader_phong.glsl");
+  phongShaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                        ":/shaders/fragshader_phong.glsl");
+  phongShaderProgram.link();
+  // Gourand
+  gourandlShaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                        ":/shaders/vertshader_gourand.glsl");
+  gourandlShaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                        ":/shaders/fragshader_gourand.glsl");
+  gourandlShaderProgram.link();
 
   // Get the uniforms
   uniformModelViewTransform =
-      shaderProgram.uniformLocation("modelViewTransform");
+      normalShaderProgram.uniformLocation("modelViewTransform");
   uniformProjectionTransform =
-      shaderProgram.uniformLocation("projectionTransform");
-  uniformNormalTransform = shaderProgram.uniformLocation("normalTransform");
+      normalShaderProgram.uniformLocation("projectionTransform");
+  uniformNormalTransform = normalShaderProgram.uniformLocation("normalTransform");
 }
 
 void MainView::loadMesh() {
@@ -135,7 +148,7 @@ void MainView::paintGL() {
   glClearColor(0.2f, 0.5f, 0.7f, 0.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  shaderProgram.bind();
+  normalShaderProgram.bind();
 
   // Set the projection matrix
   glUniformMatrix4fv(uniformProjectionTransform, 1, GL_FALSE,
@@ -147,7 +160,7 @@ void MainView::paintGL() {
   glBindVertexArray(meshVAO);
   glDrawArrays(GL_TRIANGLES, 0, meshSize);
 
-  shaderProgram.release();
+  normalShaderProgram.release();
 }
 
 /**

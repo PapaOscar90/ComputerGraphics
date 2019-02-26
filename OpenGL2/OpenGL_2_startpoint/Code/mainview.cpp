@@ -93,21 +93,8 @@ void MainView::createShaderProgram() {
 void MainView::loadMesh() {
   Model model(":/models/cat.obj");
   model.unitize();
-  QVector<QVector3D> vertexCoords = model.getVertices();
-
-  QVector<float> meshData;
-  meshData.reserve(2 * 3 * vertexCoords.size());
-
-  for (auto coord : vertexCoords) {
-    meshData.append(coord.x());
-    meshData.append(coord.y());
-    meshData.append(coord.z());
-    meshData.append(static_cast<float>(rand()) / RAND_MAX);
-    meshData.append(static_cast<float>(rand()) / RAND_MAX);
-    meshData.append(static_cast<float>(rand()) / RAND_MAX);
-  }
-
-  meshSize = vertexCoords.size();
+  QVector<float> meshData = model.getVNInterleaved();
+  meshSize = model.getVertices().size();
 
   // Generate VAO
   glGenVertexArrays(1, &meshVAO);

@@ -1,0 +1,20 @@
+README
+
+Description:
+Following the instructions, we imported our triangle program and began to extend it with the needed Z addition to our `Vertex` struct. Then we simply added in more triangles that would describe the objects we had to manually create (namely the cube and the pyramid). However, we initially struggled with our objects not displaying correctly. Some faces were rendering behind or infront of others when they should do the opposite. After a tip from the TAs, we discovered how OpenGL handles the right/left handedness. So we re-did our shapes' vertices in a counter-clockwise fashion, and then added the final parts. Using QT's built in functions, the process of transforming the scene was very straightforward. We simply stored the relevant data and applied the rotate, translate, and scale methods to the QMatrix4x4 representing the model transformations.
+
+Screenshots:
+The Default image outlines the entire application, including the default settings and resulting output. The three shapes can be seen here in their basic translated positions. One thing not visible due to no overlap, is that the shapes will be drawn over each other, since there is no relation between them.
+
+The Transform image showcases the output of three rotations and scales as applied by the GUI.
+
+The TransformKeybaord image showcases the output of transforms by the GUI, as well as translation by the keyboard.
+
+Controls:
+The controls implemented are just the default GUI controls that were given to us.
+ - UP/DOWN have been mapped to Z translations
+ - LEFT/RIGHT have been mapped to X translations
+ - PG_UP/PG_DOWN have been mapped to Y translations.
+
+Feedback:
+This was a nice step forward in learning OpenGL overall. But it was very confusing with regard to the counter clockwise declaration. Though it is in the docs (buried deep), maybe a nudge in the instructions would save us a lot of hassle with trying to find the issue.

@@ -2,9 +2,8 @@
 #include "model.h"
 #include "vertex.h"
 
-#include <math.h>
 #include <QDateTime>
-
+#include <math.h>
 
 /**
  * @brief MainView::MainView
@@ -14,9 +13,9 @@
  * @param parent
  */
 MainView::MainView(QWidget *parent) : QOpenGLWidget(parent) {
-    qDebug() << "MainView constructor";
+  qDebug() << "MainView constructor";
 
-    connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+  connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 /**
@@ -28,13 +27,13 @@ MainView::MainView(QWidget *parent) : QOpenGLWidget(parent) {
  *
  */
 MainView::~MainView() {
-    makeCurrent();
-    debugLogger->stopLogging();
-    delete debugLogger;
+  makeCurrent();
+  debugLogger->stopLogging();
+  delete debugLogger;
 
-    qDebug() << "MainView destructor";
-    destroyModelBuffers();
-    doneCurrent();
+  qDebug() << "MainView destructor";
+  destroyModelBuffers();
+  doneCurrent();
 }
 
 // --- OpenGL initialization
@@ -46,94 +45,94 @@ MainView::~MainView() {
  * Attaches a debugger and calls other init functions
  */
 void MainView::initializeGL() {
-    qDebug() << ":: Initializing OpenGL";
-    initializeOpenGLFunctions();
+  qDebug() << ":: Initializing OpenGL";
+  initializeOpenGLFunctions();
 
-    debugLogger = new QOpenGLDebugLogger();
-    connect( debugLogger, SIGNAL( messageLogged( QOpenGLDebugMessage ) ),
-             this, SLOT( onMessageLogged( QOpenGLDebugMessage ) ), Qt::DirectConnection );
+  debugLogger = new QOpenGLDebugLogger();
+  connect(debugLogger, SIGNAL(messageLogged(QOpenGLDebugMessage)), this,
+          SLOT(onMessageLogged(QOpenGLDebugMessage)), Qt::DirectConnection);
 
-    if ( debugLogger->initialize() ) {
-        qDebug() << ":: Logging initialized";
-        debugLogger->startLogging( QOpenGLDebugLogger::SynchronousLogging );
-        debugLogger->enableMessages();
-    }
+  if (debugLogger->initialize()) {
+    qDebug() << ":: Logging initialized";
+    debugLogger->startLogging(QOpenGLDebugLogger::SynchronousLogging);
+    debugLogger->enableMessages();
+  }
 
-    QString glVersion;
-    glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
-    qDebug() << ":: Using OpenGL" << qPrintable(glVersion);
+  QString glVersion;
+  glVersion = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+  qDebug() << ":: Using OpenGL" << qPrintable(glVersion);
 
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glDepthFunc(GL_LEQUAL);
-    glClearColor(0.0, 1.0, 0.0, 1.0);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glDepthFunc(GL_LEQUAL);
+  glClearColor(0.0, 1.0, 0.0, 1.0);
 
-    createShaderProgram();
-    loadMesh();
+  createShaderProgram();
+  loadMesh();
 
-    // Initialize transformations
-    updateProjectionTransform();
-    updateModelTransforms();
+  // Initialize transformations
+  updateProjectionTransform();
+  updateModelTransforms();
 }
 
-void MainView::createShaderProgram()
-{
-    // Create shader program
-    shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                           ":/shaders/vertshader.glsl");
-    shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                           ":/shaders/fragshader.glsl");
-    shaderProgram.link();
+void MainView::createShaderProgram() {
+  // Create shader program
+  shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                        ":/shaders/vertshader.glsl");
+  shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                        ":/shaders/fragshader.glsl");
+  shaderProgram.link();
 
-    // Get the uniforms
-    uniformModelViewTransform = shaderProgram.uniformLocation("modelViewTransform");
-    uniformProjectionTransform = shaderProgram.uniformLocation("projectionTransform");
+  // Get the uniforms
+  uniformModelViewTransform =
+      shaderProgram.uniformLocation("modelViewTransform");
+  uniformProjectionTransform =
+      shaderProgram.uniformLocation("projectionTransform");
 }
 
-void MainView::loadMesh()
-{
-    Model model(":/models/cat.obj");
-    model.unitize();
-    QVector<QVector3D> vertexCoords = model.getVertices();
+void MainView::loadMesh() {
+  Model model(":/models/cat.obj");
+  model.unitize();
+  QVector<QVector3D> vertexCoords = model.getVertices();
 
-    QVector<float> meshData;
-    meshData.reserve(2 * 3 * vertexCoords.size());
+  QVector<float> meshData;
+  meshData.reserve(2 * 3 * vertexCoords.size());
 
-    for (auto coord : vertexCoords)
-    {
-        meshData.append(coord.x());
-        meshData.append(coord.y());
-        meshData.append(coord.z());
-        meshData.append(static_cast<float>(rand()) / RAND_MAX);
-        meshData.append(static_cast<float>(rand()) / RAND_MAX);
-        meshData.append(static_cast<float>(rand()) / RAND_MAX);
-    }
+  for (auto coord : vertexCoords) {
+    meshData.append(coord.x());
+    meshData.append(coord.y());
+    meshData.append(coord.z());
+    meshData.append(static_cast<float>(rand()) / RAND_MAX);
+    meshData.append(static_cast<float>(rand()) / RAND_MAX);
+    meshData.append(static_cast<float>(rand()) / RAND_MAX);
+  }
 
-    meshSize = vertexCoords.size();
+  meshSize = vertexCoords.size();
 
-    // Generate VAO
-    glGenVertexArrays(1, &meshVAO);
-    glBindVertexArray(meshVAO);
+  // Generate VAO
+  glGenVertexArrays(1, &meshVAO);
+  glBindVertexArray(meshVAO);
 
-    // Generate VBO
-    glGenBuffers(1, &meshVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
+  // Generate VBO
+  glGenBuffers(1, &meshVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
 
-    // Write the data to the buffer
-    glBufferData(GL_ARRAY_BUFFER, meshData.size() * sizeof(float), meshData.data(), GL_STATIC_DRAW);
+  // Write the data to the buffer
+  glBufferData(GL_ARRAY_BUFFER, meshData.size() * sizeof(float),
+               meshData.data(), GL_STATIC_DRAW);
 
-    // Set vertex coordinates to location 0
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
-    glEnableVertexAttribArray(0);
+  // Set vertex coordinates to location 0
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+  glEnableVertexAttribArray(0);
 
-    // Set colour coordinates to location 1
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+  // Set colour coordinates to location 1
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+                        (void *)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 }
-
 
 // --- OpenGL drawing
 
@@ -144,20 +143,22 @@ void MainView::loadMesh()
  *
  */
 void MainView::paintGL() {
-    // Clear the screen before rendering
-    glClearColor(0.2f, 0.5f, 0.7f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // Clear the screen before rendering
+  glClearColor(0.2f, 0.5f, 0.7f, 0.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    shaderProgram.bind();
+  shaderProgram.bind();
 
-    // Set the projection matrix
-    glUniformMatrix4fv(uniformProjectionTransform, 1, GL_FALSE, projectionTransform.data());
-    glUniformMatrix4fv(uniformModelViewTransform, 1, GL_FALSE, meshTransform.data());
+  // Set the projection matrix
+  glUniformMatrix4fv(uniformProjectionTransform, 1, GL_FALSE,
+                     projectionTransform.data());
+  glUniformMatrix4fv(uniformModelViewTransform, 1, GL_FALSE,
+                     meshTransform.data());
 
-    glBindVertexArray(meshVAO);
-    glDrawArrays(GL_TRIANGLES, 0, meshSize);
+  glBindVertexArray(meshVAO);
+  glDrawArrays(GL_TRIANGLES, 0, meshSize);
 
-    shaderProgram.release();
+  shaderProgram.release();
 }
 
 /**
@@ -168,56 +169,51 @@ void MainView::paintGL() {
  * @param newWidth
  * @param newHeight
  */
-void MainView::resizeGL(int newWidth, int newHeight)
-{
-    Q_UNUSED(newWidth)
-    Q_UNUSED(newHeight)
-    updateProjectionTransform();
+void MainView::resizeGL(int newWidth, int newHeight) {
+  Q_UNUSED(newWidth)
+  Q_UNUSED(newHeight)
+  updateProjectionTransform();
 }
 
-void MainView::updateProjectionTransform()
-{
-    float aspect_ratio = static_cast<float>(width()) / static_cast<float>(height());
-    projectionTransform.setToIdentity();
-    projectionTransform.perspective(60, aspect_ratio, 0.2, 20);
+void MainView::updateProjectionTransform() {
+  float aspect_ratio =
+      static_cast<float>(width()) / static_cast<float>(height());
+  projectionTransform.setToIdentity();
+  projectionTransform.perspective(60, aspect_ratio, 0.2, 20);
 }
 
-void MainView::updateModelTransforms()
-{
-    meshTransform.setToIdentity();
-    meshTransform.translate(0, 0, -10);
-    meshTransform.scale(scale);
-    meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
+void MainView::updateModelTransforms() {
+  meshTransform.setToIdentity();
+  meshTransform.translate(0, 0, -10);
+  meshTransform.scale(scale);
+  meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
 
-    update();
+  update();
 }
 
 // --- OpenGL cleanup helpers
 
-void MainView::destroyModelBuffers()
-{
-    glDeleteBuffers(1, &meshVBO);
-    glDeleteVertexArrays(1, &meshVAO);
+void MainView::destroyModelBuffers() {
+  glDeleteBuffers(1, &meshVBO);
+  glDeleteVertexArrays(1, &meshVAO);
 }
 
 // --- Public interface
 
-void MainView::setRotation(int rotateX, int rotateY, int rotateZ)
-{
-    rotation = { static_cast<float>(rotateX), static_cast<float>(rotateY), static_cast<float>(rotateZ) };
-    updateModelTransforms();
+void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
+  rotation = {static_cast<float>(rotateX), static_cast<float>(rotateY),
+              static_cast<float>(rotateZ)};
+  updateModelTransforms();
 }
 
-void MainView::setScale(int newScale)
-{
-    scale = static_cast<float>(newScale) / 100.f;
-    updateModelTransforms();
+void MainView::setScale(int newScale) {
+  scale = static_cast<float>(newScale) / 100.f;
+  updateModelTransforms();
 }
 
-void MainView::setShadingMode(ShadingMode shading)
-{
-    qDebug() << "Changed shading to" << shading;
-    Q_UNIMPLEMENTED();
+void MainView::setShadingMode(ShadingMode shading) {
+  qDebug() << "Changed shading to" << shading;
+  Q_UNIMPLEMENTED();
 }
 
 // --- Private helpers
@@ -229,7 +225,6 @@ void MainView::setShadingMode(ShadingMode shading)
  *
  * @param Message
  */
-void MainView::onMessageLogged( QOpenGLDebugMessage Message ) {
-    qDebug() << " → Log:" << Message;
+void MainView::onMessageLogged(QOpenGLDebugMessage Message) {
+  qDebug() << " → Log:" << Message;
 }
-

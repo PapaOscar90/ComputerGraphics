@@ -113,24 +113,17 @@ void Model::unitize() {
   // make the defaults fit better on screen.
   unitizeScaleFactor /= 4.f;
 
+  auto unitizeFunc = [unitizeTranslation, unitizeScaleFactor](auto val) {
+    return (val - unitizeTranslation) / unitizeScaleFactor;
+  };
+
   std::transform(vertices.begin(), vertices.end(), vertices.begin(),
-                 [unitizeTranslation, unitizeScaleFactor](auto vertex) {
-                   return (vertex - unitizeTranslation) / unitizeScaleFactor;
-                 });
-  std::transform(normals.begin(), normals.end(), normals.begin(),
-                 [unitizeTranslation, unitizeScaleFactor](auto normal) {
-                   return (normal - unitizeTranslation) / unitizeScaleFactor;
-                 });
+                 unitizeFunc);
+  std::transform(normals.begin(), normals.end(), normals.begin(), unitizeFunc);
   std::transform(vertices_indexed.begin(), vertices_indexed.end(),
-                 vertices_indexed.begin(),
-                 [unitizeTranslation, unitizeScaleFactor](auto vertex) {
-                   return (vertex - unitizeTranslation) / unitizeScaleFactor;
-                 });
+                 vertices_indexed.begin(), unitizeFunc);
   std::transform(normals_indexed.begin(), normals_indexed.end(),
-                 normals_indexed.begin(),
-                 [unitizeTranslation, unitizeScaleFactor](auto normal) {
-                   return (normal - unitizeTranslation) / unitizeScaleFactor;
-                 });
+                 normals_indexed.begin(), unitizeFunc);
 
   qDebug() << "TODO: implement this yourself";
 }

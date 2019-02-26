@@ -8,7 +8,22 @@ using namespace std;
 const double EPSILON = numeric_limits<double>::epsilon();
 
 Hit Plane::intersect(Ray const &ray) {
-  /* Detect ray intersection via normal directions */
+  /* ******************************************************
+   * Intersection Calculation
+   * 
+   * Given: ray, position, normal
+   * Sought: intersect? if true then *t
+   * 
+   * Ray's Origin (ray.O), Ray's Direction (ray.D),
+   * point on plane (position), plane's normal (N)
+   * 
+   * Finding an intersection is as simple as checking the
+   * normals. The only thing to be careful of is dividing
+   * by zero. So we first check that.
+   * 
+   * ****************************************************/
+    
+  // Detect ray intersection via normal directions */
   double denominator = N.dot(ray.D);
   double t;
 

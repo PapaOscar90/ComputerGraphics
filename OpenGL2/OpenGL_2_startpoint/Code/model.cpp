@@ -119,13 +119,6 @@ void Model::unitize() {
 
   std::transform(vertices.begin(), vertices.end(), vertices.begin(),
                  unitizeFunc);
-  std::transform(normals.begin(), normals.end(), normals.begin(), unitizeFunc);
-  std::transform(vertices_indexed.begin(), vertices_indexed.end(),
-                 vertices_indexed.begin(), unitizeFunc);
-  std::transform(normals_indexed.begin(), normals_indexed.end(),
-                 normals_indexed.begin(), unitizeFunc);
-
-  qDebug() << "TODO: implement this yourself";
 }
 
 QVector<QVector3D> Model::getVertices() { return vertices; }

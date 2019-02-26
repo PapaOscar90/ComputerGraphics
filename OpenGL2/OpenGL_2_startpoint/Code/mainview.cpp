@@ -90,11 +90,11 @@ void MainView::createShaderProgram() {
                                              ":/shaders/fragshader_phong.glsl");
   phongShaderProgram.link();
   // Gourand
-  gourandlShaderProgram.addShaderFromSourceFile(
+  gourandShaderProgram.addShaderFromSourceFile(
       QOpenGLShader::Vertex, ":/shaders/vertshader_gourand.glsl");
-  gourandlShaderProgram.addShaderFromSourceFile(
+  gourandShaderProgram.addShaderFromSourceFile(
       QOpenGLShader::Fragment, ":/shaders/fragshader_gourand.glsl");
-  gourandlShaderProgram.link();
+  gourandShaderProgram.link();
 
   // Get the uniforms
   // Normal
@@ -113,11 +113,11 @@ void MainView::createShaderProgram() {
       phongShaderProgram.uniformLocation("normalTransform");
   // Gourand
   gourandUniformModelViewTransform =
-      gourandlShaderProgram.uniformLocation("modelViewTransform");
+      gourandShaderProgram.uniformLocation("modelViewTransform");
   gourandUniformProjectionTransform =
-      gourandlShaderProgram.uniformLocation("projectionTransform");
+      gourandShaderProgram.uniformLocation("projectionTransform");
   gourandUniformNormalTransform =
-      gourandlShaderProgram.uniformLocation("normalTransform");
+      gourandShaderProgram.uniformLocation("normalTransform");
 }
 
 void MainView::loadMesh() {
@@ -198,7 +198,7 @@ void MainView::paintGL() {
     phongShaderProgram.release();
     break;
   case GOURAUD:
-    gourandlShaderProgram.bind();
+    gourandShaderProgram.bind();
 
     // Set the projection matrix
     glUniformMatrix4fv(gourandUniformProjectionTransform, 1, GL_FALSE,
@@ -211,7 +211,7 @@ void MainView::paintGL() {
     glBindVertexArray(meshVAO);
     glDrawArrays(GL_TRIANGLES, 0, meshSize);
 
-    gourandlShaderProgram.release();
+    gourandShaderProgram.release();
     break;
   }
 }

@@ -27,12 +27,12 @@ void main() {
   vec3 L = normalize(transformedLightCoordinates - transformedVertCoordinates);
   vec3 normal = normalize(vertNormal);
 
-  // // DIFFUSE TERM
+  // DIFFUSE TERM
   float NDotL = dot(normal, L);
   float intensity = max(min(NDotL, 1.0), 0.0);
-  color += material.y * intensity * materialColor;
+  color += material.y * intensity * lightColor * materialColor;
 
-  // // SPECULAR TERM
+  //  SPECULAR TERM
   vec3 R = 2.0 * NDotL * normal - L;
   vec3 V = normalize(-transformedVertCoordinates);
   float VDotR = dot(R, V);

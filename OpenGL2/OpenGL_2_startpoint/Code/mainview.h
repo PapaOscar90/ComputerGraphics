@@ -50,6 +50,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLuint meshVAO;
   GLuint meshVBO;
   GLuint meshSize;
+  GLuint texutrePtr;
   QMatrix4x4 meshTransform;
 
   // Transforms
@@ -94,11 +95,15 @@ private:
 
   void createShaderProgram();
   void loadMesh();
+  void createTexture();
 
   void destroyModelBuffers();
 
   void updateProjectionTransform();
   void updateModelTransforms();
+  void loadTexture(QString file, GLuint texturePtr);
+
+  QVector<quint8> imageToBytes(QImage image);
 };
 
 #endif // MAINVIEW_H

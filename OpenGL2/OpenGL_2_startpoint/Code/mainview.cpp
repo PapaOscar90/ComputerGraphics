@@ -69,10 +69,15 @@ void MainView::initializeGL() {
 
   createShaderProgram();
   loadMesh();
+  createTexture();
 
   // Initialize transformations
   updateProjectionTransform();
   updateModelTransforms();
+}
+
+void MainView::createTexture() {
+    glGenTextures(1, &texutrePtr);
 }
 
 void MainView::createShaderProgram() {

@@ -111,6 +111,9 @@ void MainView::createShaderProgram() {
       phongShaderProgram.uniformLocation("projectionTransform");
   phongUniformNormalTransform =
       phongShaderProgram.uniformLocation("normalTransform");
+  phongUniformMaterial = phongShaderProgram.uniformLocation("material");
+  phongUniformLightPosition = phongShaderProgram.uniformLocation("lightPosition");
+  phongUniformLightColor = phongShaderProgram.uniformLocation("lightColor");
   // Gourand
   gourandUniformModelViewTransform =
       gourandShaderProgram.uniformLocation("modelViewTransform");
@@ -118,6 +121,9 @@ void MainView::createShaderProgram() {
       gourandShaderProgram.uniformLocation("projectionTransform");
   gourandUniformNormalTransform =
       gourandShaderProgram.uniformLocation("normalTransform");
+  gourandUniformMaterial = gourandShaderProgram.uniformLocation("material");
+  gourandUniformLightPosition = gourandShaderProgram.uniformLocation("lightPosition");
+  gourandUniformLightColor = gourandShaderProgram.uniformLocation("lightColor");
 }
 
 void MainView::loadMesh() {
@@ -191,6 +197,9 @@ void MainView::paintGL() {
                        meshTransform.data());
     glUniformMatrix3fv(phongUniformNormalTransform, 1, GL_FALSE,
                        normalTransform.data());
+    glUniform4fv(phongUniformMaterial, 1, material.data());
+    glUniform3fv(phongUniformLightPosition, 1, lightPosition.data());
+    glUniform3fv(phongUniformLightColor, 1, lightColor.data());
 
     glBindVertexArray(meshVAO);
     glDrawArrays(GL_TRIANGLES, 0, meshSize);
@@ -207,6 +216,10 @@ void MainView::paintGL() {
                        meshTransform.data());
     glUniformMatrix3fv(gourandUniformNormalTransform, 1, GL_FALSE,
                        normalTransform.data());
+
+    glUniform4fv(gourandUniformMaterial, 1, material.data());
+    glUniform3fv(gourandUniformLightPosition, 1, lightPosition.data());
+    glUniform3fv(gourandUniformLightColor, 1, lightColor.data());
 
     glBindVertexArray(meshVAO);
     glDrawArrays(GL_TRIANGLES, 0, meshSize);

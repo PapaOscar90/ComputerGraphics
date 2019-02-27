@@ -29,11 +29,22 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLint phongUniformModelViewTransform;
   GLint phongUniformProjectionTransform;
   GLint phongUniformNormalTransform;
+  GLint phongUniformMaterial;
+  GLint phongUniformLightPosition;
+  GLint phongUniformLightColor;
 
   QOpenGLShaderProgram gourandShaderProgram;
   GLint gourandUniformModelViewTransform;
   GLint gourandUniformProjectionTransform;
   GLint gourandUniformNormalTransform;
+  GLint gourandUniformMaterial;
+  GLint gourandUniformLightPosition;
+  GLint gourandUniformLightColor;
+
+  // Rendering Constants
+  const QVector<float> material = {0.8, 0.3, 0.8, 2}; // kA, kD, kS, n
+  const QVector<float> lightPosition = {0, 200, 200}; // 3D Coordinates
+  const QVector<float> lightColor = {1.0, 1.0, 1.0};  // RGB
 
   // Mesh values
   GLuint meshVAO;

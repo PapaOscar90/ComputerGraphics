@@ -34,7 +34,7 @@ void main() {
 
   //  SPECULAR TERM
   vec3 R = 2.0 * NDotL * normal - L;
-  vec3 V = normalize(-transformedVertCoordinates);
+  vec3 V = -1 * normalize(transformedVertCoordinates);
   float VDotR = dot(R, V);
   intensity = pow(max(min(VDotR, 1.0), 0.0), material.w);
   color += material.z * intensity * lightColor;

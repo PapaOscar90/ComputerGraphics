@@ -26,8 +26,8 @@ void main() {
       normalTransform * vertNormal_in; // Apply normal transformation to normals
   transformedLightCoordinates =
       vec3(modelViewTransform *
-           vec4(lightPosition, 1.0)); // Get transformed vertex coordinates
+           vec4(lightPosition, 1.0)); // Get transformed light coordinates
   transformedVertCoordinates =
       vec3(modelViewTransform *
-           vec4(vertCoordinates_in, 1.0)); // Get transformed light coordinates
+           vec4(vertCoordinates_in, 1.0)); // Get transformed vertex coordinates
 }

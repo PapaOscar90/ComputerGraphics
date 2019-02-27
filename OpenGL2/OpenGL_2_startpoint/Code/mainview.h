@@ -42,9 +42,9 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLint gourandUniformLightColor;
 
   // Rendering Constants
-  const QVector<float> material = {0.8f, 0.3f, 0.8f, 2}; // kA, kD, kS, n
-  const QVector<float> lightPosition = {0, 200, 200}; // 3D Coordinates
-  const QVector<float> lightColor = {1.0, 1.0, 1.0};  // RGB
+  const QVector<float> material = {0.4f, 0.3f, 0.5f, 2}; // kA, kD, kS, n
+  const QVector<float> lightPosition = {0, 200, 200};    // 3D Coordinates
+  const QVector<float> lightColor = {1.0, 1.0, 1.0};     // RGB
 
   // Mesh values
   GLuint meshVAO;

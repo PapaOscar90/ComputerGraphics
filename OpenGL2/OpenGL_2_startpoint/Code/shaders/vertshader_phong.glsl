@@ -11,13 +11,23 @@ layout(location = 1) in vec3 vertNormal_in;
 uniform mat4 modelViewTransform;
 uniform mat4 projectionTransform;
 uniform mat3 normalTransform;
+uniform vec3 lightPosition;
 
 // Specify the output of the vertex stage
 out vec3 vertNormal;
+out vec3 transformedVertCoordinates;
+out vec3 transformedLightCoordinates;
 
 void main() {
   // gl_Position is the output (a vec4) of the vertex shader
   gl_Position =
       projectionTransform * modelViewTransform * vec4(vertCoordinates_in, 1.0);
-  vertNormal = normalTransform * vertNormal_in;
+  vertNormal =
+      normalTransform * vertNormal_in; // Apply normal transformation to normals
+  transformedLightCoordinates =
+      vec3(modelViewTransform *
+           vec4(lightPosition, 1.0)); // Get transformed vertex coordinates
+  transformedVertCoordinates =
+      vec3(modelViewTransform *
+           vec4(vertCoordinates_in, 1.0)); // Get transformed light coordinates
 }

@@ -89,12 +89,12 @@ void MainView::createShaderProgram() {
   phongShaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
                                              ":/shaders/fragshader_phong.glsl");
   phongShaderProgram.link();
-  // Gourand
-  gourandShaderProgram.addShaderFromSourceFile(
-      QOpenGLShader::Vertex, ":/shaders/vertshader_gourand.glsl");
-  gourandShaderProgram.addShaderFromSourceFile(
-      QOpenGLShader::Fragment, ":/shaders/fragshader_gourand.glsl");
-  gourandShaderProgram.link();
+  // Gouraud
+  gouraudShaderProgram.addShaderFromSourceFile(
+      QOpenGLShader::Vertex, ":/shaders/vertshader_gouraud.glsl");
+  gouraudShaderProgram.addShaderFromSourceFile(
+      QOpenGLShader::Fragment, ":/shaders/fragshader_gouraud.glsl");
+  gouraudShaderProgram.link();
 
   // Get the uniforms
   // Normal
@@ -112,18 +112,20 @@ void MainView::createShaderProgram() {
   phongUniformNormalTransform =
       phongShaderProgram.uniformLocation("normalTransform");
   phongUniformMaterial = phongShaderProgram.uniformLocation("material");
-  phongUniformLightPosition = phongShaderProgram.uniformLocation("lightPosition");
+  phongUniformLightPosition =
+      phongShaderProgram.uniformLocation("lightPosition");
   phongUniformLightColor = phongShaderProgram.uniformLocation("lightColor");
-  // Gourand
-  gourandUniformModelViewTransform =
-      gourandShaderProgram.uniformLocation("modelViewTransform");
-  gourandUniformProjectionTransform =
-      gourandShaderProgram.uniformLocation("projectionTransform");
-  gourandUniformNormalTransform =
-      gourandShaderProgram.uniformLocation("normalTransform");
-  gourandUniformMaterial = gourandShaderProgram.uniformLocation("material");
-  gourandUniformLightPosition = gourandShaderProgram.uniformLocation("lightPosition");
-  gourandUniformLightColor = gourandShaderProgram.uniformLocation("lightColor");
+  // Gouraud
+  gouraudUniformModelViewTransform =
+      gouraudShaderProgram.uniformLocation("modelViewTransform");
+  gouraudUniformProjectionTransform =
+      gouraudShaderProgram.uniformLocation("projectionTransform");
+  gouraudUniformNormalTransform =
+      gouraudShaderProgram.uniformLocation("normalTransform");
+  gouraudUniformMaterial = gouraudShaderProgram.uniformLocation("material");
+  gouraudUniformLightPosition =
+      gouraudShaderProgram.uniformLocation("lightPosition");
+  gouraudUniformLightColor = gouraudShaderProgram.uniformLocation("lightColor");
 }
 
 void MainView::loadMesh() {
@@ -207,24 +209,24 @@ void MainView::paintGL() {
     phongShaderProgram.release();
     break;
   case GOURAUD:
-    gourandShaderProgram.bind();
+    gouraudShaderProgram.bind();
 
     // Set the projection matrix
-    glUniformMatrix4fv(gourandUniformProjectionTransform, 1, GL_FALSE,
+    glUniformMatrix4fv(gouraudUniformProjectionTransform, 1, GL_FALSE,
                        projectionTransform.data());
-    glUniformMatrix4fv(gourandUniformModelViewTransform, 1, GL_FALSE,
+    glUniformMatrix4fv(gouraudUniformModelViewTransform, 1, GL_FALSE,
                        meshTransform.data());
-    glUniformMatrix3fv(gourandUniformNormalTransform, 1, GL_FALSE,
+    glUniformMatrix3fv(gouraudUniformNormalTransform, 1, GL_FALSE,
                        normalTransform.data());
 
-    glUniform4fv(gourandUniformMaterial, 1, material.data());
-    glUniform3fv(gourandUniformLightPosition, 1, lightPosition.data());
-    glUniform3fv(gourandUniformLightColor, 1, lightColor.data());
+    glUniform4fv(gouraudUniformMaterial, 1, material.data());
+    glUniform3fv(gouraudUniformLightPosition, 1, lightPosition.data());
+    glUniform3fv(gouraudUniformLightColor, 1, lightColor.data());
 
     glBindVertexArray(meshVAO);
     glDrawArrays(GL_TRIANGLES, 0, meshSize);
 
-    gourandShaderProgram.release();
+    gouraudShaderProgram.release();
     break;
   }
 }

@@ -5,13 +5,26 @@
 
 // Specify the inputs to the fragment shader
 // These must have the same type and name!
-in vec3 vertNormal;
+in float ambientTerm, diffuseTerm, specularTerm;
 
 // Specify the Uniforms of the fragment shaders
 // uniform vec3 lightPosition; // for example
+uniform vec3 lightColor;
 
 // Specify the output of the fragment shader
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
 out vec4 fColor;
 
-void main() { fColor = vec4(normalize(vertNormal), 1.0) / 2.0; }
+void main() {
+  vec3 materialColor = vec3(1, 1, 1);
+  // AMBIENT TERM
+  vec3 color = ambientTerm * materialColor;
+
+  // DIFFUSE TERM
+  color += diffuseTerm * materialColor * lightColor;
+
+  // SPECULAR TERM
+  color += specularTerm * lightColor;
+
+  fColor = vec4(color, 1.0);
+}

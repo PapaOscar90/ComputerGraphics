@@ -32,6 +32,8 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLint phongUniformMaterial;
   GLint phongUniformLightPosition;
   GLint phongUniformLightColor;
+  GLint phongUniformTexture;
+  GLint phongUniformTextureSampler;
 
   QOpenGLShaderProgram gouraudShaderProgram;
   GLint gouraudUniformModelViewTransform;
@@ -40,6 +42,8 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLint gouraudUniformMaterial;
   GLint gouraudUniformLightPosition;
   GLint gouraudUniformLightColor;
+  GLint gouraudUniformTexture;
+  GLint gouraudUniformTextureSampler;
 
   // Rendering Constants
   const QVector<float> material = {0.4f, 0.3f, 0.5f, 2}; // kA, kD, kS, n

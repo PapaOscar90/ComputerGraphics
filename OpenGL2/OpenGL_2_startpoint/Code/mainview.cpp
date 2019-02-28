@@ -77,7 +77,8 @@ void MainView::initializeGL() {
 }
 
 void MainView::createTexture() {
-    glGenTextures(1, &texutrePtr);
+  glGenTextures(1, &texutrePtr);
+  loadTexture(":/textures/rug_logo.png", texutrePtr);
 }
 
 void MainView::createShaderProgram() {
@@ -120,6 +121,9 @@ void MainView::createShaderProgram() {
   phongUniformLightPosition =
       phongShaderProgram.uniformLocation("lightPosition");
   phongUniformLightColor = phongShaderProgram.uniformLocation("lightColor");
+  phongUniformTexture = phongShaderProgram.uniformLocation("texture");
+  phongUniformTextureSampler =
+      phongShaderProgram.uniformLocation("samplerUniform");
   // Gouraud
   gouraudUniformModelViewTransform =
       gouraudShaderProgram.uniformLocation("modelViewTransform");
@@ -131,12 +135,30 @@ void MainView::createShaderProgram() {
   gouraudUniformLightPosition =
       gouraudShaderProgram.uniformLocation("lightPosition");
   gouraudUniformLightColor = gouraudShaderProgram.uniformLocation("lightColor");
+  gouraudUniformTexture = gouraudShaderProgram.uniformLocation("texture");
+  gouraudUniformTextureSampler =
+      gouraudShaderProgram.uniformLocation("samplerUniform");
+}
+
+void MainView::loadTexture(QString file, GLuint texturePtr) {
+  glBindTexture(GL_TEXTURE_2D, texturePtr);
+
+  // NOTE not much thought was put into these values. A fun sounding combo was selected ¯\_(ツ)_/¯
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  QImage qImage(file);
+  QVector<quint8> image = imageToBytes(qImage);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, qImage.width(), qImage.height(), 0,
+               GL_RGBA, GL_UNSIGNED_BYTE, image.data());
 }
 
 void MainView::loadMesh() {
   Model model(":/models/cat.obj");
   model.unitize();
-  QVector<float> meshData = model.getVNInterleaved();
+  QVector<float> meshData = model.getVNTInterleaved();
   meshSize = model.getVertices().size();
 
   // Generate VAO
@@ -152,13 +174,19 @@ void MainView::loadMesh() {
                meshData.data(), GL_STATIC_DRAW);
 
   // Set vertex coordinates to location 0
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
+                        reinterpret_cast<void *>(0));
   glEnableVertexAttribArray(0);
 
   // Set normal coordinates to location 1
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
-                        (void *)(3 * sizeof(float)));
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
+                        reinterpret_cast<void *>(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
+
+  // Set texture coordinates to location 2
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
+                        reinterpret_cast<void *>(6 * sizeof(float)));
+  glEnableVertexAttribArray(2);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -207,7 +235,10 @@ void MainView::paintGL() {
     glUniform4fv(phongUniformMaterial, 1, material.data());
     glUniform3fv(phongUniformLightPosition, 1, lightPosition.data());
     glUniform3fv(phongUniformLightColor, 1, lightColor.data());
+    glUniform1i(phongUniformTextureSampler, 0);
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texutrePtr);
     glBindVertexArray(meshVAO);
     glDrawArrays(GL_TRIANGLES, 0, meshSize);
 
@@ -227,7 +258,10 @@ void MainView::paintGL() {
     glUniform4fv(gouraudUniformMaterial, 1, material.data());
     glUniform3fv(gouraudUniformLightPosition, 1, lightPosition.data());
     glUniform3fv(gouraudUniformLightColor, 1, lightColor.data());
+    glUniform1i(gouraudUniformTextureSampler, 0);
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texutrePtr);
     glBindVertexArray(meshVAO);
     glDrawArrays(GL_TRIANGLES, 0, meshSize);
 

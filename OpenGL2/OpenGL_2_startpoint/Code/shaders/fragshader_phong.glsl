@@ -8,18 +8,20 @@
 in vec3 vertNormal;
 in vec3 transformedVertCoordinates;
 in vec3 transformedLightCoordinates;
+in vec2 textureCoordinates;
 
 // Specify the Uniforms of the fragment shaders
 // uniform vec3 lightPosition; // for example
 uniform vec4 material;
 uniform vec3 lightColor;
+uniform sampler2D samplerUniform;
 
 // Specify the output of the fragment shader
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
 out vec4 fColor;
 
 void main() {
-  vec3 materialColor = vec3(1, 1, 1);
+  vec3 materialColor = vec3(texture2D(samplerUniform, textureCoordinates));
 
   // AMBIENT TERM
   vec3 color = material.x * materialColor;

@@ -78,7 +78,7 @@ void MainView::initializeGL() {
 
 void MainView::createTexture() {
   glGenTextures(1, &texutrePtr);
-  loadTexture(":/textures/rug_logo.png", texutrePtr);
+  loadTexture(":/textures/cat_diff.png", texutrePtr);
 }
 
 void MainView::createShaderProgram() {
@@ -306,6 +306,7 @@ void MainView::updateModelTransforms() {
 void MainView::destroyModelBuffers() {
   glDeleteBuffers(1, &meshVBO);
   glDeleteVertexArrays(1, &meshVAO);
+  glDeleteTextures(1,&texutrePtr);
 }
 
 // --- Public interface

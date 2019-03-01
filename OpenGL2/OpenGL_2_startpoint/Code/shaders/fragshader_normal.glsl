@@ -14,4 +14,12 @@ in vec3 vertNormal;
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
 out vec4 fColor;
 
-void main() { fColor = vec4(normalize(vertNormal), 1.0); }
+void main() {
+  vec3 mappedNormal = vertNormal;
+
+  // This maps [-1,1] to [0,1]
+  mappedNormal += 1;
+  mappedNormal /= 2;
+
+  fColor = vec4(normalize(mappedNormal), 1.0);
+}

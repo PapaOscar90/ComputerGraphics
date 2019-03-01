@@ -36,10 +36,10 @@ void main() {
            vec4(lightPosition, 1.0)); // Get transformed light coordinates
   vec3 transformedVertCoordinates =
       vec3(modelViewTransform *
-           vec4(vertCoordinates_in, 1.0)); // Get transformed light coordinates
+           vec4(vertCoordinates_in, 1.0)); // Get vertex coordinate
 
   vec3 L = transformedLightCoordinates - transformedVertCoordinates;
-  float distance = length(L);
+  float distance = length(L); // Light drop off
   L = normalize(L);
   vec3 normal = normalize(vertNormal);
 

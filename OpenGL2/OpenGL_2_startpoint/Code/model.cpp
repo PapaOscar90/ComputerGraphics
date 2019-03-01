@@ -74,7 +74,7 @@ Model::Model(QString filename) {
 }
 
 /**
- * @brief Model::unitize Not Implemented yet!
+ * @brief Model::unitize
  *
  * Unitize the model by scaling so that it fits a box with sides 1
  * and origin at 0,0,0
@@ -111,7 +111,7 @@ void Model::unitize() {
 
   // NOTE we actually unitize to a cube 4 times the size of the unit cube to
   // make the defaults fit better on screen.
-  unitizeScaleFactor /= 4.f;
+  unitizeScaleFactor /= 8.f;
 
   auto unitizeFunc = [unitizeTranslation, unitizeScaleFactor](auto val) {
     return (val - unitizeTranslation) / unitizeScaleFactor;

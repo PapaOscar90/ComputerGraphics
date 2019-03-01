@@ -46,7 +46,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLint gouraudUniformTextureSampler;
 
   // Rendering Constants
-  const QVector<float> material = {0.4f, 0.3f, 0.5f, 2}; // kA, kD, kS, n
+  const QVector<float> material = {0.2f, 0.6f, 0.3f, 32}; // kA, kD, kS, n
   const QVector<float> lightPosition = {0, 200, 200};    // 3D Coordinates
   const QVector<float> lightColor = {1.0, 1.0, 1.0};     // RGB
 

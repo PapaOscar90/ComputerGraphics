@@ -1,6 +1,8 @@
 This is a README file
 
 ## Changlog
+Changes were made in the order of, and method specified, in the problem statement. Some are detailed below, but mostly detailed in comments directly above the relevent code. The code extends from our previous knowledge, and we assume we do not need to re-explain every detail, such as VAO/VBO creation process. Only the parts relevent to this assignment will have more detailed comments.
+
 ### Normal Shader
   - Change references to color to normal where necessary.
   - Store additional normal transform data.
@@ -10,11 +12,14 @@ This is a README file
 
 ## Questions
 ### Normal Shader
-  - Without the normal uniform is not applied in the vertex shader, the cat has vibrant bands of color dominating particular faces. Its right sides are a vibrant blue, its front-facing sides are a vibrant red, its top is a vibrant green, its left sides are black, as are its back and bottom-facing sides. This colors of the sides remain constant irrespective of the orientation of the cat (e.g. in its default orientation or on its side the cats belly is black). When the normal uniform is applied the cat seems to shimmer as it rotates. The colors are now dependent on the orientation of the cat. In its default orientation the cat's face is red and when the cat is reoriented so that it's belly faces the right, it's belly turns red.
+  - Without the normal uniform applied in the vertex shader, the cat has vibrant bands of color dominating particular faces. Its right sides are a vibrant blue, its front-facing sides are a vibrant red, its top is a vibrant green, its left sides are black, as are its back and bottom-facing sides. This colors of the sides remain constant irrespective of the orientation of the cat (e.g. in its default orientation or on its side the cats belly is black). When the normal uniform is applied the cat seems to shimmer as it rotates. The colors are now dependent on the orientation of the cat. In its default orientation the cat's face is red and when the cat is reoriented so that it's belly faces the right, it's belly turns red. As the cat rotates, the normal colors stay relative to the global coordinates.
 
-When submitting your assignment, describe (briefly) the changes you made and what difficulties you encountered in this file.
+### glTexParameteri()
 
-Also describe what controls (key short-cuts, mouse clicks, mouse movement etc) and possible bonus assignments you implemented, so we can check them more easily.
 
-If you have any suggestions/feedback for improving the practical assignments or support from teaching assistants, you may include it here OR post in anonymously on Nestor under Feedback.
+## Controls
+Controls are the default UI elements given to us from the startpoint.
+
+## Feedback
+Possible to give GIF on nestor of expected outputs. Our model looks like the expected, but can change depending on distance. We are pretty sure this is how it was meant to be, since the vertices are becoming tighter, causing the interpolation to be stronger. But we would have been happier if we knew if we had it exactly correct, since we can easily change it to however it is needed to be.
 

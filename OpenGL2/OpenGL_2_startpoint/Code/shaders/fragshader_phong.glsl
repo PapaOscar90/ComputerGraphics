@@ -21,6 +21,7 @@ uniform sampler2D samplerUniform;
 out vec4 fColor;
 
 void main() {
+  // Find the color at specified UV coordinates on the 2D texture
   vec3 materialColor = vec3(texture2D(samplerUniform, textureCoordinates));
 
   // AMBIENT TERM
@@ -41,5 +42,6 @@ void main() {
   intensity = pow(max(min(VDotR, 1.0), 0.0), material.w);
   color += material.z * intensity * lightColor;
 
+  // Add alpha
   fColor = vec4(color, 1.0);
 }

@@ -26,8 +26,11 @@ void main() {
 
   textureCoordinates = textureCoordinates_in;
 
+  // Use the material's ambient property
   ambientTerm = material.x;
 
+  // Apply the transformation to vertices, and lights. This makes sure
+  // everything in the world "transforms" together
   vec3 vertNormal =
       normalTransform * vertNormal_in; // Apply normal transformation to normals
 
@@ -43,10 +46,12 @@ void main() {
   L = normalize(L);
   vec3 normal = normalize(vertNormal);
 
+  // Calculate light amount for diffuse
   float NDotL = dot(normal, L);
   float intensity = max(min(NDotL, 1.0), 0.0);
   diffuseTerm = material.y * intensity;
 
+  // Calculate light amount for specular, with reflection
   vec3 R = 2.0 * NDotL * normal - L;
   vec3 V = -1 * normalize(transformedVertCoordinates);
   float VDotR = dot(R, V);

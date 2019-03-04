@@ -76,13 +76,14 @@ void MainView::initializeGL() {
   updateModelTransforms();
 }
 
+// Creates a texture from a specified file. Can extend to drop down UI element
 void MainView::createTexture() {
   glGenTextures(1, &texutrePtr);
   loadTexture(":/textures/cat_diff.png", texutrePtr);
 }
 
 void MainView::createShaderProgram() {
-  // Create shader programs
+  // Create shader programs for the three different types
   // Normal
   normalShaderProgram.addShaderFromSourceFile(
       QOpenGLShader::Vertex, ":/shaders/vertshader_normal.glsl");
@@ -140,10 +141,11 @@ void MainView::createShaderProgram() {
       gouraudShaderProgram.uniformLocation("samplerUniform");
 }
 
+// The actual loading process, with wrapping and filter methods declared
 void MainView::loadTexture(QString file, GLuint texturePtr) {
   glBindTexture(GL_TEXTURE_2D, texturePtr);
 
-  // NOTE not much thought was put into these values. A fun sounding combo was selected ¯\_(ツ)_/¯
+
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

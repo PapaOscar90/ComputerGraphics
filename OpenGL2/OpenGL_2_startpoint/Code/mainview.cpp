@@ -324,6 +324,7 @@ void MainView::setScale(int newScale) {
   updateModelTransforms();
 }
 
+// Set the shading based upon selection of UI element.
 void MainView::setShadingMode(ShadingMode shading) {
   qDebug() << "Changed shading to" << shading;
   activeShader = shading;

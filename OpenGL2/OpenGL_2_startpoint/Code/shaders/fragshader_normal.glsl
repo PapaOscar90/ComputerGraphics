@@ -21,5 +21,6 @@ void main() {
   mappedNormal += 1;
   mappedNormal /= 2;
 
+  // Add the alpha to the normalized normals
   fColor = vec4(normalize(mappedNormal), 1.0);
 }

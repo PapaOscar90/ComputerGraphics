@@ -28,5 +28,6 @@ void main() {
   // SPECULAR TERM
   color += specularTerm * lightColor;
 
+  // Add the alpha
   fColor = vec4(color, 1.0);
 }

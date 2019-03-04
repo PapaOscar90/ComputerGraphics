@@ -16,9 +16,11 @@ Changes were made in the order of, and method specified, in the problem statemen
 
 ### glTexParameteri()
 We played around with the parameters randomly at first, and didn't see any differences. However, after researching them further, we now know why. The texture we are using is mapped directly onto the mesh, and only maps one way. It either works, or it doesn't. From the research we did, we found the following:
-|-----:|:------------|
-| GL_REPEAT | This will repeat the textures after the edge of the texture is reached. This is often visible in games for grass textures. There is a large amount of repeating texture from a small input file.|
-| GL_CLAMP_TO_EDGE | This will stop at the last pixel when the edge is reached. |
+
+* GL_REPEAT 
+**This will repeat the textures after the edge of the texture is reached. This is often visible in games for grass textures. There is a large amount of repeating texture from a small input file.
+* GL_CLAMP_TO_EDGE
+** This will stop at the last pixel when the edge is reached.
 
 Wrap S/T with the previous modes changes the vertical/horizontal parts individually. For example, if you set Wrap S to GL_CLAMP, and Wrap_T to GL_CLAMP to a checkerboard texture that is smaller than the object being textured, will result in the checkboard pattern, and long strips where the last pixels of the edge of the texture are continued. If they mode is set to GL_REPEAT, the checkboard pattern will just continue on and on until the end of the object being textured.
 

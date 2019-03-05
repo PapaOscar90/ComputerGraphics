@@ -26,6 +26,16 @@ Wrap S/T with the previous modes changes the vertical/horizontal parts individua
 
 Of course, there is a bit more depth to this than written here, but we feel it isn't needed to lecture you, the reader, about things that are directly in the docs for this function. Creating a texture for an object requires planning and a few choices to best texture your object without needed unneccisary resources.
 
+### Screenshots
+#### Cat_Textured_*
+These screenshots show the differences between the two texture shader models. You can plainly see the difference where there is more fine details, for example the head.
+
+#### Application_of_Normal
+These screen shots display what was described above, with the different results of normal application. Whether it is local to the model, or to the global frame.
+
+#### Wrapped_In_RUG
+For fun, we wrapped the cat in the RUG flag. You can really see the differences between the light and dark side on this texture.
+
 ## Controls
 Controls are the default UI elements given to us from the startpoint.
 

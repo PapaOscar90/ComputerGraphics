@@ -1,0 +1,94 @@
+{
+    "Eye": [200, 200, 1000],
+    "Lights": [
+        {
+            "position": [-200, 600, 1500],
+            "color": [1.0, 1.0, 1.0]
+        }
+    ],
+    "Objects": [
+        {
+            "type": "mesh",
+            "comment": "Central White Sphere",
+            "model": "../Scenes/meshes/sphere.obj",
+            "position": [200, 200, 0],
+            "scale": 2.0,
+            "material": {
+                "color": [1.0, 1.0, 1.0],
+                "ka": 0.5,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 1
+            }
+        },
+        {
+            "type": "mesh",
+            "comment": "Top Right Red Sphere",
+            "model": "../Scenes/meshes/sphere.obj",
+            "position": [300, 300, -100],
+            "scale": 1.0,
+            "material": {
+                "color": [1.0, 0.0, 0.0],
+                "ka": 0.5,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 1
+            }
+        },
+        {
+            "type": "mesh",
+            "comment": "Top Left Green Sphere",
+            "model": "../Scenes/meshes/sphere.obj",
+            "position": [100, 300, -100],
+            "scale": 1.0,
+            "material": {
+                "color": [0.0, 1.0, 0.0],
+                "ka": 0.5,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 1
+            }
+        },
+        {
+            "type": "mesh",
+            "comment": "Bottom Right Blue Sphere",
+            "model": "../Scenes/meshes/sphere.obj",
+            "position": [300, 100, -100],
+            "scale": 1.0,
+            "material": {
+                "color": [0.0, 0.0, 1.0],
+                "ka": 0.5,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 1
+            }
+        },
+        {
+            "type": "mesh",
+            "comment": "Bottom Left Black Sphere",
+            "model": "../Scenes/meshes/sphere.obj",
+            "position": [100, 100, -100],
+            "scale": 1.0,
+            "material": {
+                "color": [0.0, 0.0, 0.0],
+                "ka": 0.5,
+                "kd": 0.5,
+                "ks": 0.5,
+                "n": 1
+            }
+        },
+        {
+            "type": "plane",
+            "comment": "Background plane",
+            "point": [0, 0, -200],
+            "normal": [0, 0, 1],
+            "material": {
+                "color": [0.5, 0.5, 0.5],
+                "ka": 1.0,
+                "kd": 0.0,
+                "ks": 0.0,
+                "n": 0
+            }
+        }
+    ]
+}

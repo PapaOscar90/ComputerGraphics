@@ -1,0 +1,115 @@
+{
+    "Eye": [200, 200, 1000],
+    "Lights": [
+        {
+            "position": [-200, 600, 1500],
+            "color": [1.0, 1.0, 1.0]
+        }
+    ],
+    "Objects": [
+        {
+            "type": "plane",
+            "comment": "Gray plane",
+            "point": [0, 0, 0],
+            "normal": [0, 1, 0.1],
+            "material": {
+                "color": [0.5, 0.5, 0.5],
+                "ka": 0.5,
+                "kd": 0.8,
+                "ks": 1.0,
+                "n": 64
+            }
+        },
+        {
+            "type": "plane",
+            "comment": "Blue plane",
+            "point": [0, 0, -2500],
+            "normal": [0, 0, 1],
+            "material": {
+                "color": [0.0, 0.0, 0.5],
+                "ka": 0.5,
+                "kd": 0.8,
+                "ks": 1.0,
+                "n": 12
+            }
+        },
+        {
+            "type": "sphere",
+            "comment": "Sun",
+            "position": [10, 350, -2600],
+            "radius": 200,
+            "material": {
+                "color": [1.0, 0.8, 0.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 1
+            }
+        },
+        {
+            "type": "sphere",
+            "comment": "Blue sphere",
+            "position": [90, 320, 100],
+            "radius": 50,
+            "material": {
+                "color": [0.0, 0.0, 1.0],
+                "ka": 0.2,
+                "kd": 0.7,
+                "ks": 1,
+                "n": 64
+            }
+        },
+        {
+            "type": "sphere",
+            "comment": "Green sphere",
+            "position": [210, 270, 300],
+            "radius": 50,
+            "material": {
+                "color": [0.0, 1.0, 0.0],
+                "ka": 0.2,
+                "kd": 0.3,
+                "ks": 0.5,
+                "n": 8
+            }
+        },
+        {
+            "type": "sphere",
+            "comment": "Red sphere",
+            "position": [210, 170, 150],
+            "radius": 50,
+            "material": {
+                "color": [1.0, 0.0, 0.0],
+                "ka": 0.2,
+                "kd": 0.7,
+                "ks": 0.8,
+                "n": 32
+            }
+        },
+        {
+            "type": "sphere",
+            "comment": "Yellow sphere",
+            "position": [250, 220, 400],
+            "radius": 50,
+            "material": {
+                "color": [1.0, 0.8, 0.0],
+                "ka": 0.2,
+                "kd": 0.8,
+                "ks": 0.0,
+                "n": 1
+            }
+        },
+        {
+            "type": "sphere",
+            "comment": "Orange sphere",
+            "position": [110, 130, 200],
+            "radius": 50,
+            "material": {
+                "color": [1.0, 0.5, 0.0],
+                "ka": 0.2,
+                "kd": 0.8,
+                "ks": 0.5,
+                "n": 32
+            }
+        }
+    ]
+}

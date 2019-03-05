@@ -1,0 +1,107 @@
+{
+    "Eye": [200, 200, 1000],
+    "Lights": [
+        {
+            "position": [-200, 600, 1500],
+            "color": [1.0, 1.0, 1.0]
+        }
+    ],
+    "Objects": [
+        {
+            "type": "triangle",
+            "comment": "Upper Left triangle",
+            "vertices": [[107.5, 255, 0], [197.5, 305, 0], [197.5, 205, 0]],
+            "material": {
+                "color": [0.4, 0.1, 1.0],
+                "ka": 0.2,
+                "kd": 0.8,
+                "ks": 0.3,
+                "n": 128
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Left triangle",
+            "vertices": [[107.5, 150, 0], [107.5, 250, 0], [197.5, 200, 0]],
+            "material": {
+                "color": [0.1, 0.4, 1.0],
+                "ka": 0.2,
+                "kd": 0.8,
+                "ks": 0.3,
+                "n": 128
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Lower Left triangle",
+            "vertices": [[197.5, 195, 0], [197.5, 95, 0], [107.5, 145, 0]],
+            "material": {
+                "color": [1.0, 0.4, 0.1],
+                "ka": 0.2,
+                "kd": 0.8,
+                "ks": 0.3,
+                "n": 128
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Upper Right triangle",
+            "vertices": [[202.5, 305, 0], [292.5, 255, 0], [202.5, 205, 0]],
+            "material": {
+                "color": [0.4, 1.0, 0.1],
+                "ka": 0.2,
+                "kd": 0.8,
+                "ks": 0.3,
+                "n": 128
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Right triangle",
+            "vertices": [[202.5, 200, 0], [292.5, 250, 0], [292.5, 150, 0]],
+            "material": {
+                "color": [0.1, 1.0, 0.4],
+                "ka": 0.2,
+                "kd": 0.8,
+                "ks": 0.3,
+                "n": 128
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Lower Right triangle",
+            "vertices": [[202.5, 95, 0], [202.5, 195, 0], [292.5, 145, 0]],
+            "material": {
+                "color": [1.0, 0.1, 0.4],
+                "ka": 0.2,
+                "kd": 0.8,
+                "ks": 0.3,
+                "n": 128
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Background triangle",
+            "vertices": [[500, 40, -500], [-100, 40, -500], [200, 500, -500]],
+            "material": {
+                "color": [1.0, 1.0, 1.0],
+                "ka": 1.0,
+                "kd": 1.0,
+                "ks": 1.0,
+                "n": 0
+            }
+        },
+        {
+            "type": "triangle",
+            "comment": "Invisible triangle",
+            "vertices": [[400, 200, 0], [0, 200, 0], [200, 200, 950]],
+            "material": {
+                "color": [0.5, 0.5, 0.5],
+                "ka": 1.0,
+                "kd": 0.0,
+                "ks": 0.4,
+                "n": 128
+            }
+        }
+    ]
+}

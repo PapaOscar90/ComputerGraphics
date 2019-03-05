@@ -68,7 +68,7 @@ Color Scene::trace(Ray const &ray) {
     Hit min_hit(numeric_limits<double>::infinity(), Vector());
     for (unsigned idx = 0; idx != objects.size(); ++idx) {
       Hit shadowHit(objects[idx]->intersect(shadowRay));
-      if (!shadowHit.NO_HIT) {
+      if (shadowHit.t > 0) {
         isInShadow = 1;
       }
     }

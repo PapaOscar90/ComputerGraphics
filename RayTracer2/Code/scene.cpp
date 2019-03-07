@@ -139,7 +139,7 @@ void Scene::reflectColor(Point hit, Vector N, Color &addedColor, int bouncesRema
   Vector newV = -bounceRay.D;                  // the view vector
   Vector NHat = newN.normalized();          // Normalized N
   Vector VHat = newV.normalized();          // Normalized V
-
+  Vector R = 2*(newN.dot(newV))*newN - newN; // Find the bounce angle
 
 }
 

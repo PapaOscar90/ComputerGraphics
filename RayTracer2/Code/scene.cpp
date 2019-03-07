@@ -110,6 +110,39 @@ void Scene::render(Image &img) {
   }
 }
 
+// This will compute the value of light from a reflection
+void Scene::reflectColor(Point hit, Vector N, Color &addedColor, int bouncesRemaining){
+  if(bouncesRemaining == 0){
+    return;
+  }
+
+  Hit min_hit(numeric_limits<double>::infinity(), Vector());
+  ObjectPtr obj = nullptr;
+
+  // Find closest impacted object
+  Ray bounceRay = Ray(hit, N);
+  for (unsigned idx = 0; idx != objects.size(); ++idx) {
+    Hit hit(objects[idx]->intersect(bounceRay));
+    if (hit.t < min_hit.t) {
+      min_hit = hit;
+      obj = objects[idx];
+    }
+  }
+
+  // If no object, don't add anything
+  if (!obj)
+    return;
+
+  Material newMaterial = obj->material;  // the hit objects material
+  Point nextHit = bounceRay.at(min_hit.t);     // the hit point
+  Vector newN = min_hit.N;               // the normal at hit point
+  Vector newV = -bounceRay.D;                  // the view vector
+  Vector NHat = newN.normalized();          // Normalized N
+  Vector VHat = newV.normalized();          // Normalized V
+
+
+}
+
 // --- Misc functions ----------------------------------------------------------
 
 void Scene::addObject(ObjectPtr obj) { objects.push_back(obj); }

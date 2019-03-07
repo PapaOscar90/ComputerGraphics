@@ -16,6 +16,10 @@ class Scene {
   std::vector<LightPtr> lights; // no ptr needed, but kept for consistency
   Point eye;
 
+private:
+  // For internal calculation of reflection light amount
+  void reflectColor(Point hit, Vector N, Color &addedColor, int bouncesRemaining);
+
 public:
   // trace a ray into the scene and return the color
   Color trace(Ray const &ray);

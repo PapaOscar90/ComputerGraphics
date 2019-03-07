@@ -61,33 +61,34 @@ Color Scene::trace(Ray const &ray) {
   for (auto lightPtr : lights) {
     Vector L = (lightPtr->position - hit).normalized();
     
+    // Detect if light in lights is line of sight with impact location
     int isInShadow = 0;
-    Point shadowOffset = hit + (0.00001*N);
-    Ray shadowRay = Ray(shadowOffset, L);
+    Point shadowOffset = hit + (0.00001*N); // Offset to account for precision
+    Ray shadowRay = Ray(shadowOffset, L); // Create ray towards light from impact
     ObjectPtr shadowObject = nullptr;
     Hit min_hit(numeric_limits<double>::infinity(), Vector());
-    for (unsigned idx = 0; idx != objects.size(); ++idx) {
+
+    // For each object, detect if there is a collision
+    for (unsigned idx = 0; idx != objects.size(); ++idx) { 
       Hit shadowHit(objects[idx]->intersect(shadowRay));
       if (shadowHit.t > 0) {
-        isInShadow = 1;
+        isInShadow = 1; // If there is, set flag
       }
     }
 
+    // If the impact is not in a shadow, add the light to color
+    if(!isInShadow){
+      // Diffuse term
+      float NdotL = NHat.dot(L);
+      float intensity = max(min(NdotL, 1.0f), 0.0f);
+      color += material.kd * intensity * material.color * (lightPtr->color);
 
-    if(isInShadow)
-      return color;
-
-    // Diffuse term
-    float NdotL = NHat.dot(L);
-    float intensity = max(min(NdotL, 1.0f), 0.0f);
-    color += material.kd * intensity * material.color * (lightPtr->color);
-
-    // Specular term
-    Vector R = (2 * (NdotL)*NHat - L).normalized();
-    float VdotR = VHat.dot(R);
-    intensity = pow(max(min(VdotR, 1.0f), 0.0f), material.n);
-    color += material.ks * intensity * (lightPtr->color);
-    
+      // Specular term
+      Vector R = (2 * (NdotL)*NHat - L).normalized();
+      float VdotR = VHat.dot(R);
+      intensity = pow(max(min(VdotR, 1.0f), 0.0f), material.n);
+      color += material.ks * intensity * (lightPtr->color);
+    }
   }
 
   return color;

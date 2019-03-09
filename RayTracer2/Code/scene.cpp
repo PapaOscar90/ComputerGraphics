@@ -116,7 +116,7 @@ void Scene::render(Image &img) {
   unsigned w = img.width();
   unsigned h = img.height();
 
-#pragma omp parallel for
+  #pragma omp parallel for
   for (unsigned y = 0; y < h; ++y) {
     for (unsigned x = 0; x < w; ++x) {
       Point pixel(x + 0.5, h - 1 - y + 0.5, 0);

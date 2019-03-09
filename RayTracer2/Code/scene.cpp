@@ -68,6 +68,7 @@ Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V){
     if( isInShadow(hit, N, L) == 0){
       color += getDiffuseColor(material, lightPtr, N, L);
       color += getSpecularColor(material, lightPtr, N, L, V);
+      color += getReflectionColor(hit, N, V, 1);
     }
   }
 
@@ -94,6 +95,12 @@ Color Scene::getSpecularColor(Material material, LightPtr lightPtr, Vector N, Ve
   Color color = material.ks * intensity * (lightPtr->color);
 
   return color;
+}
+
+Color Scene::getReflectionColor(Point hit, Vector N, Vector V, int impactsRemaining){
+  if (impactsRemaining <= 1){
+    return Color(0.0, 0.0, 0.0);
+  }
 }
 
 int Scene::isInShadow(Point hit, Vector N, Vector L){

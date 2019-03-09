@@ -16,10 +16,13 @@ class Scene {
   std::vector<LightPtr> lights; // no ptr needed, but kept for consistency
   Point eye;
 
-private:
+protected:
   // For internal calculation of reflection light amount
-  //Color getReflectionColor(Ray out, int bouncesRemaining);
   Color getColorAt(Material material, Point hit, Vector N, Vector V);
+  int   isInShadow(Point hit, Vector N, Vector L);
+  Color getDiffuseColor(Material material, LightPtr lightPtr, Vector N, Vector L);
+  Color getSpecularColor(Material material, LightPtr lightPtr, Vector N, Vector L, Vector V);
+  Color getReflectionColor();
 
 public:
   // trace a ray into the scene and return the color

@@ -10,7 +10,10 @@
 
 using namespace std;
 
-Color Scene::trace(Ray const &ray) {
+Color Scene::trace(Ray const &ray, int impactsRemaining) {
+  if(impactsRemaining<1)
+    return Color(0.0, 0.0, 0.0);
+
   // Find hit object and distance
   Hit min_hit(numeric_limits<double>::infinity(), Vector());
   ObjectPtr obj = nullptr;
@@ -91,7 +94,14 @@ Color Scene::trace(Ray const &ray) {
     }
   }
 
-  return color;
+  // Now bounce the ray to the next impact to find the relfection color
+  // Get new vector
+  float NdotV = N.dot(ray.D.normalized());
+  Vector B = (2 * (NdotV)*NHat - (ray.D)).normalized();
+
+  Ray bounceRay(ray.O, B);
+
+  return color + trace(bounceRay, impactsRemaining - 1);
 }
 
 void Scene::render(Image &img) {
@@ -103,44 +113,11 @@ void Scene::render(Image &img) {
     for (unsigned x = 0; x < w; ++x) {
       Point pixel(x + 0.5, h - 1 - y + 0.5, 0);
       Ray ray(eye, (pixel - eye).normalized());
-      Color col = trace(ray);
+      Color col = trace(ray, 2);
       col.clamp();
       img(x, y) = col;
     }
   }
-}
-
-// This will compute the value of light from a reflection
-void Scene::reflectColor(Point hit, Vector N, Color &addedColor, int bouncesRemaining){
-  if(bouncesRemaining == 0){
-    return;
-  }
-
-  Hit min_hit(numeric_limits<double>::infinity(), Vector());
-  ObjectPtr obj = nullptr;
-
-  // Find closest impacted object
-  Ray bounceRay = Ray(hit, N);
-  for (unsigned idx = 0; idx != objects.size(); ++idx) {
-    Hit hit(objects[idx]->intersect(bounceRay));
-    if (hit.t < min_hit.t) {
-      min_hit = hit;
-      obj = objects[idx];
-    }
-  }
-
-  // If no object, don't add anything
-  if (!obj)
-    return;
-
-  Material newMaterial = obj->material;  // the hit objects material
-  Point nextHit = bounceRay.at(min_hit.t);     // the hit point
-  Vector newN = min_hit.N;               // the normal at hit point
-  Vector newV = -bounceRay.D;                  // the view vector
-  Vector NHat = newN.normalized();          // Normalized N
-  Vector VHat = newV.normalized();          // Normalized V
-  Vector R = 2*(newN.dot(newV))*newN - newN; // Find the bounce angle
-
 }
 
 // --- Misc functions ----------------------------------------------------------

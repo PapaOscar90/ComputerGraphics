@@ -10,10 +10,7 @@
 
 using namespace std;
 
-Color Scene::trace(Ray const &ray, int impactsRemaining) {
-  if(impactsRemaining<1)
-    return Color(0.0, 0.0, 0.0);
-
+Color Scene::trace(Ray const &ray) {
   // Find hit object and distance
   Hit min_hit(numeric_limits<double>::infinity(), Vector());
   ObjectPtr obj = nullptr;
@@ -34,10 +31,13 @@ Color Scene::trace(Ray const &ray, int impactsRemaining) {
   Vector N = min_hit.N;              // the normal at hit point
   Vector V = -ray.D;                 // the view vector
 
+  Color color = getColorAt(material, hit, N, V);
+
+  return color;
+}
+
+Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V){
   /****************************************************
-   * This is where you should insert the color
-   * calculation (Phong model).
-   *
    * Given: material, hit, N, V, lights[]
    * Sought: color
    *
@@ -94,15 +94,21 @@ Color Scene::trace(Ray const &ray, int impactsRemaining) {
     }
   }
 
-  // Now bounce the ray to the next impact to find the relfection color
-  // Get new vector
-  float NdotV = N.dot(ray.D.normalized());
-  Vector B = (2 * (NdotV)*NHat - (ray.D)).normalized();
-
-  Ray bounceRay(ray.O, B);
-
-  return color + trace(bounceRay, impactsRemaining - 1);
+  return color;
 }
+
+/*Color getReflectionColor(Ray ray, int impactsRemaining){
+    if(impactsRemaining<1)
+      return Color(0.0, 0.0, 0.0);
+
+      
+    // Now bounce the ray to the next impact to find the relfection color
+    // Get new vector
+    float NdotV = N.dot(ray.D.normalized());
+    Vector B = (2 * (NdotV)*NHat - (ray.D)).normalized();
+
+    Ray bounceRay(ray.O, B);
+}*/
 
 void Scene::render(Image &img) {
   unsigned w = img.width();
@@ -113,7 +119,7 @@ void Scene::render(Image &img) {
     for (unsigned x = 0; x < w; ++x) {
       Point pixel(x + 0.5, h - 1 - y + 0.5, 0);
       Ray ray(eye, (pixel - eye).normalized());
-      Color col = trace(ray, 2);
+      Color col = trace(ray);
       col.clamp();
       img(x, y) = col;
     }

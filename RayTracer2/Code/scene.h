@@ -18,11 +18,12 @@ class Scene {
 
 private:
   // For internal calculation of reflection light amount
-  void reflectColor(Point hit, Vector N, Color &addedColor, int bouncesRemaining);
+  //Color getReflectionColor(Ray out, int bouncesRemaining);
+  Color getColorAt(Material material, Point hit, Vector N, Vector V);
 
 public:
   // trace a ray into the scene and return the color
-  Color trace(Ray const &ray, int impactsRemaining);
+  Color trace(Ray const &ray);
 
   // render the scene to the given image
   void render(Image &img);

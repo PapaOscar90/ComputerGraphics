@@ -114,7 +114,7 @@ Color Scene::getReflectionColor(Material material, Point hit, Vector N, Vector V
   Vector NHat = N.normalized();
   
   // Compute the direction of the reflection (B)ounce
-  Vector B = (2 * (NdotV)*NHat - V).normalized();
+  Vector B = (V - 2 * (NdotV)*NHat).normalized();
 
   // Move the hit outwards a bit to not impact itself
   hit = hit + (0.00001*N);

@@ -10,6 +10,8 @@
 
 using namespace std;
 
+ const float AMBIENT_LIGHT_INTENSITY = 1.0;
+
 Color Scene::trace(Ray const &ray) {
   // Find hit object and distance
   Hit min_hit(numeric_limits<double>::infinity(), Vector());
@@ -56,7 +58,7 @@ Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V){
   Vector VHat = V.normalized(); // Normalized V
 
   // We add an extra scale factor for us to universally adjust if needed
-  const float AMBIENT_LIGHT_INTENSITY = 1.0;
+ 
 
   Color color = material.ka * AMBIENT_LIGHT_INTENSITY * material.color;
 
@@ -68,7 +70,7 @@ Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V){
     if( isInShadow(hit, N, L) == 0){
       color += getDiffuseColor(material, lightPtr, N, L);
       color += getSpecularColor(material, lightPtr, N, L, V);
-      color += getReflectionColor(hit, N, V, 1);
+      //color += getReflectionColor(material, hit, N, V, 1);
     }
   }
 
@@ -97,10 +99,35 @@ Color Scene::getSpecularColor(Material material, LightPtr lightPtr, Vector N, Ve
   return color;
 }
 
-Color Scene::getReflectionColor(Point hit, Vector N, Vector V, int impactsRemaining){
-  if (impactsRemaining <= 1){
+Color Scene::getReflectionColor(Material material, Point hit, Vector N, Vector V, int impactsRemaining){
+  if (impactsRemaining <= 0){
     return Color(0.0, 0.0, 0.0);
   }
+
+  // Find if there is an object in the reflection path
+  Hit min_hit(numeric_limits<double>::infinity(), Vector());
+  ObjectPtr obj = nullptr;
+
+  Vector B = (2 * N.normalized().dot(V) * N.normalized() - V).normalized();
+  Ray reflectionRay = Ray(hit, B);
+  for (unsigned idx = 0; idx != objects.size(); ++idx) {
+    Hit hit(objects[idx]->intersect(reflectionRay));
+    if (hit.t < min_hit.t) {
+      min_hit = hit;
+      obj = objects[idx];
+    }
+  }
+
+  // No hit? Return background color.
+  if (!obj)
+    return Color(0.0, 0.0, 0.0);
+
+  material = obj->material; // the hit objects material
+  hit = reflectionRay.at(min_hit.t);     // the hit point
+  N = min_hit.N;              // the normal at hit point
+  V = -reflectionRay.D;                 // the view vector
+
+  getReflectionColor(material,hit, N, V, (impactsRemaining-1));
 }
 
 int Scene::isInShadow(Point hit, Vector N, Vector L){

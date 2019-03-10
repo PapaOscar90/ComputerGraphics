@@ -111,6 +111,9 @@ bool Raytracer::readScene(string const &ifname) try {
   scene.setEye(eye);
 
   // TODO: add your other configuration settings here
+  int superSampling = jsonscene["SuperSamplingFactor"];
+  superSampling = (int) sqrt(superSampling);
+  cout << "Supersampling n*n, n: " << superSampling << endl;
 
   for (auto const &lightNode : jsonscene["Lights"])
     scene.addLight(parseLightNode(lightNode));

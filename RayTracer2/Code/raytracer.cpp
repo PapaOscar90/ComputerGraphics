@@ -9,11 +9,11 @@
 // -- Include all your shapes here ---------------------------------------------
 // =============================================================================
 
+#include "shapes/cylinder.h"
 #include "shapes/mesh.h"
 #include "shapes/plane.h"
 #include "shapes/sphere.h"
 #include "shapes/triangle.h"
-#include "shapes/cylinder.h"
 
 // =============================================================================
 // -- End of shape includes ----------------------------------------------------
@@ -56,7 +56,7 @@ bool Raytracer::parseObjectNode(json const &node) {
     Point point(node["point"]);
     Vector N(node["normal"]);
     obj = ObjectPtr(new Plane(point, N));
-  } else if (node["type"] == "cylinder"){
+  } else if (node["type"] == "cylinder") {
     Point pointA(node["pointA"]);
     Point pointB(node["pointB"]);
     double radius = node["radius"];
@@ -111,27 +111,26 @@ bool Raytracer::readScene(string const &ifname) try {
   scene.setEye(eye);
 
   // TODO: add your other configuration settings here
-  if( jsonscene.find("MaxRecursionDepth") != jsonscene.end()){
+  if (jsonscene.find("MaxRecursionDepth") != jsonscene.end()) {
     maxRecursionDepth = jsonscene["MaxRecursionDepth"];
   } else {
     maxRecursionDepth = 1;
   }
   cout << "Using Recursion Depth: " << maxRecursionDepth << endl;
 
-  if( jsonscene.find("SuperSamplingFactor") != jsonscene.end()){
+  if (jsonscene.find("SuperSamplingFactor") != jsonscene.end()) {
     int fetchSuperSampling = jsonscene["SuperSamplingFactor"];
-    superSampling = (int) sqrt(fetchSuperSampling);
+    superSampling = (int)sqrt(fetchSuperSampling);
   } else {
     superSampling = 1;
   }
   cout << "Supersampling n*n, n: " << superSampling << endl;
 
-  if( jsonscene.find("Shadows") != jsonscene.end()){
+  if (jsonscene.find("Shadows") != jsonscene.end()) {
     useShadows = jsonscene["Shadows"];
-    if(useShadows)
+    if (useShadows)
       cout << "Using shadows" << endl;
   }
-  
 
   for (auto const &lightNode : jsonscene["Lights"])
     scene.addLight(parseLightNode(lightNode));

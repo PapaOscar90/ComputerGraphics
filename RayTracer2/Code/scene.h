@@ -18,11 +18,15 @@ class Scene {
 
 protected:
   // For internal calculation of reflection light amount
-  Color getColorAt(Material material, Point hit, Vector N, Vector V, int impactsToUse);
-  int   isInShadow(Point hit, Vector N, Vector L);
-  Color getDiffuseColor(Material material, LightPtr lightPtr, Vector N, Vector L);
-  Color getSpecularColor(Material material, LightPtr lightPtr, Vector N, Vector L, Vector V);
-  Color getReflectionColor(Material material, Point hit, Vector N, Vector V, int impactsRemaining);
+  Color getColorAt(Material material, Point hit, Vector N, Vector V,
+                   int impactsToUse);
+  int isInShadow(Point hit, Vector N, Vector L);
+  Color getDiffuseColor(Material material, LightPtr lightPtr, Vector N,
+                        Vector L);
+  Color getSpecularColor(Material material, LightPtr lightPtr, Vector N,
+                         Vector L, Vector V);
+  Color getReflectionColor(Material material, Point hit, Vector N, Vector V,
+                           int impactsRemaining);
 
 public:
   // trace a ray into the scene and return the color

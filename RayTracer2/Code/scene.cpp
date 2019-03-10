@@ -70,7 +70,7 @@ Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V){
     if( isInShadow(hit, N, L) == 0){
       color += getDiffuseColor(material, lightPtr, N, L);
       color += getSpecularColor(material, lightPtr, N, L, V);
-      //color += getReflectionColor(material, hit, N, V, 1);
+      color += getReflectionColor(material, hit, N, V, 1);
     }
   }
 
@@ -100,15 +100,19 @@ Color Scene::getSpecularColor(Material material, LightPtr lightPtr, Vector N, Ve
 }
 
 Color Scene::getReflectionColor(Material material, Point hit, Vector N, Vector V, int impactsRemaining){
-  if (impactsRemaining <= 0){
+  if (impactsRemaining ==  0){
     return Color(0.0, 0.0, 0.0);
   }
-
   // Find if there is an object in the reflection path
   Hit min_hit(numeric_limits<double>::infinity(), Vector());
   ObjectPtr obj = nullptr;
 
-  Vector B = (2 * N.normalized().dot(V) * N.normalized() - V).normalized();
+  float NdotV = N.normalized().dot(V);
+  Vector NHat = N.normalized();
+  
+
+  Vector B = (2 * (NdotV)*NHat - V).normalized();
+  hit = hit + (0.001*N);
   Ray reflectionRay = Ray(hit, B);
   for (unsigned idx = 0; idx != objects.size(); ++idx) {
     Hit hit(objects[idx]->intersect(reflectionRay));
@@ -127,7 +131,17 @@ Color Scene::getReflectionColor(Material material, Point hit, Vector N, Vector V
   N = min_hit.N;              // the normal at hit point
   V = -reflectionRay.D;                 // the view vector
 
-  getReflectionColor(material,hit, N, V, (impactsRemaining-1));
+  Color returnColor = Color(0.0, 0.0, 0.0);
+  for(auto lightPtr : lights){
+    Vector L = (lightPtr->position - hit).normalized();
+    
+    // If the impact is not in a shadow, add the light to color
+    if( isInShadow(hit, N, L) == 0){
+      returnColor += getDiffuseColor(material, lightPtr, N, L);
+    }
+  }
+
+  return (returnColor + getReflectionColor(material,hit, N, V, (impactsRemaining-1)));
 }
 
 int Scene::isInShadow(Point hit, Vector N, Vector L){

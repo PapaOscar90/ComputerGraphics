@@ -16,6 +16,8 @@ Color Scene::trace(Ray const &ray, int impactsToUse) {
   // Find hit object and distance
   Hit min_hit(numeric_limits<double>::infinity(), Vector());
   ObjectPtr obj = nullptr;
+
+  // Check for a collision for every object
   for (unsigned idx = 0; idx != objects.size(); ++idx) {
     Hit hit(objects[idx]->intersect(ray));
     if (hit.t < min_hit.t) {
@@ -58,16 +60,15 @@ Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V, int im
   Vector VHat = V.normalized(); // Normalized V
 
   // We add an extra scale factor for us to universally adjust if needed
- 
-
-  Color color = material.ka * AMBIENT_LIGHT_INTENSITY * material.color;
+   Color color = material.ka * AMBIENT_LIGHT_INTENSITY * material.color;
 
   // Calculate for every light the light intensity at hit location
   for (auto lightPtr : lights) {
+    // Compute the light vector, and normalize
     Vector L = (lightPtr->position - hit).normalized();
     
-    // If the impact is not in a shadow, add the light to color
-    if( isInShadow(hit, N, L) == 0){
+    // If the impact is not in a shadow, add the different light to color
+    if(!isInShadow(hit, N, L)){
       color += getDiffuseColor(material, lightPtr, N, L);
       color += getSpecularColor(material, lightPtr, N, L, V);
       color += getReflectionColor(material, hit, N, V, impactsToUse);
@@ -77,8 +78,8 @@ Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V, int im
   return color;
 }
 
+// Diffuse term, depends on angle of light to the surface normal
 Color Scene::getDiffuseColor(Material material, LightPtr lightPtr, Vector N, Vector L){
-    // Diffuse term
   float NdotL = N.normalized().dot(L);
   float intensity = max(min(NdotL, 1.0f), 0.0f);
   Color color = material.kd * intensity * material.color * (lightPtr->color);
@@ -86,8 +87,8 @@ Color Scene::getDiffuseColor(Material material, LightPtr lightPtr, Vector N, Vec
   return color;
 }
 
+// Specular term, depends on angle of light reflection to the eye vector
 Color Scene::getSpecularColor(Material material, LightPtr lightPtr, Vector N, Vector L, Vector V){
-  // Specular term
   float NdotL = N.normalized().dot(L);
   Vector NHat = N.normalized();
 
@@ -99,7 +100,9 @@ Color Scene::getSpecularColor(Material material, LightPtr lightPtr, Vector N, Ve
   return color;
 }
 
+// Find the color being reflected onto the surface
 Color Scene::getReflectionColor(Material material, Point hit, Vector N, Vector V, int impactsRemaining){
+  // If we have reached the impact location, return nothing
   if (impactsRemaining ==  0){
     return Color(0.0, 0.0, 0.0);
   }
@@ -110,10 +113,15 @@ Color Scene::getReflectionColor(Material material, Point hit, Vector N, Vector V
   float NdotV = N.normalized().dot(V);
   Vector NHat = N.normalized();
   
-
+  // Compute the direction of the reflection (B)ounce
   Vector B = (2 * (NdotV)*NHat - V).normalized();
-  hit = hit + (0.001*N);
+
+  // Move the hit outwards a bit to not impact itself
+  hit = hit + (0.00001*N);
+  // Create a ray from the impact in the direction of the relfection vector
   Ray reflectionRay = Ray(hit, B);
+
+  // Check for a hit
   for (unsigned idx = 0; idx != objects.size(); ++idx) {
     Hit hit(objects[idx]->intersect(reflectionRay));
     if (hit.t < min_hit.t) {
@@ -131,12 +139,13 @@ Color Scene::getReflectionColor(Material material, Point hit, Vector N, Vector V
   N = min_hit.N;              // the normal at hit point
   V = -reflectionRay.D;                 // the view vector
 
+  // Start tracking the color to be returned for the reflection value
   Color returnColor = Color(0.0, 0.0, 0.0);
   for(auto lightPtr : lights){
     Vector L = (lightPtr->position - hit).normalized();
     
     // If the impact is not in a shadow, add the light to color
-    if( isInShadow(hit, N, L) == 0){
+    if(!isInShadow(hit, N, L)){
       returnColor += getDiffuseColor(material, lightPtr, N, L);
     }
   }
@@ -148,7 +157,6 @@ int Scene::isInShadow(Point hit, Vector N, Vector L){
   Point shadowOffset = hit + (0.00001*N); // Offset to account for precision
   Ray shadowRay = Ray(shadowOffset, L); // Create ray towards light from impact
   ObjectPtr shadowObject = nullptr;
-  Hit min_hit(numeric_limits<double>::infinity(), Vector());
 
   // For each object, detect if there is a collision
   for (unsigned idx = 0; idx != objects.size(); ++idx) { 
@@ -163,15 +171,27 @@ int Scene::isInShadow(Point hit, Vector N, Vector L){
 void Scene::render(Image &img, int superSamp, int impactsToUse) {
   unsigned w = img.width();
   unsigned h = img.height();
-  float subPixelSize = (1/superSamp)/2;
+  double subPixelSize = (1.0/superSamp)/2.0;
+
 
   #pragma omp parallel for
   for (unsigned y = 0; y < h; ++y) {
     for (unsigned x = 0; x < w; ++x) {
       Color col = Color(0.0, 0.0, 0.0);
-      for(int j = 1; j <= superSamp; j++){
-        for( int k = 1; k <= superSamp; k++){
-          Point pixel(x+(subPixelSize*j), h - 1 - y + (subPixelSize*k), 0);
+      for(int j = -superSamp/2; j <= superSamp/2; j++){
+        for( int k = -superSamp/2; k <= superSamp/2; k++){
+          
+          // If there is more than one pixel, skip the o crossings.
+          if(superSamp != 1 && (j == 0 || k == 0)) {
+            continue;
+          }
+
+          // Add +/- the subpixel*factor to either side of the center
+          double originalX = x + 0.5;
+          double originalY = h - 1 - y + 0.5;
+          double pX = originalX + (subPixelSize*j);
+          double pY = originalY + (subPixelSize*k);
+          Point pixel(pX, pY, 0);
           Ray ray(eye, (pixel - eye).normalized()); 
           col += trace(ray,impactsToUse);
         }

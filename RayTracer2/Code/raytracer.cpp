@@ -119,8 +119,6 @@ bool Raytracer::readScene(string const &ifname) try {
   cout << "Supersampling n*n, n: " << superSampling << endl;
 
 
-
-
   for (auto const &lightNode : jsonscene["Lights"])
     scene.addLight(parseLightNode(lightNode));
 

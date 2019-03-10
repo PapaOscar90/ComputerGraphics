@@ -111,13 +111,27 @@ bool Raytracer::readScene(string const &ifname) try {
   scene.setEye(eye);
 
   // TODO: add your other configuration settings here
-  maxRecursionDepth = jsonscene["MaxRecursionDepth"];
+  if( jsonscene.find("MaxRecursionDepth") != jsonscene.end()){
+    maxRecursionDepth = jsonscene["MaxRecursionDepth"];
+  } else {
+    maxRecursionDepth = 1;
+  }
   cout << "Using Recursion Depth: " << maxRecursionDepth << endl;
 
-  int fetchSuperSampling = jsonscene["SuperSamplingFactor"];
-  superSampling = (int) sqrt(fetchSuperSampling);
+  if( jsonscene.find("SuperSamplingFactor") != jsonscene.end()){
+    int fetchSuperSampling = jsonscene["SuperSamplingFactor"];
+    superSampling = (int) sqrt(fetchSuperSampling);
+  } else {
+    superSampling = 1;
+  }
   cout << "Supersampling n*n, n: " << superSampling << endl;
 
+  if( jsonscene.find("Shadows") != jsonscene.end()){
+    useShadows = jsonscene["Shadows"];
+    if(useShadows)
+      cout << "Using shadows" << endl;
+  }
+  
 
   for (auto const &lightNode : jsonscene["Lights"])
     scene.addLight(parseLightNode(lightNode));

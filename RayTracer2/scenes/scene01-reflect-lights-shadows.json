@@ -1,8 +1,7 @@
 {
     "Eye": [200, 200, 1000],
-    "Shadows": 1,
+    "Shadows": true,
     "MaxRecursionDepth": 2,
-    "SuperSamplingFactor": 16,
     "Lights": [
         {
             "position": [-200, 600, 1500],

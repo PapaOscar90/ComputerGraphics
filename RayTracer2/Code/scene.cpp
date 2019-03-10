@@ -12,7 +12,7 @@ using namespace std;
 
  const float AMBIENT_LIGHT_INTENSITY = 1.0;
 
-Color Scene::trace(Ray const &ray) {
+Color Scene::trace(Ray const &ray, int impactsToUse) {
   // Find hit object and distance
   Hit min_hit(numeric_limits<double>::infinity(), Vector());
   ObjectPtr obj = nullptr;
@@ -33,12 +33,12 @@ Color Scene::trace(Ray const &ray) {
   Vector N = min_hit.N;              // the normal at hit point
   Vector V = -ray.D;                 // the view vector
 
-  Color color = getColorAt(material, hit, N, V);
+  Color color = getColorAt(material, hit, N, V, impactsToUse);
 
   return color;
 }
 
-Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V){
+Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V, int impactsToUse){
   /****************************************************
    * Given: material, hit, N, V, lights[]
    * Sought: color
@@ -70,7 +70,7 @@ Color Scene::getColorAt(Material material, Point hit, Vector N, Vector V){
     if( isInShadow(hit, N, L) == 0){
       color += getDiffuseColor(material, lightPtr, N, L);
       color += getSpecularColor(material, lightPtr, N, L, V);
-      color += getReflectionColor(material, hit, N, V, 1);
+      color += getReflectionColor(material, hit, N, V, impactsToUse);
     }
   }
 
@@ -160,7 +160,7 @@ int Scene::isInShadow(Point hit, Vector N, Vector L){
   return false;
 }
 
-void Scene::render(Image &img, int superSamp) {
+void Scene::render(Image &img, int superSamp, int impactsToUse) {
   unsigned w = img.width();
   unsigned h = img.height();
   float subPixelSize = (1/superSamp)/2;
@@ -173,7 +173,7 @@ void Scene::render(Image &img, int superSamp) {
         for( int k = 1; k <= superSamp; k++){
           Point pixel(x+(subPixelSize*j), h - 1 - y + (subPixelSize*k), 0);
           Ray ray(eye, (pixel - eye).normalized()); 
-          col += trace(ray);
+          col += trace(ray,impactsToUse);
         }
       }
       col = col / (superSamp*superSamp);

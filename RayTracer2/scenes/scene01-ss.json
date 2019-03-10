@@ -1,6 +1,7 @@
 {
     "Eye": [200, 200, 1000],
-    "SuperSamplingFactor": 64,
+    "SuperSamplingFactor": 4,
+    "MaxRecursionDepth": 1,
     "ImageSize": [400,400,0],
     "Lights": [
         {

@@ -111,6 +111,9 @@ bool Raytracer::readScene(string const &ifname) try {
   scene.setEye(eye);
 
   // TODO: add your other configuration settings here
+  int maxRecursionDepth = jsonscene["MaxRecursionDepth"];
+  cout << "Using Recursion Depth: " << maxRecursionDepth << endl;
+
   int fetchSuperSampling = jsonscene["SuperSamplingFactor"];
   superSampling = (int) sqrt(fetchSuperSampling);
   cout << "Supersampling n*n, n: " << superSampling << endl;
@@ -145,7 +148,7 @@ void Raytracer::renderToFile(string const &ofname) {
   // TODO: the size may be a settings in your file
   Image img(imageX, imageY);
   cout << "Tracing...\n";
-  scene.render(img, superSampling);
+  scene.render(img, superSampling, maxRecursionDepth);
   cout << "Writing image to " << ofname << "...\n";
   img.write_png(ofname);
   cout << "Done.\n";

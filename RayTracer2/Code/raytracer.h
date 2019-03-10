@@ -15,6 +15,7 @@ class Raytracer {
   Scene scene;
   int superSampling;
   int imageX, imageY;
+  int maxRecursionDepth;
 
 public:
   bool readScene(std::string const &ifname);

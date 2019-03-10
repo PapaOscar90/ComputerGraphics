@@ -111,9 +111,14 @@ bool Raytracer::readScene(string const &ifname) try {
   scene.setEye(eye);
 
   // TODO: add your other configuration settings here
-  int superSampling = jsonscene["SuperSamplingFactor"];
-  superSampling = (int) sqrt(superSampling);
+  int fetchSuperSampling = jsonscene["SuperSamplingFactor"];
+  superSampling = (int) sqrt(fetchSuperSampling);
   cout << "Supersampling n*n, n: " << superSampling << endl;
+
+  Point imageSize(jsonscene["ImageSize"]);
+  imageX = imageSize.x;
+  imageY = imageSize.y;
+  cout << "Image Size: " << imageX << "x" << imageY << endl;
 
   for (auto const &lightNode : jsonscene["Lights"])
     scene.addLight(parseLightNode(lightNode));
@@ -138,9 +143,9 @@ bool Raytracer::readScene(string const &ifname) try {
 
 void Raytracer::renderToFile(string const &ofname) {
   // TODO: the size may be a settings in your file
-  Image img(400, 400);
+  Image img(imageX, imageY);
   cout << "Tracing...\n";
-  scene.render(img);
+  scene.render(img, superSampling);
   cout << "Writing image to " << ofname << "...\n";
   img.write_png(ofname);
   cout << "Done.\n";

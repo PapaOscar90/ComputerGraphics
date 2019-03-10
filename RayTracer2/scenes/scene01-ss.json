@@ -1,6 +1,7 @@
 {
     "Eye": [200, 200, 1000],
-    "SuperSamplingFactor": 4,
+    "SuperSamplingFactor": 64,
+    "ImageSize": [400,400,0],
     "Lights": [
         {
             "position": [-200, 600, 1500],

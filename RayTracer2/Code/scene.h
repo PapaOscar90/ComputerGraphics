@@ -29,7 +29,7 @@ public:
   Color trace(Ray const &ray);
 
   // render the scene to the given image
-  void render(Image &img);
+  void render(Image &img, int superSamp);
 
   void addObject(ObjectPtr obj);
   void addLight(Light const &light);

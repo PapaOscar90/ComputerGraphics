@@ -160,16 +160,23 @@ int Scene::isInShadow(Point hit, Vector N, Vector L){
   return false;
 }
 
-void Scene::render(Image &img) {
+void Scene::render(Image &img, int superSamp) {
   unsigned w = img.width();
   unsigned h = img.height();
+  float subPixelSize = (1/superSamp)/2;
 
   #pragma omp parallel for
   for (unsigned y = 0; y < h; ++y) {
     for (unsigned x = 0; x < w; ++x) {
-      Point pixel(x + 0.5, h - 1 - y + 0.5, 0);
-      Ray ray(eye, (pixel - eye).normalized());
-      Color col = trace(ray);
+      Color col = Color(0.0, 0.0, 0.0);
+      for(int j = 1; j <= superSamp; j++){
+        for( int k = 1; k <= superSamp; k++){
+          Point pixel(x+(subPixelSize*j), h - 1 - y + (subPixelSize*k), 0);
+          Ray ray(eye, (pixel - eye).normalized()); 
+          col += trace(ray);
+        }
+      }
+      col = col / (superSamp*superSamp);
       col.clamp();
       img(x, y) = col;
     }

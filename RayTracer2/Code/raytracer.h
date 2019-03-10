@@ -13,6 +13,8 @@ class Material;
 
 class Raytracer {
   Scene scene;
+  int superSampling;
+  int imageX, imageY;
 
 public:
   bool readScene(std::string const &ifname);

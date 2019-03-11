@@ -5,7 +5,7 @@
 
 typedef Image Texture;
 struct TextureCoordinates {
-  double x, y;
+  double u, v;
 };
 
 #endif /* TEXTURE_H */

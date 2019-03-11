@@ -40,11 +40,14 @@ Hit Sphere::intersect(Ray const &ray) {
 
 TextureCoordinates Sphere::textureCoordinates(Point const &point) {
   Vector hitVector = point - position;
+  
   TextureCoordinates hitCoordinates;
-  hitCoordinates.x = (M_PI + atan2(-hitVector.y,-hitVector.x)) / (2*M_PI);
-  hitCoordinates.y = acos(hitVector.z/r) / M_PI;
+  hitCoordinates.u = (M_PI + atan2(-hitVector.y,-hitVector.x)) / (2*M_PI);
+  hitCoordinates.v = acos(hitVector.z/r) / M_PI;
 
   return hitCoordinates;
 }
 
-Sphere::Sphere(Point const &pos, double radius) : position(pos), r(radius) {}
+Sphere::Sphere(Point const &pos, double radius) : position(pos), r(radius) {
+  rotation = Vector{0.0, 0.5, 0.0};
+}

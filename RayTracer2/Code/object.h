@@ -16,6 +16,7 @@ typedef std::shared_ptr<Object> ObjectPtr;
 class Object {
 public:
   Material material;
+  Vector rotation{0.0, 0.0, 0.0};
 
   virtual ~Object() = default;
 

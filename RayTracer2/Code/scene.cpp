@@ -161,10 +161,11 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection, in
   Point reflectionOrigin = hit  + (N*0.001);
   Ray reflectionRay(reflectionOrigin,reflectionDirection);
 
+  // Return the light at the current hit, plus the light being reflected onto
   float VdotR = VHat.dot(reflectionDirection);
   float intensity = pow(max(min(VdotR, 1.0f), 0.0f), material.n);
   color += material.ks * trace(reflectionRay, depth-1);
-  // Return the light at the current hit, plus the light being reflected onto
+  
   return color;
 }
 

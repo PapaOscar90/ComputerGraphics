@@ -20,10 +20,11 @@ class Scene {
   bool renderShadows = false;
   double shadowBias = 0.00001;
   unsigned int ssFactor = 1;
+  unsigned int recursionDepth;
 
 public:
   // trace a ray into the scene and return the color
-  Color trace(Ray const &ray);
+  Color trace(Ray const &ray, int depth);
 
   // render the scene to the given image
   void render(Image &img);
@@ -33,12 +34,13 @@ public:
   void setEye(Triple const &position);
   void shouldRenderShadows(bool shadows);
   void setSuperSamplingFactor(unsigned int factor);
+  void setRecursionFactor(unsigned int depth);
 
   unsigned getNumObject();
   unsigned getNumLights();
 
 private:
-  Color getColor(Ray const &ray, ObjectPtr obj, Hit const &hit);
+  Color getColor(Ray const &ray, ObjectPtr obj, Hit const &hit, int depth);
   bool inShadow(Point hit, Vector N, Vector L);
 };
 

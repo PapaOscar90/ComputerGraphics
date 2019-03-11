@@ -10,7 +10,12 @@
 
 using namespace std;
 
-Color Scene::trace(Ray const &ray) {
+Color Scene::trace(Ray const &ray, int depth) {
+  if(depth < 1){
+    return Color(0.0, 0.0, 0.0);
+  }
+
+
   // Find hit object and distance
   Hit min_hit(numeric_limits<double>::infinity(), Vector());
   ObjectPtr obj = nullptr;
@@ -26,7 +31,7 @@ Color Scene::trace(Ray const &ray) {
   if (!obj)
     return Color(0.0, 0.0, 0.0);
 
-  return getColor(ray, obj, min_hit);
+  return getColor(ray, obj, min_hit, depth);
 }
 
 void Scene::render(Image &img) {
@@ -35,7 +40,7 @@ void Scene::render(Image &img) {
 
   int factor = ssFactor;
   double subPixelSize = 1.0 / (2 * factor);
-#pragma omp parallel for
+  #pragma omp parallel for
   for (unsigned y = 0; y < h; ++y) {
     for (unsigned x = 0; x < w; ++x) {
 
@@ -53,7 +58,7 @@ void Scene::render(Image &img) {
                       h - 1 - y + 0.5 + (subPixelSize * j), 0);
           Ray ray(eye, (pixel - eye).normalized());
           // Collect color of samples
-          col += trace(ray);
+          col += trace(ray, recursionDepth);
         }
       }
       col /= ssFactor * ssFactor; // Average the colors over the samples
@@ -92,7 +97,7 @@ bool Scene::inShadow(Point hit, Vector N, Vector L) {
   return false;
 }
 
-Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection) {
+Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection, int depth) {
   Material material = obj->material;  // the hit objects material
   Point hit = ray.at(intersection.t); // the hit point
   Vector N = intersection.N;          // the normal at hit point
@@ -150,11 +155,26 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection) {
     intensity = pow(max(min(VdotR, 1.0f), 0.0f), material.n);
     color += material.ks * intensity * (lightPtr->color);
   }
+
+  // Create the reflection ray
+  Vector reflectionDirection = (2.0 * V.normalized().dot(N) * N.normalized()).normalized();
+  Point reflectionOrigin = hit  + (N*0.001);
+  Ray reflectionRay(reflectionOrigin,reflectionDirection);
+
+  float VdotR = VHat.dot(reflectionDirection);
+  float intensity = pow(max(min(VdotR, 1.0f), 0.0f), material.n);
+  color += material.ks * trace(reflectionRay, depth-1);
+  // Return the light at the current hit, plus the light being reflected onto
   return color;
 }
+
+
+
 
 unsigned Scene::getNumObject() { return objects.size(); }
 
 void Scene::setSuperSamplingFactor(unsigned int factor) { ssFactor = factor; }
+
+void Scene::setRecursionFactor(unsigned int depth) { recursionDepth = depth; }
 
 unsigned Scene::getNumLights() { return lights.size(); }

@@ -137,6 +137,12 @@ bool Raytracer::readScene(string const &ifname) try {
     scene.setSuperSamplingFactor(*superSamplingFactor);
   }
 
+  auto recursionFactor = jsonscene.find("MaxRecursionDepth");
+  if( recursionFactor != jsonscene.end()) {
+    cout << "Max recursion set to " << *recursionFactor << ".\n";
+    scene.setRecursionFactor(*recursionFactor);
+  }
+
   for (auto const &lightNode : jsonscene["Lights"])
     scene.addLight(parseLightNode(lightNode));
 

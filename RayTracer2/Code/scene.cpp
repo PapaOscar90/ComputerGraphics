@@ -157,8 +157,8 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection, in
   }
 
   // Create the reflection ray
-  Vector reflectionDirection = (2.0 * V.normalized().dot(N) * N.normalized()).normalized();
-  Point reflectionOrigin = hit  + (N*0.001);
+  Vector reflectionDirection = ray.D - N * 2.0 * ray.D.dot(N);
+  Point reflectionOrigin = hit  + (N*0.00000000001);
   Ray reflectionRay(reflectionOrigin,reflectionDirection);
 
   // Return the light at the current hit, plus the light being reflected onto

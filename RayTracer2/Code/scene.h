@@ -20,7 +20,7 @@ class Scene {
   bool renderShadows = false;
   double shadowBias = 0.00001;
   unsigned int ssFactor = 1;
-  unsigned int recursionDepth;
+  unsigned int recursionDepth = 1;
 
 public:
   // trace a ray into the scene and return the color

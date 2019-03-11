@@ -124,7 +124,7 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection) {
 
   Color materialColor = material.surface.match(
       [=](Color materialColor) { return materialColor; },
-      [=](Texture materialTexture) {
+      [=](Texture &materialTexture) {
         auto coordinates = obj->textureCoordinates(hit);
 
         return materialTexture.colorAt(coordinates.x, coordinates.y);

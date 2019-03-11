@@ -48,6 +48,4 @@ TextureCoordinates Sphere::textureCoordinates(Point const &point) {
   return hitCoordinates;
 }
 
-Sphere::Sphere(Point const &pos, double radius) : position(pos), r(radius) {
-  rotation = Vector{0.0, 0.5, 0.0};
-}
+Sphere::Sphere(Point const &pos, double radius) : position(pos), r(radius) {}

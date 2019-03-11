@@ -138,7 +138,7 @@ bool Raytracer::readScene(string const &ifname) try {
   }
 
   auto recursionFactor = jsonscene.find("MaxRecursionDepth");
-  if( recursionFactor != jsonscene.end()) {
+  if (recursionFactor != jsonscene.end()) {
     cout << "Max recursion set to " << *recursionFactor << ".\n";
     scene.setRecursionFactor(*recursionFactor);
   }

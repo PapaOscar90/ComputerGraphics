@@ -11,10 +11,9 @@
 using namespace std;
 
 Color Scene::trace(Ray const &ray, int depth) {
-  if(depth < 1){
+  if (depth < 1) {
     return Color(0.0, 0.0, 0.0);
   }
-
 
   // Find hit object and distance
   Hit min_hit(numeric_limits<double>::infinity(), Vector());
@@ -40,7 +39,7 @@ void Scene::render(Image &img) {
 
   int factor = ssFactor;
   double subPixelSize = 1.0 / (2 * factor);
-  #pragma omp parallel for
+#pragma omp parallel for
   for (unsigned y = 0; y < h; ++y) {
     for (unsigned x = 0; x < w; ++x) {
 
@@ -97,8 +96,10 @@ bool Scene::inShadow(Point hit, Vector N, Vector L) {
   return false;
 }
 
-Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection, int depth) {
-  Material material = obj->material;  // the hit objects material
+Color Scene::getColor(Ray const &initRay, ObjectPtr obj,
+                      Hit const &intersection, int depth) {
+  Material material = obj->material; // the hit objects material
+  Ray ray = initRay;
   Point hit = ray.at(intersection.t); // the hit point
   Vector N = intersection.N;          // the normal at hit point
   Vector V = -ray.D;                  // the view vector
@@ -157,20 +158,18 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection, in
   }
 
   // Create the reflection ray
-  Vector reflectionDirection = (2.0 * V.normalized().dot(N) * N.normalized()).normalized();
-  Point reflectionOrigin = hit  + (N*0.001);
-  Ray reflectionRay(reflectionOrigin,reflectionDirection);
+  Vector reflectionDirection =
+      (2.0 * V.normalized().dot(N) * N.normalized()).normalized();
+  Point reflectionOrigin = hit + (N * 0.001);
+  Ray reflectionRay(reflectionOrigin, reflectionDirection);
 
   // Return the light at the current hit, plus the light being reflected onto
   float VdotR = VHat.dot(reflectionDirection);
   float intensity = pow(max(min(VdotR, 1.0f), 0.0f), material.n);
-  color += material.ks * trace(reflectionRay, depth-1);
-  
+  color += material.ks * trace(reflectionRay, depth - 1);
+
   return color;
 }
-
-
-
 
 unsigned Scene::getNumObject() { return objects.size(); }
 

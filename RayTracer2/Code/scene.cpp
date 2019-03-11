@@ -164,8 +164,6 @@ Color Scene::getColor(Ray const &initRay, ObjectPtr obj,
   Ray reflectionRay(reflectionOrigin, reflectionDirection);
 
   // Return the light at the current hit, plus the light being reflected onto
-  float VdotR = VHat.dot(reflectionDirection);
-  float intensity = pow(max(min(VdotR, 1.0f), 0.0f), material.n);
   color += material.ks * trace(reflectionRay, depth - 1);
 
   return color;

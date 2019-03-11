@@ -4,6 +4,8 @@
 
 using namespace std;
 
+#define PI 3.141592653589793238463
+
 Hit Sphere::intersect(Ray const &ray) {
   /* *********************************************************************
    * RT1.1: INTERSECTION CALCULATION
@@ -67,6 +69,15 @@ Hit Sphere::intersect(Ray const &ray) {
   Vector N = 2 * (ray.at(t) - position);
 
   return Hit(t, N);
+}
+
+TextureCoordinates Sphere::findTextureCoords(Point &hit, Sphere &self){
+  Vector hitVector = hit - self.position;
+  TextureCoordiantes hitCoordinates;
+  hitCoordinates.x = (1.0 + atan2(hitVector.z, hitVector.x) / PI) * 0.5;
+  hitCoordinates.y = acos(hitVector.y / self.r) / PI;
+
+  return hitCoordinates;
 }
 
 Sphere::Sphere(Point const &pos, double radius) : position(pos), r(radius) {}

@@ -16,7 +16,7 @@ Hit Sphere::intersect(Ray const &ray) {
 
   double t0;
   double t1;
-  if (not Solvers::quadratic(a, b, c, t0, t1))
+  if (!Solvers::quadratic(a, b, c, t0, t1))
     return Hit::NO_HIT();
 
   // t0 is closest hit
@@ -41,8 +41,8 @@ Hit Sphere::intersect(Ray const &ray) {
 TextureCoordinates Sphere::textureCoordinates(Point const &point) {
   Vector hitVector = point - position;
   TextureCoordinates hitCoordinates;
-  hitCoordinates.x = (1.0 + atan2(hitVector.z, hitVector.x) / M_PI) * 0.5;
-  hitCoordinates.y = acos(hitVector.y / r) / M_PI;
+  hitCoordinates.x = (M_PI + atan2(-hitVector.y,-hitVector.x)) / (2*M_PI);
+  hitCoordinates.y = acos(hitVector.z/r) / M_PI;
 
   return hitCoordinates;
 }

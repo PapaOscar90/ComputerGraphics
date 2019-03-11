@@ -86,12 +86,24 @@ Light Raytracer::parseLightNode(json const &node) const {
 }
 
 Material Raytracer::parseMaterialNode(json const &node) const {
-  Color color(node["color"]);
+  auto textureLoc = node.find("texture");
+  auto colorLoc = node.find("color");
+
   double ka = node["ka"];
   double kd = node["kd"];
   double ks = node["ks"];
   double n = node["n"];
-  return Material(color, ka, kd, ks, n);
+
+  if (textureLoc != node.end()) {
+    string itname = *textureLoc;
+    Texture texture(itname);
+    return Material(texture, ka, kd, ks, n);
+  } else if (colorLoc != node.end()) {
+    Color color(*colorLoc);
+    return Material(color, ka, kd, ks, n);
+  } else {
+    throw runtime_error("No texture or color specified for material.");
+  }
 }
 
 bool Raytracer::readScene(string const &ifname) try {
@@ -111,25 +123,18 @@ bool Raytracer::readScene(string const &ifname) try {
   scene.setEye(eye);
 
   // TODO: add your other configuration settings here
-  if (jsonscene.find("MaxRecursionDepth") != jsonscene.end()) {
-    maxRecursionDepth = jsonscene["MaxRecursionDepth"];
-  } else {
-    maxRecursionDepth = 1;
+  auto shadows = jsonscene.find("Shadows");
+  if (shadows != jsonscene.end()) {
+    // If `shadows` was set in the scene file
+    cout << "Render shadows set to " << *shadows << ".\n";
+    scene.shouldRenderShadows(*shadows);
   }
-  cout << "Using Recursion Depth: " << maxRecursionDepth << endl;
 
-  if (jsonscene.find("SuperSamplingFactor") != jsonscene.end()) {
-    int fetchSuperSampling = jsonscene["SuperSamplingFactor"];
-    superSampling = (int)sqrt(fetchSuperSampling);
-  } else {
-    superSampling = 1;
-  }
-  cout << "Supersampling n*n, n: " << superSampling << endl;
-
-  if (jsonscene.find("Shadows") != jsonscene.end()) {
-    useShadows = jsonscene["Shadows"];
-    if (useShadows)
-      cout << "Using shadows" << endl;
+  auto superSamplingFactor = jsonscene.find("SuperSamplingFactor");
+  if (superSamplingFactor != jsonscene.end()) {
+    // If `SuperSamplingFactor` was set in the scene file
+    cout << "Super sampling factor set to " << *superSamplingFactor << ".\n";
+    scene.setSuperSamplingFactor(*superSamplingFactor);
   }
 
   for (auto const &lightNode : jsonscene["Lights"])
@@ -157,7 +162,7 @@ void Raytracer::renderToFile(string const &ofname) {
   // TODO: the size may be a settings in your file
   Image img(400, 400);
   cout << "Tracing...\n";
-  scene.render(img, superSampling, maxRecursionDepth);
+  scene.render(img);
   cout << "Writing image to " << ofname << "...\n";
   img.write_png(ofname);
   cout << "Done.\n";

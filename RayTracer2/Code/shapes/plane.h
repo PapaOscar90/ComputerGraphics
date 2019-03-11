@@ -8,6 +8,7 @@ public:
   Plane(Point const &point, Vector const N);
 
   virtual Hit intersect(Ray const &ray);
+  virtual TextureCoordinates textureCoordinates(Point const &point);
 
   Point const point;
   Vector const N;

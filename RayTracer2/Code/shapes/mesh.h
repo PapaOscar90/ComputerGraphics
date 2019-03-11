@@ -12,6 +12,7 @@ public:
        double const &scale);
 
   virtual Hit intersect(Ray const &ray);
+  virtual TextureCoordinates textureCoordinates(Point const &point);
 
 private:
   std::string const &filename;

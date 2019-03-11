@@ -24,6 +24,10 @@ Hit Mesh::intersect(Ray const &ray) {
   return hit ? min_hit : Hit::NO_HIT();
 }
 
+TextureCoordinates Mesh::textureCoordinates(Point const &point) {
+  throw std::logic_error("Not implemented.");
+}
+
 Mesh::Mesh(string const &filename, Vector const &translation,
            double const &scale)
     : filename(filename), translation(translation), scale(scale) {

@@ -10,19 +10,19 @@ const double EPSILON = numeric_limits<double>::epsilon();
 Hit Plane::intersect(Ray const &ray) {
   /* ******************************************************
    * Intersection Calculation
-   * 
+   *
    * Given: ray, position, normal
    * Sought: intersect? if true then *t
-   * 
+   *
    * Ray's Origin (ray.O), Ray's Direction (ray.D),
    * point on plane (position), plane's normal (N)
-   * 
+   *
    * Finding an intersection is as simple as checking the
    * normals. The only thing to be careful of is dividing
    * by zero. So we first check that.
-   * 
+   *
    * ****************************************************/
-    
+
   // Detect ray intersection via normal directions */
   double denominator = N.dot(ray.D);
   double t;
@@ -40,6 +40,10 @@ Hit Plane::intersect(Ray const &ray) {
 
   // The normal of the plane is always the normal of the plane
   return Hit(t, N);
+}
+
+TextureCoordinates Plane::textureCoordinates(Point const &point) {
+  throw std::logic_error("Not implemented.");
 }
 
 Plane::Plane(Point const &point, Vector const N) : point(point), N(N) {}

@@ -1,77 +1,50 @@
 #include "triangle.h"
 
+#include <cfloat> // DBL_EPSILON
 #include <cmath>
-#include <limits>
-
-using namespace std;
-
-const double EPSILON = numeric_limits<double>::epsilon();
 
 Hit Triangle::intersect(Ray const &ray) {
-  /* *********************************************************************
-   * RT1.1: INTERSECTION CALCULATION
-   *
-   * Given: ray, vertices[]     * Sought: intersects? if true: *t
-   *
-   * Insert calculation of ray/triangle intersection here.
-   *
-   * You have the triangle'tvec vertices (vertices) and  the
-   * ray'tvec origin (ray.O) and direction (ray.D).
-   *
-   * Computation for Intersection:
-   * If the ray does not intersect the triangle, return NoHit.
-   * Otherwise, return Hit and place the distance of the
-   * intersection point from the ray origin in *t (see example).
-   *
-   * If an intersection occurs and the distance along the ray if it does occur
-   * is computer using the Möller–Trumbore intersection algorithm.
-   * See http://www.graphics.cornell.edu/pubs/1997/MT97.pdf
-   *
-   ***************************************************************************/
+  // Möller-Trumbore
+  Vector edge1(v1 - v0);
+  Vector edge2(v2 - v0);
+  Vector h = ray.D.cross(edge2);
+  double a = edge1.dot(h);
+  if (a > -DBL_EPSILON && a < DBL_EPSILON)
+    return Hit::NO_HIT();
 
-  Vector edge1(vertices[1] - vertices[0]);
-  Vector edge2(vertices[2] - vertices[0]);
-  Vector pvec = ray.D.cross(edge2);
-  double det = edge1.dot(pvec);
-
-  if (det > -EPSILON && det < EPSILON)
-    return Hit::NO_HIT(); // The ray is parallel to the triangle.
-
-  double invDet = 1.0 / det;
-  Vector tvec = ray.O - vertices[0];
-  double u = invDet * (tvec.dot(pvec));
+  double f = 1 / a;
+  Vector s = ray.O - v0;
+  double u = f * s.dot(h);
   if (u < 0.0 || u > 1.0)
     return Hit::NO_HIT();
 
-  Vector qvec = tvec.cross(edge1);
-  double v = invDet * (ray.D.dot(qvec));
+  Vector q = s.cross(edge1);
+  double v = f * ray.D.dot(q);
   if (v < 0.0 || u + v > 1.0)
     return Hit::NO_HIT();
 
-  double t = invDet * (edge2.dot(qvec));
-  if (t <= EPSILON) {
+  double t = f * edge2.dot(q);
+
+  if (t <= DBL_EPSILON) // line intersection (not ray)
     return Hit::NO_HIT();
-  }
-  /**************************************************************************
-   * RT1.2: NORMAL CALCULATION
-   *
-   * Given: t, C, r
-   * Sought: N
-   *
-   * As a triangle s effective a bounded planar surface, the surface normal is
-   *simple the normal off of the plane. This may be found simply by performing
-   *the cross product of the two edges of the triangle.
-   *
-   *
-   **************************************************************************/
 
-  Vector N = edge2.cross(edge1);
+  // determine orientation of the normal
+  Vector normal = N;
   if (N.dot(ray.D) > 0)
-    N = -N;
+    normal = -normal;
 
-  return Hit(t, N);
+  return Hit(t, normal);
 }
 
-Triangle::Triangle(Point const &vertex1, Point const &vertex2,
-                   Point const &vertex3)
-    : vertices({vertex1, vertex2, vertex3}) {}
+TextureCoordinates Triangle::textureCoordinates(Point const &point) {
+  throw std::logic_error("Not implemented.");
+}
+
+Triangle::Triangle(Point const &v0, Point const &v1, Point const &v2)
+    : v0(v0), v1(v1), v2(v2), N() {
+  // Calculate surface normal
+  Vector U(v1 - v0);
+  Vector V(v2 - v0);
+  N = U.cross(V);
+  N.normalize();
+}

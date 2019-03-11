@@ -16,31 +16,30 @@ class Scene {
   std::vector<LightPtr> lights; // no ptr needed, but kept for consistency
   Point eye;
 
-protected:
-  // For internal calculation of reflection light amount
-  Color getColorAt(Material material, Point hit, Vector N, Vector V,
-                   int impactsToUse);
-  int isInShadow(Point hit, Vector N, Vector L);
-  Color getDiffuseColor(Material material, LightPtr lightPtr, Vector N,
-                        Vector L);
-  Color getSpecularColor(Material material, LightPtr lightPtr, Vector N,
-                         Vector L, Vector V);
-  Color getReflectionColor(Material material, Point hit, Vector N, Vector V,
-                           int impactsRemaining);
+  // Additional configuration
+  bool renderShadows = false;
+  double shadowBias = 0.00001;
+  unsigned int ssFactor = 1;
 
 public:
   // trace a ray into the scene and return the color
-  Color trace(Ray const &ray, int useReflections);
+  Color trace(Ray const &ray);
 
   // render the scene to the given image
-  void render(Image &img, int superSamp, int impactsToUse);
+  void render(Image &img);
 
   void addObject(ObjectPtr obj);
   void addLight(Light const &light);
   void setEye(Triple const &position);
+  void shouldRenderShadows(bool shadows);
+  void setSuperSamplingFactor(unsigned int factor);
 
   unsigned getNumObject();
   unsigned getNumLights();
+
+private:
+  Color getColor(Ray const &ray, ObjectPtr obj, Hit const &hit);
+  bool inShadow(Point hit, Vector N, Vector L);
 };
 
 #endif

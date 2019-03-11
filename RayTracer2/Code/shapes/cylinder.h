@@ -8,6 +8,7 @@ public:
   Cylinder(Point const &pointA, Point const &pointB, double const radius);
 
   virtual Hit intersect(Ray const &ray);
+  virtual TextureCoordinates textureCoordinates(Point const &point);
 
   // The cylinder is defined between two points with a radius
   Point const pointA;

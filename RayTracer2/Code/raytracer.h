@@ -13,10 +13,6 @@ class Material;
 
 class Raytracer {
   Scene scene;
-  int superSampling;
-  int imageX, imageY;
-  int maxRecursionDepth;
-  bool useShadows;
 
 public:
   bool readScene(std::string const &ifname);

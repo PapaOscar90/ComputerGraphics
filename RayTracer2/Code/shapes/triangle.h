@@ -2,15 +2,18 @@
 #define TRIANGLE_H_
 
 #include "../object.h"
-#include <array>
 
 class Triangle : public Object {
 public:
-  Triangle(Point const &vertex1, Point const &vertex2, Point const &vertex3);
+  Triangle(Point const &v0, Point const &v1, Point const &v2);
 
   virtual Hit intersect(Ray const &ray);
+  virtual TextureCoordinates textureCoordinates(Point const &point);
 
-  std::array<Point, 3> const vertices;
+  Point v0;
+  Point v1;
+  Point v2;
+  Vector N;
 };
 
 #endif

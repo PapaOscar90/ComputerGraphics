@@ -21,9 +21,9 @@ Hit Cylinder::intersect(Ray const &ray) {
    * by the determinate. It informs us if the cylindar is intersected
    *
    * Implicitly: (ca.ca - (ca.rd * ca.rd))t^2 + 2(ca.ca*oc.rd - ca.oc*ca.rd)t +
-   *(ca.ca*oc.oc - ca.oc*ca.oc - r^2*ca.ca) = 0 
+   *(ca.ca*oc.oc - ca.oc*ca.oc - r^2*ca.ca) = 0
    * where: ca = pb-pa  | The direction to the end of cylinder
-   *        oc = ro-pa  | The direction to the cylinder 
+   *        oc = ro-pa  | The direction to the cylinder
    *      caca = ca.ca  | Shorthands for later...
    *      card = ca.rd
    *      caoc = ca.oc
@@ -76,6 +76,10 @@ Hit Cylinder::intersect(Ray const &ray) {
   }
 
   return Hit::NO_HIT();
+}
+
+TextureCoordinates Cylinder::textureCoordinates(Point const &point) {
+  throw std::logic_error("Not implemented.");
 }
 
 Cylinder::Cylinder(Point const &pointA, Point const &pointB,

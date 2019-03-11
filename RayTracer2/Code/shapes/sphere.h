@@ -8,11 +8,10 @@ public:
   Sphere(Point const &pos, double radius);
 
   virtual Hit intersect(Ray const &ray);
-  virtual TextureCoordiantes findTextureCoords(Point &hit, Object &self);
+  virtual TextureCoordinates textureCoordinates(Point const &point);
 
   Point const position;
   double const r;
-  TextureCoordiantes textureCoordiantes;
 };
 
 #endif

@@ -1,81 +1,48 @@
 #include "sphere.h"
+#include "solvers.h"
 
 #include <cmath>
 
 using namespace std;
 
-#define PI 3.141592653589793238463
-
 Hit Sphere::intersect(Ray const &ray) {
-  /* *********************************************************************
-   * RT1.1: INTERSECTION CALCULATION
-   *
-   * Given: ray, position, r     * Sought: intersects? if true: *t
-   *
-   * You have the sphere's center (C) and radius (r) as well as
-   * the ray's origin (ray.O) and direction (ray.D).
-   *
-   * Computation for Intersection:
-   * If the ray does not intersect the sphere, return NoHit.
-   * Otherwise, return Hit and place the distance of the
-   * intersection point from the ray origin in *t (see example).
-   *  (e+td-c)*(e+td-c) - R^2 = 0
-   * Where e is the origin, t the distance, d the vector of the ray
-   * and c the center of the sphere
-   *
-   * This expands into the quadratic solution form, which looks at the
-   * discriminant. Specifically if:
-   *
-   * D = (d*(e-c))^2 - (d*d)((e-c)*(e-c)- R^2)
-   *                           = 0 -> single solution, ray grazes
-   *                           > 0 -> Two strikes, get closest
-   *                           < 0 -> The ray misses the sphere
-   *
-   * The solution for t is:
-   *
-   *  t = (-d*(e-c) +/- sqrt(D)) / (d*d)
-   ***************************************************************************/
-  double t;
-  double d2 = ray.D.dot(ray.D);
-  double r2 = r * r;
-  Vector eMinusC = ray.O - position;
+  // Sphere formula: ||x - position||^2 = r^2
+  // Line formula:   x = ray.O + t * ray.D
 
-  double discriminant =
-      (pow(ray.D.dot(eMinusC), 2)) - d2 * ((eMinusC.dot(eMinusC)) - r2);
+  Vector L = ray.O - position;
+  double a = ray.D.dot(ray.D);
+  double b = 2 * ray.D.dot(L);
+  double c = L.dot(L) - r * r;
 
-  if (discriminant < 0.) {
+  double t0;
+  double t1;
+  if (not Solvers::quadratic(a, b, c, t0, t1))
     return Hit::NO_HIT();
-  } else if (discriminant == 0.) {
-    // One hit
-    t = (-ray.D.dot(eMinusC)) / d2;
-  } else {
-    // Two hits, needs to find closest
-    t = -ray.D.dot(eMinusC);
-    t = min(t + sqrt(discriminant), t - sqrt(discriminant));
-    t /= d2;
+
+  // t0 is closest hit
+  if (t0 < 0) // check if it is not behind the camera
+  {
+    t0 = t1;    // try t1
+    if (t0 < 0) // both behind the camera
+      return Hit::NO_HIT();
   }
 
-  /**************************************************************************
-   * RT1.2: NORMAL CALCULATION
-   *
-   * Given: t, C, r
-   * Sought: N
-   *
-   * The normal at point p = (e+td) on the surface, is given by:
-   *
-   * N = 2(p-c)
-   *
-   **************************************************************************/
-  Vector N = 2 * (ray.at(t) - position);
+  // calculate normal
+  Point hit = ray.at(t0);
+  Vector N = (hit - position).normalized();
 
-  return Hit(t, N);
+  // determine orientation of the normal
+  if (N.dot(ray.D) > 0)
+    N = -N;
+
+  return Hit(t0, N);
 }
 
-TextureCoordinates Sphere::findTextureCoords(Point &hit, Sphere &self){
-  Vector hitVector = hit - self.position;
-  TextureCoordiantes hitCoordinates;
-  hitCoordinates.x = (1.0 + atan2(hitVector.z, hitVector.x) / PI) * 0.5;
-  hitCoordinates.y = acos(hitVector.y / self.r) / PI;
+TextureCoordinates Sphere::textureCoordinates(Point const &point) {
+  Vector hitVector = point - position;
+  TextureCoordinates hitCoordinates;
+  hitCoordinates.x = (1.0 + atan2(hitVector.z, hitVector.x) / M_PI) * 0.5;
+  hitCoordinates.y = acos(hitVector.y / r) / M_PI;
 
   return hitCoordinates;
 }

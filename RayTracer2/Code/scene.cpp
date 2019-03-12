@@ -11,6 +11,7 @@
 using namespace std;
 
 Color Scene::trace(Ray const &ray, int depth) {
+  // If we have reached the final impact already, return black
   if (depth < 1) {
     return Color(0.0, 0.0, 0.0);
   }
@@ -30,6 +31,7 @@ Color Scene::trace(Ray const &ray, int depth) {
   if (!obj)
     return Color(0.0, 0.0, 0.0);
 
+  // Get color of impact
   return getColor(ray, obj, min_hit, depth);
 }
 
@@ -39,7 +41,8 @@ void Scene::render(Image &img) {
 
   int factor = ssFactor;
   double subPixelSize = 1.0 / (2 * factor);
-#pragma omp parallel for
+
+  #pragma omp parallel for
   for (unsigned y = 0; y < h; ++y) {
     for (unsigned x = 0; x < w; ++x) {
 
@@ -80,13 +83,14 @@ void Scene::setEye(Triple const &position) { eye = position; }
 
 void Scene::shouldRenderShadows(bool shadows) { renderShadows = shadows; }
 
+// Checks if the object is in the shadow of another object
 bool Scene::inShadow(Point hit, Vector N, Vector L) {
   Point shadowOrigin = hit + (shadowBias * N);
   Ray shadowRay(shadowOrigin, L);
 
   ObjectPtr shadowObject = nullptr;
 
-  // Check if the shadow ray collides with any object
+  // Check if the shadow ray collides with any object going towards the light
   for (unsigned idx = 0; idx != objects.size(); ++idx) {
     Hit shadowHit(objects[idx]->intersect(shadowRay));
     if (shadowHit.t > 0) { // There is a collision
@@ -96,6 +100,7 @@ bool Scene::inShadow(Point hit, Vector N, Vector L) {
   return false;
 }
 
+// Returns a color at an intersection with an object
 Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection,
                       int depth) {
   Material material = obj->material; // the hit objects material
@@ -105,9 +110,6 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection,
   Vector V = -ray.D;                  // the view vector
 
   /****************************************************
-   * This is where you should insert the color
-   * calculation (Phong model).
-   *
    * Given: material, hit, N, V, lights[]
    * Sought: color
    *
@@ -128,6 +130,7 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection,
   // We add an extra scale factor for us to universally adjust if needed
   const float AMBIENT_LIGHT_INTENSITY = 1.0;
 
+  // Return either the color or texture depending on material type
   Color materialColor = material.surface.match(
       [=](Color materialColor) { return materialColor; },
       [=](Texture &materialTexture) {
@@ -136,9 +139,12 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection,
         return materialTexture.colorAt(coordinates.u, coordinates.v);
       });
 
+  // Add the ambient component
   Color color = material.ka * AMBIENT_LIGHT_INTENSITY * materialColor;
 
+  // For each light
   for (auto lightPtr : lights) {
+    // Create vector to light
     Vector L = (lightPtr->position - hit).normalized();
 
     // If the impact is in shadow, then the light does not contribute.
@@ -157,12 +163,12 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection,
     color += material.ks * intensity * (lightPtr->color);
   }
 
-  // Create the reflection ray
+  // Create the reflection ray for recursive reflection
   Vector reflectionDirection = ray.D - N * 2.0 * ray.D.dot(N);
-  Point reflectionOrigin = hit  + (N*0.00000000001);
+  Point reflectionOrigin = hit  + (N*0.00000000001); // Bias
   Ray reflectionRay(reflectionOrigin,reflectionDirection);
 
-  // Return the light at the current hit, plus the light being reflected onto
+  // Return the light at the current hit, plus the light being reflected onto this hit
   color += material.ks * trace(reflectionRay, depth - 1);
 
   return color;

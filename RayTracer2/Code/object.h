@@ -27,6 +27,7 @@ public:
                                              // in derived class
   virtual TextureCoordinates textureCoordinates(Point const &point) = 0;
 
+  // Set the axis of rotation, and the angle from vector
   void setRotation(Vector const &vector, double const angle) {
     axis = vector.normalized();
     this->angle = angle * M_PI / 180; // convert between degrees and radians

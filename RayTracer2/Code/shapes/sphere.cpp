@@ -38,11 +38,13 @@ Hit Sphere::intersect(Ray const &ray) {
   return Hit(t0, N);
 }
 
+// Rotate the ray around an axis, a certain angle vi
 Triple rotate(Triple const &v, double const angle, Vector const &k) {
   return v * cos(angle) + (k.cross(v) * sin(angle)) +
          k * (k.dot(v)) * (1 - cos(angle));
 }
 
+// Find the texture coordinate u,v of a hit on the sphere
 TextureCoordinates Sphere::textureCoordinates(Point const &point) {
   Vector hitVector = point - position;
   hitVector = rotate(hitVector, angle, axis);

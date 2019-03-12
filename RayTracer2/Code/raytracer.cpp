@@ -86,6 +86,7 @@ bool Raytracer::parseObjectNode(json const &node) {
   return true;
 }
 
+// Parase the lights
 Light Raytracer::parseLightNode(json const &node) const {
   Point pos(node["position"]);
   Color col(node["color"]);
@@ -101,6 +102,7 @@ Material Raytracer::parseMaterialNode(json const &node) const {
   double ks = node["ks"];
   double n = node["n"];
 
+  // Parse the texture or color if either exists
   if (textureLoc != node.end()) {
     string itname = *textureLoc;
     Texture texture(itname);
@@ -129,7 +131,7 @@ bool Raytracer::readScene(string const &ifname) try {
   Point eye(jsonscene["Eye"]);
   scene.setEye(eye);
 
-  // TODO: add your other configuration settings here
+  // Parse the shadow boolean and set
   auto shadows = jsonscene.find("Shadows");
   if (shadows != jsonscene.end()) {
     // If `shadows` was set in the scene file
@@ -137,6 +139,7 @@ bool Raytracer::readScene(string const &ifname) try {
     scene.shouldRenderShadows(*shadows);
   }
 
+  // Parse the SS factor and set
   auto superSamplingFactor = jsonscene.find("SuperSamplingFactor");
   if (superSamplingFactor != jsonscene.end()) {
     // If `SuperSamplingFactor` was set in the scene file
@@ -144,6 +147,7 @@ bool Raytracer::readScene(string const &ifname) try {
     scene.setSuperSamplingFactor(*superSamplingFactor);
   }
 
+  // Parse the reflection depth and set
   auto recursionFactor = jsonscene.find("MaxRecursionDepth");
   if (recursionFactor != jsonscene.end()) {
     cout << "Max recursion set to " << *recursionFactor << ".\n";

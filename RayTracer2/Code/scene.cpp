@@ -42,7 +42,7 @@ void Scene::render(Image &img) {
   int factor = ssFactor;
   double subPixelSize = 1.0 / (2 * factor);
 
-  #pragma omp parallel for
+#pragma omp parallel for
   for (unsigned y = 0; y < h; ++y) {
     for (unsigned x = 0; x < w; ++x) {
 
@@ -168,7 +168,8 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection,
   Point reflectionOrigin = hit  + (N*0.00000000001); // Bias
   Ray reflectionRay(reflectionOrigin,reflectionDirection);
 
-  // Return the light at the current hit, plus the light being reflected onto this hit
+  // Return the light at the current hit, plus the light being reflected onto
+  // this hit
   color += material.ks * trace(reflectionRay, depth - 1);
 
   return color;

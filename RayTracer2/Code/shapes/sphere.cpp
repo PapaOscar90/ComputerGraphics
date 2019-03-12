@@ -38,16 +38,20 @@ Hit Sphere::intersect(Ray const &ray) {
   return Hit(t0, N);
 }
 
+Triple rotate(Triple const &v, double const angle, Vector const &k) {
+  return v * cos(angle) + (k.cross(v) * sin(angle)) +
+         k * (k.dot(v)) * (1 - cos(angle));
+}
+
 TextureCoordinates Sphere::textureCoordinates(Point const &point) {
   Vector hitVector = point - position;
-  
+  hitVector = rotate(hitVector, angle, axis);
+
   TextureCoordinates hitCoordinates;
-  hitCoordinates.u = (M_PI + atan2(-hitVector.y,-hitVector.x)) / (2*M_PI);
-  hitCoordinates.v = acos(hitVector.z/r) / M_PI;
+  hitCoordinates.u = (M_PI + atan2(-hitVector.y, -hitVector.x)) / (2 * M_PI);
+  hitCoordinates.v = acos(hitVector.z / r) / M_PI;
 
   return hitCoordinates;
 }
 
-Sphere::Sphere(Point const &pos, double radius) : position(pos), r(radius) {
-  rotation = Vector{0.0, 0.5, 0.0};
-}
+Sphere::Sphere(Point const &pos, double radius) : position(pos), r(radius) {}

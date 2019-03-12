@@ -165,8 +165,8 @@ Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection,
 
   // Create the reflection ray for recursive reflection
   Vector reflectionDirection = ray.D - N * 2.0 * ray.D.dot(N);
-  Point reflectionOrigin = hit  + (N*0.00000000001); // Bias
-  Ray reflectionRay(reflectionOrigin,reflectionDirection);
+  Point reflectionOrigin = hit + (N * reflectionBias); // Bias
+  Ray reflectionRay(reflectionOrigin, reflectionDirection);
 
   // Return the light at the current hit, plus the light being reflected onto
   // this hit

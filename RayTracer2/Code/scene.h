@@ -19,6 +19,7 @@ class Scene {
   // Additional configuration
   bool renderShadows = false;
   double shadowBias = 0.00001;
+  double reflectionBias = 0.00000000001;
   unsigned int ssFactor = 1;
   unsigned int recursionDepth = 1;
 

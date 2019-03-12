@@ -1,49 +1,91 @@
 # README
 ## Description
-Keeping backwards compatibility, we implemented a system that reads from the json file the value of the keys dealing with shadow, reflection, and SS. If none of present, it will default to off. With this, we can safely continue to add functionality. We followed the specification of Raytracer2, and implemented shadows first. This was very straightforward, and needed a function that just took in the hit information and a light, and returns whether it is blocked. 
+Keeping backwards compatibility, we implemented a system that reads from the
+json file the value of the keys dealing with shadow, reflection, rotation, and
+SS. If one of these values is not present, we provide some defaults (these may
+be seen in `scene.h`). With this, we can safely continue extend functionality
+without worrying about the scenes that previously rendered no longer being
+compatible. We followed the specification of Raytracer2, and implemented shadows
+first. This was very straightforward, and needed a function that just took in
+the hit information and a light, and returns whether it is blocked by an object.
 
-From this point, we then implemented the reflections, since we already had a light loop that added all the light sources (from the RayTracer1). Reflections were a bit tricky, and took the most time. In the end, our intuition was correct, but we needed to add a simple "ray.D -" before our original reflectionRay calculation. This fixed our reflections, giving us the exact reference output. For the final competition, it shouldn't be difficult to extend this to include refraction.
+From this point, we then implemented the reflections, since we already had a
+light loop that added all the light sources (from the RayTracer1). Reflections
+were a bit tricky, and took the most time. In the end, our intuition was
+correct, but we needed to add a simple `ray.D -` before our original
+reflectionRay calculation. This fixed our reflections, giving us the exact
+reference output. For the final competition, it shouldn't be difficult to extend
+this to include refraction.
 
-Anti-Aliasing, or SuperSampling, was accomplished with a double for loop in the render loop that sends out a n*n number of rays, uniformly distributed, within the pixel being rendered. This creates a much smoother image, but still has some jagged edges due to the uniform distribution. To solve this, we would change this for the final competition to include a bit of randomness to the distribution, which attempts to further smooth images.
+Anti-Aliasing, or SuperSampling, was accomplished with a double for loop in the
+render loop that sends out a n*n number of rays, uniformly distributed, within
+the pixel being rendered. This creates a much smoother image, but still has some
+jagged edges due to the uniform distribution. To solve this, we would change
+this for the final competition to include a bit of randomness to the
+distribution, which attempts to further smooth images.
 
-Texture mapping was completed via the formula found in the book. However, we had to inverse the x and y coordinates brough in, due to the texture on the globe being mirrored. We were not sure why ours was mirrored, as we incorporated the hit detection given to us (which should now give correct hit location). When rotation was incorporated via vector manipulation, we had a rotated earth. However, the orientation is opposite of the reference image. This means that we most likely have a flipped sign bug somewhere that we cannot find. However, rotation of the spheres is correct for our own model, so that we can pass in the angles and rotate the earth about each axis.
+Texture mapping was completed via the formula found in the book. However, we had
+to invert the x and y coordinates brought in, due to the texture on the globe
+being mirrored. We were not sure why ours was mirrored, as we incorporated the
+hit detection given to us (which should now give correct hit location). When
+rotation was incorporated via vector manipulation, we had a rotated earth.
+However, the orientation is opposite of the reference image. This means that we
+most likely have a flipped sign bug somewhere that we cannot find. However,
+rotation of the spheres is correct for our own model, so that we can pass in an
+angle and axis and have the earth rotate freely.
 
 ## Screenshots:
 ### scene01-shadows
-This is the output of our previous raytracing engine, with the addition of shadow detection.
+This is the output of our previous raytracing engine, with the addition of
+shadow detection.
 
 ### scene01-lights-shadows
-We did not have to change anything for the addition of lights, as we had implemented this in RayTracer1.
+We did not have to change anything for the addition of lights, as we had
+implemented this in RayTracer1.
 
 ### scene01-reflect-lights-shadows
-This is the result of adding the mutually recursive getColor(). The reflection is based upon the specular component, which you can see when comparing the spheres against the red one (highest component).
+This is the result of adding the mutually recursive getColor(). The reflection
+is based upon the specular component, which you can see when comparing the
+spheres against the red one (highest component).
 
 ### scene01-SS
-This is a 4x Super Sampling render. The edges are now smoothed, at the cost of 16 times (4x4) the rendering time.
+This is a 4x Super Sampling render. The edges are now smoothed, at the cost of
+16 times (4x4) the rendering time.
 
 ### scene01-texture-ss-reflect-lights-shadows-pre-rotate
 This demonstrates the full scene, with an un-rotated earth texture
 
 ### scene01-texture-ss-reflect-lights-shadows
-This is the final result.
+This is the final result with the earth rotated.
 
 ### scene02-texture-test
-This was our blue grid result, we used a green and red strip to figure out the orientation of the textures.
+This was our blue grid result, we modified the provided texture to include a
+green and red strip to aid in orienting the textures and in the implementation
+of rotation.
 
 ### scene03-texture-03-pre-rotate
-This was our first render with the texture. From this (very long) render, we discovered a memory copying issue which we fixed by passing by reference instead of by value.
+This was our first render with the texture. From this (very long) render, we
+discovered a bug, which resulted in the texture having memory reallocated for it
+and being copied. This increased the render time significantly. We fixed this
+issue by using a reference to the texture instead of the value.
 
 ## Scenes
-Note we have included the `Scenes` directory so that the images that have been generated for the `Screenshots` directory may be regenerated or cross-references with their scene description.
+Note we have included the `Scenes` directory so that the images that have been
+generated for the `Screenshots` directory may be regenerated or cross-referenced
+with their scene description.
 
 ## Feedback
-We enjoyed this lab, though it took a lot of time to look up and derive each equation for the shapes.
+We enjoyed this lab, though the use of c++14 instead of (at least) c++17 mean we
+didn't have access to tools like `variant` or `optional`. To overcome this we
+introduced the mapbox `variant` type, but it would have been easier to use the
+STL. Additionally, it may be useful to introduce a third texture (with example
+renders in the PDF) that renders quicker than the earth but which isn't uniform.
 
 # Raytracer C++ framework for Introduction to Computer Graphics
 
-This is a C++ framework for a raytracer. It is created for the Computer
-Science course "Introduction to Computer Graphics" taught at the
-University of Groningen.
+This is a C++ framework for a raytracer. It is created for the Computer Science
+course "Introduction to Computer Graphics" taught at the University of
+Groningen.
 
 This framework is inspired by and uses (some) code of the raytracer framework of
 Bert Freudenberg which unfortunately is no longer available.
@@ -80,12 +122,13 @@ by `.png`.
 ## Description of the included files
 
 ### Scene files
-* `Scenes/*.json`: Scene files are structured in JSON. If you have never
-    worked with json, please see [here](https://en.wikipedia.org/wiki/JSON#Data_types,_syntax_and_example)
-    or [here](https://www.json.org/).
+* `Scenes/*.json`: Scene files are structured in JSON. If you have never worked
+    with json, please see
+    [here](https://en.wikipedia.org/wiki/JSON#Data_types,_syntax_and_example) or
+    [here](https://www.json.org/).
 
-    Take a look at the provided example scenes for the general structure.
-    You are free (and encouraged) to define your own scene files later on.
+    Take a look at the provided example scenes for the general structure. You
+    are free (and encouraged) to define your own scene files later on.
 
 ### The raytracer source files (Code directory)
 
@@ -119,25 +162,26 @@ by `.png`.
     and replace/rename **every** instance of `Example` `example.h` or `EXAMPLE`
     with your new shape name.
 
-* `triple.cpp/.h`: Triple class. Represents a 3-dimensional vector which is
-    used for colors, points and vectors.
-    Includes a number of useful functions and operators, see the comments in
-    `triple.h`.
-    Classes of `Color`, `Vector`, `Point` are all aliases of `Triple`.
+* `triple.cpp/.h`: Triple class. Represents a 3-dimensional vector which is used
+    for colors, points and vectors. Includes a number of useful functions and
+    operators, see the comments in `triple.h`. Classes of `Color`, `Vector`,
+    `Point` are all aliases of `Triple`.
 
-* `objloader.cpp/.h`: Is a similar class to Model used in the OpenGL
-    exercises to load .obj model files. It produces a std::vector
-    of Vertex structs. See `vertex.h` on how you can retrieve the
-    coordinates and other data defined at vertices.
+* `objloader.cpp/.h`: Is a similar class to Model used in the OpenGL exercises
+    to load .obj model files. It produces a std::vector of Vertex structs. See
+    `vertex.h` on how you can retrieve the coordinates and other data defined at
+    vertices.
 
 ### Supporting source files (Code directory)
 
-* `lode/*`: Code for reading from and writing to PNG files,
-    used by the `Image` class.
-    lodepng is created by Lode Vandevenne and can be found on
-    [github](https://github.com/lvandeve/lodepng).
-* `json/*`: Code for parsing JSON documents.
-    Created by Niels Lohmann and available under the MIT license on
-    [github](https://github.com/nlohmann/json).
-    **Recommended:** Especially take a look at their README for more
+* `lode/*`: Code for reading from and writing to PNG files, used by the `Image`
+  class. lodepng is created by Lode Vandevenne and can be found on
+  [github](https://github.com/lvandeve/lodepng).
+* `json/*`: Code for parsing JSON documents. Created by Niels Lohmann and
+    available under the MIT license on
+    [github](https://github.com/nlohmann/json). **Recommended:** Especially take
+    a look at their README for more
     info on how to work with json files.
+* `mapbox/*`: Code for a variant type in C++14. Used in the material class to
+  create discriminated union for a color and a texture. Its available under the
+  BSD license on [github](https://github.com/mapbox/variant/).

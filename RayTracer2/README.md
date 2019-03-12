@@ -1,43 +1,37 @@
 # README
 ## Description
-Following the instructions, we began by implementing the required sections to successfully trace the spheres on the screen. The bulk of the time was taken up by getting the point P to correctly compute. Once this point is known, the vectors were computed from the location and relative to the light source and surface normal (that we compute).
-It took some tweaking to get the images to correctly match, but we found out that the ambiant light is not a white addition, but just an increase in the object's own surface matierials directly. So a red sphere gets brighter by adding more of itself instead of adding "white light" which white-washes the image. Which in itself is also a good discovery because we can adjust the white-balance of our images later.
-Each shape is drawn by calculating the implicit equation where the ray either intersects once, twice, or not at all. In the case that they intersect twice, the minimum is taken to be the correct point for rending as it is in front of the other. The difficulty in adding the shapes lays in interpreting each mathematical equation in code. Usually there is an obvious way to represent each object.
-We also parallelized the rendering of the image so that multi-thread computers can drastically speed up the render process.
+Keeping backwards compatibility, we implemented a system that reads from the json file the value of the keys dealing with shadow, reflection, and SS. If none of present, it will default to off. With this, we can safely continue to add functionality. We followed the specification of Raytracer2, and implemented shadows first. This was very straightforward, and needed a function that just took in the hit information and a light, and returns whether it is blocked. 
 
-##Screenshots:
-### scene01_no_shading
-This is a purely intersect only render. If the ray collides with a sphere, draw the color that matches at the point P.
+From this point, we then implemented the reflections, since we already had a light loop that added all the light sources (from the RayTracer1). Reflections were a bit tricky, and took the most time. In the end, our intuition was correct, but we needed to add a simple "V -" before our original reflectionRay calculation. This fixed our reflections, giving us the exact reference output. For the final competition, it shouldn't be difficult to extend this to include refraction.
 
-### scene01_diffuse
-This image is the result of our previous intersection with only the diffuse light added.
+Anti-Aliasing, or SuperSampling, was accomplished with a double for loop in the render loop that sends out a n*n number of rays, uniformly distributed, within the pixel being rendered. This creates a much smoother image, but still has some jagged edges due to the uniform distribution. To solve this, we would change this for the final competition to include a bit of randomness to the distribution, which attempts to further smooth images.
 
-### scene01_full_phong
-This image is the same as the previous, but with the specular and ambiant light added. Note that the position of the light is clearly identified by the position of the highlights, and the different materiels of each sphere causing the radius of the highlights to be large or small.
+Texture mapping was completed via the formula found in the book. However, we had to inverse the x and y coordinates brough in, due to the texture on the globe being mirrored. We were not sure why ours was mirrored, as we incorporated the hit detection given to us (which should now give correct hit location). When rotation was incorporated via vector manipulation, we had a rotated earth. However, the orientation is opposite of the reference image. This means that we most likely have a flipped sign bug somewhere that we cannot find. However, rotation of the spheres is correct for our own model, so that we can pass in the angles and rotate the earth about each axis.
 
-### scene02_no_shading
-This is the same as before, but a new scene. Note how the "black" sphere is orange when it's diffuse doesn't effect the light hitting it.
+## Screenshots:
+### scene01-shadows
+This is the output of our previous raytracing engine, with the addition of shadow detection.
 
-### scene02_diffuse
-Also the same as the other scene. Nothing new to highlight besides the "black" sphere.
+### scene01-lights-shadows
+We did not have to change anything for the addition of lights, as we had implemented this in RayTracer1.
 
-### scene02_full_phong
-The spheres are now shiny.
+### scene01-reflect-lights-shadows
+This is the result of adding the mutually recursive getColor(). The reflection is based upon the specular component, which you can see when comparing the spheres against the red one (highest component).
 
-### scene03_triangles
-Here we demonstrate the rendering of triangles. Note that there is one triangle in the center of the screen that is parallel to the Eye's viewpoint. As a result the triangle is invisible.
+### scene01-SS
+This is a 4x Super Sampling render. The edges are now smoothed, at the cost of 16 times (4x4) the rendering time.
 
-### scene04_plane
-With the addition of planes, we decided to make a "sunset" style render. 
+### scene01-texture-ss-reflect-lights-shadows-pre-rotate
+This demonstrates the full scene, with an un-rotated earth texture
 
-### scene05_cylinder
-We demonstrate the rendering of a cylinder with a greek style columned building.
+### scene01-texture-ss-reflect-lights-shadows
+This is the final result.
 
-### scene06_obj_grouped_spheres
-We render 5 spheres using imported meshes.
+### scene02-texture-test
+This was our blue grid result, we used a green and red strip to figure out the orientation of the textures.
 
-### scene07_cubes
-We render 2 cubes imported from obj files. Nothing spectacular to note. They are cubes. However, we discovered that we had to export obj files from Blender with triangulate faces toggled on or else we couldn't render the mesh. As this is not the default export option from Blender 2.8 this caused some problems.
+### scene03-texture-03-pre-rotate
+This was our first render with the texture. From this (very long) render, we discovered a memory copying issue which we fixed by passing by reference instead of by value.
 
 ## Scenes
 Note we have included the `Scenes` directory so that the images that have been generated for the `Screenshots` directory may be regenerated or cross-references with their scene description.

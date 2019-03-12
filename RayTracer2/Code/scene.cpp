@@ -96,10 +96,10 @@ bool Scene::inShadow(Point hit, Vector N, Vector L) {
   return false;
 }
 
-Color Scene::getColor(Ray const &initRay, ObjectPtr obj,
-                      Hit const &intersection, int depth) {
+Color Scene::getColor(Ray const &ray, ObjectPtr obj, Hit const &intersection,
+                      int depth) {
   Material material = obj->material; // the hit objects material
-  Ray ray = initRay;
+
   Point hit = ray.at(intersection.t); // the hit point
   Vector N = intersection.N;          // the normal at hit point
   Vector V = -ray.D;                  // the view vector

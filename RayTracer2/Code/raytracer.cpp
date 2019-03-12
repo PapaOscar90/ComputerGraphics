@@ -42,6 +42,13 @@ bool Raytracer::parseObjectNode(json const &node) {
     Point pos(node["position"]);
     double radius = node["radius"];
     obj = ObjectPtr(new Sphere(pos, radius));
+
+    auto rotation = node.find("rotation");
+    auto angle = node.find("angle");
+    if (rotation != node.end() && angle != node.end()) {
+      obj->setRotation(Vector(*rotation), *angle);
+    }
+
   } else if (node["type"] == "triangle") {
     Point vertex1(node["vertices"][0]);
     Point vertex2(node["vertices"][1]);

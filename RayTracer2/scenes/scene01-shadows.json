@@ -13,8 +13,7 @@
             "comment": "Blue sphere",
             "position": [90, 320, 100],
             "radius": 50,
-            "material":
-            {
+            "material": {
                 "color": [0.0, 0.0, 1.0],
                 "ka": 0.2,
                 "kd": 0.7,
@@ -27,8 +26,7 @@
             "comment": "Green sphere",
             "position": [210, 270, 300],
             "radius": 50,
-            "material":
-            {
+            "material": {
                 "color": [0.0, 1.0, 0.0],
                 "ka": 0.2,
                 "kd": 0.3,
@@ -41,8 +39,7 @@
             "comment": "Red sphere",
             "position": [290, 170, 150],
             "radius": 50,
-            "material":
-            {
+            "material": {
                 "color": [1.0, 0.0, 0.0],
                 "ka": 0.2,
                 "kd": 0.7,
@@ -55,8 +52,7 @@
             "comment": "Yellow sphere",
             "position": [140, 220, 400],
             "radius": 50,
-            "material":
-            {
+            "material": {
                 "color": [1.0, 0.8, 0.0],
                 "ka": 0.2,
                 "kd": 0.8,
@@ -69,8 +65,7 @@
             "comment": "Orange sphere",
             "position": [110, 130, 200],
             "radius": 50,
-            "material":
-            {
+            "material": {
                 "color": [1.0, 0.5, 0.0],
                 "ka": 0.2,
                 "kd": 0.8,
@@ -83,8 +78,7 @@
             "comment": "Grey sphere1",
             "position": [200, 200, -1000],
             "radius": 1000,
-            "material":
-            {
+            "material": {
                 "color": [0.4, 0.4, 0.4],
                 "ka": 0.2,
                 "kd": 0.8,

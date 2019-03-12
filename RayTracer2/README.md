@@ -42,6 +42,8 @@ most likely have a flipped sign bug somewhere that we cannot find. However,
 rotation of the spheres is correct for our own model, so that we can pass in an
 angle and axis and have the earth rotate freely.
 
+Test CHANGE.
+
 ## Screenshots:
 ### scene01-shadows
 This is the output of our previous raytracing engine, with the addition of
@@ -103,7 +105,7 @@ Bert Freudenberg which unfortunately is no longer available.
 We provided a [CMakeLists.txt](CMakeLists.txt) file to be used with `cmake`.
 This can be used in the following way (on the command line/shell):
 ```
-# cd into the main directory of the framework
+# cd into the main directory of the framework (containing code and scenes)
 mkdir build   # create a new build directory
 cd build      # cd into the directory
 cmake ..      # creates a Makefile

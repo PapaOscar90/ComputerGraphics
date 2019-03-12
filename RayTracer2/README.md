@@ -5,9 +5,17 @@ json file the value of the keys dealing with shadow, reflection, rotation, and
 SS. If one of these values is not present, we provide some defaults (these may
 be seen in `scene.h`). With this, we can safely continue extend functionality
 without worrying about the scenes that previously rendered no longer being
-compatible. We followed the specification of Raytracer2, and implemented shadows
-first. This was very straightforward, and needed a function that just took in
-the hit information and a light, and returns whether it is blocked by an object.
+compatible. The only extension of note was with textures in a material.
+Previously the color field was required for a material, but with this extension
+a material may have a color or a texture. To handle this exclusive requirement
+we introduced a discriminated union between `color` and `texture`. The color of
+the requisite variant is then accessed via a *match statement* in `scene.cpp :
+getColor`.
+
+We then followed the provided specification of Raytracer2, and implemented
+shadows first. This was very straightforward, and needed a function that just
+took in the hit information and a light, and returns whether it is blocked by an
+object.
 
 From this point, we then implemented the reflections, since we already had a
 light loop that added all the light sources (from the RayTracer1). Reflections

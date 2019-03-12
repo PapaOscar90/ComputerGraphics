@@ -38,26 +38,14 @@ Hit Sphere::intersect(Ray const &ray) {
   return Hit(t0, N);
 }
 
-Triple rotate(Triple const &triple, double const angle, Vector const &axis) {
-  double q0 = -cos(angle / 2);
-  double q1 = -sin(angle / 2) * axis.x;
-  double q2 = -sin(angle / 2) * axis.y;
-  double q3 = -sin(angle / 2) * axis.z;
-  Triple Q[3] = {Triple(pow(q0, 2) + pow(q1, 2) - pow(q2, 2) - pow(q3, 2),
-                        2 * (q1 * q2 - q0 * q3), 2 * (q1 * q3 + q0 * q2)),
-                 Triple(2 * (q2 * q1 + q0 * q3),
-                        pow(q0, 2) - pow(q1, 2) + pow(q2, 2) - pow(q3, 2),
-                        2 * (q2 * q3 - q0 * q1)),
-                 Triple(2 * (q3 * q1 - q0 * q2), 2 * (q3 * q2 + q0 * q1),
-                        pow(q0, 2) - pow(q1, 2) - pow(q2, 2) + pow(q3, 2))
-
-  };
-  return Triple(Q[0].dot(triple), Q[1].dot(triple), Q[2].dot(triple));
+Triple rotate(Triple const &v, double const angle, Vector const &k) {
+  return v * cos(angle) + (k.cross(v) * sin(angle)) +
+         k * (k.dot(v)) * (1 - cos(angle));
 }
 
 TextureCoordinates Sphere::textureCoordinates(Point const &point) {
   Vector hitVector = point - position;
-  hitVector = rotate(hitVector, -angle, axis);
+  hitVector = rotate(hitVector, angle, axis);
 
   TextureCoordinates hitCoordinates;
   hitCoordinates.u = (M_PI + atan2(-hitVector.y, -hitVector.x)) / (2 * M_PI);

@@ -74,6 +74,9 @@ void MainView::initializeGL() {
     // Initialize transformations
     updateProjectionTransform();
     updateModelTransforms();
+
+    // Start the timer for 60 updates per second
+    timer.start(1000.0 / 60.0);
 }
 
 void MainView::createShaderProgram()
@@ -214,6 +217,9 @@ void MainView::paintGL() {
         break;
     }
 
+    // Call for current frame movement
+    updateModelTransforms();
+
     // Set the texture and draw the mesh.
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texturePtr);
@@ -284,6 +290,11 @@ void MainView::updateModelTransforms()
     meshTransform.setToIdentity();
     meshTransform.translate(0, 0, -4);
     meshTransform.scale(scale);
+
+    // If the rotation toggle is on, rotate the object
+    if(rotationToggle)
+        rotation.setY(rotation.y() + 0.5);
+
     meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
     meshNormalTransform = meshTransform.normalMatrix();
 
@@ -316,6 +327,11 @@ void MainView::setShadingMode(ShadingMode shading)
 {
     qDebug() << "Changed shading to" << shading;
     currentShader = shading;
+}
+
+void MainView::setRotationToggle(bool toggleOn){
+    qDebug() << "Change rotation toggle to " << toggleOn;
+    rotationToggle = toggleOn;
 }
 
 // --- Private helpers

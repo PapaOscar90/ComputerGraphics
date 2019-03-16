@@ -173,6 +173,19 @@
           <string>Rotation</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QCheckBox" name="RotationToggle">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle the constant rotation of objects&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Rotate Toggle</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
@@ -236,6 +249,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="ResetRotationButton">
+            <property name="mouseTracking">
+             <bool>true</bool>
+            </property>
             <property name="text">
              <string>Reset Rotation</string>
             </property>

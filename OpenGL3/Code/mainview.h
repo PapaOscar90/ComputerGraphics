@@ -26,6 +26,10 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
                          gouraudShaderProgram,
                          phongShaderProgram;
 
+    // Store the rotation applied to each shape
+    QQuaternion rotationFactor = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+    QVector3D translationFactor = {0,0,0};
+
     // Uniforms for the normal shader.
     GLint uniformModelViewTransformNormal;
     GLint uniformProjectionTransformNormal;
@@ -86,6 +90,7 @@ public:
     void setRotation(int rotateX, int rotateY, int rotateZ);
     void setScale(int scale);
     void setShadingMode(ShadingMode shading);
+    void setRotationToggle(bool toggleOn);
 
 protected:
     void initializeGL();
@@ -123,11 +128,14 @@ private:
     void updateGouraudUniforms();
     void updatePhongUniforms();
 
+    void updateRotation();
+
     // Useful utility method to convert image to bytes.
     QVector<quint8> imageToBytes(QImage image);
 
     // The current shader to use.
     ShadingMode currentShader = PHONG;
+    bool rotationToggle = true;
 };
 
 #endif // MAINVIEW_H

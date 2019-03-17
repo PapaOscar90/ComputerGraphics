@@ -70,6 +70,7 @@ void MainView::initializeGL() {
   createShaderProgram();
   loadMesh(":/models/cat.obj");
   loadTextures(object.myTextureID);
+  object.myPosition = {0,0,-4};
 
   // Initialize transformations
   updateProjectionTransform();
@@ -308,10 +309,10 @@ void MainView::updateProjectionTransform() {
 
 void MainView::updateModelTransforms() {
   meshTransform.setToIdentity();
-  meshTransform.translate(0, 0, -4);
-  meshTransform.scale(scale);
+  meshTransform.translate(object.myPosition);
+  meshTransform.scale(object.scale);
 
-  // If the rotation toggle is on, rotate the object
+  // If the rotation toggle is on, rotate constantly
   if (rotationToggle)
     rotation.setY(rotation.y() + 0.5);
 
@@ -337,7 +338,7 @@ void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
 }
 
 void MainView::setScale(int newScale) {
-  scale = static_cast<float>(newScale) / 100.f;
+  object.scale = static_cast<float>(newScale) / 100.f;
   updateModelTransforms();
 }
 

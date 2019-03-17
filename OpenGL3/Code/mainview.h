@@ -36,6 +36,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   struct ObjectProperties {
     QQuaternion myRotation = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
     QVector3D myPosition = {0, 0, 0};
+    float scale = 1.f;
     float mySpeed = 0;
     unsigned int numVertices;
     GLuint myVAO;
@@ -81,7 +82,6 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLuint texturePtr;
 
   // Transforms
-  float scale = 1.f;
   QVector3D rotation;
   QMatrix4x4 projectionTransform;
   QMatrix3x3 meshNormalTransform;

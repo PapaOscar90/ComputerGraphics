@@ -150,7 +150,6 @@ void MainView::loadMesh(QString name) {
   // Generate VAO
   glGenVertexArrays(1, &object.myVAO);
   glBindVertexArray(object.myVAO);
-  meshVAO = object.myVAO;
 
   // Generate VBO
   glGenBuffers(1, &object.myVBO);
@@ -327,7 +326,7 @@ void MainView::updateModelTransforms() {
 
 void MainView::destroyModelBuffers() {
   glDeleteBuffers(1, &meshVBO);
-  glDeleteVertexArrays(1, &meshVAO);
+  glDeleteVertexArrays(1, &object.myVAO);
 }
 
 // --- Public interface

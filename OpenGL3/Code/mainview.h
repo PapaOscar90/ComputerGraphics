@@ -75,7 +75,6 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   GLint uniformTextureSamplerPhong;
 
   // Buffers
-  GLuint meshVBO;
   GLuint meshSize;
 
   // Texture

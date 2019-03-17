@@ -154,7 +154,6 @@ void MainView::loadMesh(QString name) {
   // Generate VBO
   glGenBuffers(1, &object.myVBO);
   glBindBuffer(GL_ARRAY_BUFFER, object.myVBO);
-  meshVBO = object.myVBO;
 
   // Write the data to the buffer
   glBufferData(GL_ARRAY_BUFFER, object.myMeshData.size() * sizeof(float),
@@ -325,7 +324,7 @@ void MainView::updateModelTransforms() {
 // --- OpenGL cleanup helpers
 
 void MainView::destroyModelBuffers() {
-  glDeleteBuffers(1, &meshVBO);
+  glDeleteBuffers(1, &object.myVBO);
   glDeleteVertexArrays(1, &object.myVAO);
 }
 

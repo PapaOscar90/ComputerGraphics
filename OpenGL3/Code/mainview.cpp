@@ -31,7 +31,7 @@ MainView::~MainView() {
 
   qDebug() << "MainView destructor";
 
-  glDeleteTextures(1, &texturePtr);
+  glDeleteTextures(1, &object.myTextureID);
 
   destroyModelBuffers();
 }
@@ -68,8 +68,8 @@ void MainView::initializeGL() {
   glClearColor(0.0, 1.0, 0.0, 1.0);
 
   createShaderProgram();
-  loadMesh();
-  loadTextures();
+  loadMesh(":/models/cat.obj");
+  loadTextures(object.myTextureID);
 
   // Initialize transformations
   updateProjectionTransform();
@@ -139,10 +139,8 @@ void MainView::createShaderProgram() {
       phongShaderProgram.uniformLocation("textureSampler");
 }
 
-void MainView::loadMesh() {
-  ObjectProperties object;
-
-  Model model(":/models/cat.obj");
+void MainView::loadMesh(QString name) {
+  Model model(name);
   model.unitize();
   object.myMeshData = model.getVNTInterleaved();
 
@@ -181,7 +179,7 @@ void MainView::loadMesh() {
   glBindVertexArray(0);
 }
 
-void MainView::loadTextures() {
+void MainView::loadTextures(GLuint &texturePtr) {
   glGenTextures(1, &texturePtr);
   loadTexture(":/textures/cat_diff.png", texturePtr);
 }
@@ -240,10 +238,10 @@ void MainView::paintGL() {
 
   // Set the texture and draw the mesh.
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texturePtr);
+  glBindTexture(GL_TEXTURE_2D, object.myTextureID);
 
-  glBindVertexArray(meshVAO);
-  glDrawArrays(GL_TRIANGLES, 0, meshSize);
+  glBindVertexArray(object.myVAO);
+  glDrawArrays(GL_TRIANGLES, 0, object.numVertices);
 
   shaderProgram->release();
 }

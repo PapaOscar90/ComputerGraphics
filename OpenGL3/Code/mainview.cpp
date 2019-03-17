@@ -228,10 +228,11 @@ void MainView::paintGL() {
 
     // Set the texture and draw the mesh.
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, objects.at(0).myTextureID);
+    auto object = objects.at(0);
+    glBindTexture(GL_TEXTURE_2D, object.myTextureID);
 
-    glBindVertexArray(objects.at(0).myVAO);
-    glDrawArrays(GL_TRIANGLES, 0, objects.at(0).numVertices);
+    glBindVertexArray(object.myVAO);
+    glDrawArrays(GL_TRIANGLES, 0, object.numVertices);
 
     shaderProgram->release();
 }

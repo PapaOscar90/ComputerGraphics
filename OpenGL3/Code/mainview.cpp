@@ -5,6 +5,9 @@
 #include <math.h>
 #include <QDateTime>
 
+
+
+
 /**
  * @brief MainView::MainView
  *
@@ -67,9 +70,12 @@ void MainView::initializeGL() {
     glDepthFunc(GL_LEQUAL);
     glClearColor(0.0, 1.0, 0.0, 1.0);
 
+
     createShaderProgram();
-    loadMesh();
-    loadTextures();
+    ObjectProperties catObject;
+    loadMesh("/models/cat.obj", &catObject);
+    loadTextures(&catObject);
+    objects.push_back(catObject);
 
     // Initialize transformations
     updateProjectionTransform();
@@ -126,24 +132,24 @@ void MainView::createShaderProgram()
     uniformTextureSamplerPhong      = phongShaderProgram.uniformLocation("textureSampler");
 }
 
-void MainView::loadMesh()
+void MainView::loadMesh(QString fileName, ObjectProperties *object)
 {
-    Model model(":/models/cat.obj");
+    Model model(fileName);
     model.unitize();
-    QVector<float> meshData = model.getVNTInterleaved();
+    object->myMeshData = model.getVNTInterleaved();
 
-    this->meshSize = model.getVertices().size();
+    object->numVertices = model.getVertices().size();
 
     // Generate VAO
-    glGenVertexArrays(1, &meshVAO);
-    glBindVertexArray(meshVAO);
+    glGenVertexArrays(1, &object->myVAO);
+    glBindVertexArray(object->myVAO);
 
     // Generate VBO
-    glGenBuffers(1, &meshVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
+    glGenBuffers(1, &object->myVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, object->myVBO);
 
     // Write the data to the buffer
-    glBufferData(GL_ARRAY_BUFFER, meshData.size() * sizeof(float), meshData.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, object->numVertices * sizeof(float), &object->myMeshData, GL_STATIC_DRAW);
 
     // Set vertex coordinates to location 0
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
@@ -161,10 +167,10 @@ void MainView::loadMesh()
     glBindVertexArray(0);
 }
 
-void MainView::loadTextures()
+void MainView::loadTextures(ObjectProperties *object)
 {
-    glGenTextures(1, &texturePtr);
-    loadTexture(":/textures/cat_diff.png", texturePtr);
+    glGenTextures(1, &object->myTextureID);
+    loadTexture(":/textures/cat_diff.png", object->myTextureID);
 }
 
 void MainView::loadTexture(QString file, GLuint texturePtr)
@@ -222,10 +228,10 @@ void MainView::paintGL() {
 
     // Set the texture and draw the mesh.
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texturePtr);
+    glBindTexture(GL_TEXTURE_2D, objects.at(0).myTextureID);
 
-    glBindVertexArray(meshVAO);
-    glDrawArrays(GL_TRIANGLES, 0, meshSize);
+    glBindVertexArray(objects.at(0).myVAO);
+    glDrawArrays(GL_TRIANGLES, 0, objects.at(0).numVertices);
 
     shaderProgram->release();
 }
@@ -295,6 +301,8 @@ void MainView::updateModelTransforms()
     if(rotationToggle)
         rotation.setY(rotation.y() + 0.5);
 
+
+
     meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
     meshNormalTransform = meshTransform.normalMatrix();
 
@@ -305,8 +313,8 @@ void MainView::updateModelTransforms()
 
 void MainView::destroyModelBuffers()
 {
-    glDeleteBuffers(1, &meshVBO);
-    glDeleteVertexArrays(1, &meshVAO);
+    glDeleteBuffers(1, &objects.at(0).myVBO);
+    glDeleteVertexArrays(1, &objects.at(0).myVAO);
 }
 
 // --- Public interface

@@ -16,6 +16,8 @@
 #include <memory>
 #include <QMatrix4x4>
 
+using namespace std;
+
 class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     Q_OBJECT
 
@@ -33,12 +35,14 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     QVector3D translationFactor = {0,0,0};
 
     // Store the properties of each object
-    struct objectProperties {
+    struct ObjectProperties {
         QQuaternion myRotation = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
         QVector3D myPosition = {0,0,0};
         float mySpeed = 0;
         unsigned int numVertices;
         GLuint myVAO;
+        GLuint myVBO;
+        QVector<float> myMeshData;
         GLuint myTextureID;
     };
 
@@ -125,11 +129,13 @@ private slots:
     void onMessageLogged( QOpenGLDebugMessage Message );
 
 private:
+    vector<ObjectProperties> objects;
+
     void createShaderProgram();
-    void loadMesh();
+    void loadMesh(QString fileName, ObjectProperties *object);
 
     // Loads texture data into the buffer of texturePtr.
-    void loadTextures();
+    void loadTextures(ObjectProperties *object);
     void loadTexture(QString file, GLuint texturePtr);
 
     void destroyModelBuffers();

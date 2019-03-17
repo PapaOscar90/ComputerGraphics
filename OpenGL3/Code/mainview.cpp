@@ -73,8 +73,8 @@ void MainView::initializeGL() {
 
     createShaderProgram();
     ObjectProperties catObject;
-    loadMesh("/models/cat.obj", &catObject);
-    loadTextures(&catObject);
+    loadMesh(":/models/cat.obj", catObject);
+    loadTextures(catObject);
     objects.push_back(catObject);
 
     // Initialize transformations
@@ -132,24 +132,24 @@ void MainView::createShaderProgram()
     uniformTextureSamplerPhong      = phongShaderProgram.uniformLocation("textureSampler");
 }
 
-void MainView::loadMesh(QString fileName, ObjectProperties *object)
+void MainView::loadMesh(QString fileName, ObjectProperties &object)
 {
     Model model(fileName);
     model.unitize();
-    object->myMeshData = model.getVNTInterleaved();
+    object.myMeshData = model.getVNTInterleaved();
 
-    object->numVertices = model.getVertices().size();
+    object.numVertices = model.getVertices().size();
 
     // Generate VAO
-    glGenVertexArrays(1, &object->myVAO);
-    glBindVertexArray(object->myVAO);
+    glGenVertexArrays(1, &object.myVAO);
+    glBindVertexArray(object.myVAO);
 
     // Generate VBO
-    glGenBuffers(1, &object->myVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, object->myVBO);
+    glGenBuffers(1, &object.myVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, object.myVBO);
 
     // Write the data to the buffer
-    glBufferData(GL_ARRAY_BUFFER, object->numVertices * sizeof(float), &object->myMeshData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, object.numVertices * sizeof(float), &object.myMeshData, GL_STATIC_DRAW);
 
     // Set vertex coordinates to location 0
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
@@ -167,10 +167,10 @@ void MainView::loadMesh(QString fileName, ObjectProperties *object)
     glBindVertexArray(0);
 }
 
-void MainView::loadTextures(ObjectProperties *object)
+void MainView::loadTextures(ObjectProperties &object)
 {
-    glGenTextures(1, &object->myTextureID);
-    loadTexture(":/textures/cat_diff.png", object->myTextureID);
+    glGenTextures(1, &object.myTextureID);
+    loadTexture(":/textures/cat_diff.png", object.myTextureID);
 }
 
 void MainView::loadTexture(QString file, GLuint texturePtr)

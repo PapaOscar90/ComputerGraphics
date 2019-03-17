@@ -132,10 +132,10 @@ private:
     vector<ObjectProperties> objects;
 
     void createShaderProgram();
-    void loadMesh(QString fileName, ObjectProperties *object);
+    void loadMesh(QString fileName, ObjectProperties &object);
 
     // Loads texture data into the buffer of texturePtr.
-    void loadTextures(ObjectProperties *object);
+    void loadTextures(ObjectProperties &object);
     void loadTexture(QString file, GLuint texturePtr);
 
     void destroyModelBuffers();

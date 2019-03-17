@@ -67,10 +67,17 @@ void MainView::initializeGL() {
   glDepthFunc(GL_LEQUAL);
   glClearColor(0.0, 1.0, 0.0, 1.0);
 
+  objects.push_back(object);
+  qDebug() << objects.size();
+
   createShaderProgram();
+
   loadMesh(":/models/cat.obj");
   loadTextures(object.myTextureID);
   object.myPosition = {0,0,-4};
+
+  objects.push_back(object);
+  qDebug() << "Object 1 VAO/VBO" << objects.at(1).myVAO << ":" << object.myVAO << objects.at(1).myVBO << ":" <<object.myVBO;
 
   // Initialize transformations
   updateProjectionTransform();
@@ -232,17 +239,19 @@ void MainView::paintGL() {
     break;
   }
 
-  // Call for current frame movement
-  updateModelTransforms();
+  for(int i=1; i<2; i++){
+    // Call for current frame movement
+    updateModelTransforms();
 
-  // Set the texture and draw the mesh.
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, object.myTextureID);
+    // Set the texture and draw the mesh.
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, objects.at(i).myTextureID);
 
-  glBindVertexArray(object.myVAO);
-  glDrawArrays(GL_TRIANGLES, 0, object.numVertices);
-
+    glBindVertexArray(objects.at(1).myVAO);
+    glDrawArrays(GL_TRIANGLES, 0, objects.at(i).numVertices);
+  }
   shaderProgram->release();
+
 }
 
 /**

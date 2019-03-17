@@ -20,25 +20,26 @@ uniform sampler2D textureSampler;
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
 out vec4 vertColour;
 
-void main()
-{
+void main() {
   // Ambient colour does not depend on any vectors.
   vec3 texColour = texture2D(textureSampler, texCoords).xyz;
-  vec3 colour    = material.x * texColour;
+  vec3 colour = material.x * texColour;
 
   // Calculate light direction vectors in the phong model.
-  vec3 lightDirection   = normalize(relativeLightPosition - vertPosition);
-  vec3 normal           = normalize(vertNormal);
+  vec3 lightDirection = normalize(relativeLightPosition - vertPosition);
+  vec3 normal = normalize(vertNormal);
 
   // Diffuse colour.
   float diffuseIntesity = max(dot(normal, lightDirection), 0);
   colour += texColour * material.y * diffuseIntesity;
 
   // Specular colour.
-  vec3 viewDirection     = normalize(-vertPosition); // The camera is always at (0, 0, 0).
-  vec3 reflectDirection  = reflect(-lightDirection, normal);
+  vec3 viewDirection =
+      normalize(-vertPosition); // The camera is always at (0, 0, 0).
+  vec3 reflectDirection = reflect(-lightDirection, normal);
   float specularIntesity = max(dot(reflectDirection, viewDirection), 0);
-  colour += texColour * lightColour * material.z * pow(specularIntesity, material.w);
+  colour +=
+      texColour * lightColour * material.z * pow(specularIntesity, material.w);
 
   vertColour = vec4(colour, 1);
 }

@@ -14,7 +14,4 @@ in vec3 vertNormal;
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
 out vec4 fColor;
 
-void main()
-{
-    fColor = vec4(normalize(vertNormal * 0.5 + 0.5), 1.0);
-}
+void main() { fColor = vec4(normalize(vertNormal * 0.5 + 0.5), 1.0); }

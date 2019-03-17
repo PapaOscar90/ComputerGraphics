@@ -3,17 +3,11 @@
 
 #include <QVector3D>
 
-struct Vertex
-{
-    QVector3D coords;
-    QVector3D normal;
+struct Vertex {
+  QVector3D coords;
+  QVector3D normal;
 
-    Vertex(QVector3D coords, QVector3D normal)
-        :
-          coords(coords),
-          normal(normal)
-    {    }
+  Vertex(QVector3D coords, QVector3D normal) : coords(coords), normal(normal) {}
 };
 
 #endif // VERTEX_H
-

@@ -16,10 +16,10 @@ uniform vec3 lightColour;
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
 out vec4 fColour;
 
-void main()
-{
+void main() {
   vec3 texColor = texture2D(textureSampler, texCoords).xyz;
 
   // Combine the received components into one colour.
-  fColour = vec4(ambient * texColor + (diffuse + specular) * lightColour * texColor, 1);
+  fColour = vec4(
+      ambient * texColor + (diffuse + specular) * lightColour * texColor, 1);
 }

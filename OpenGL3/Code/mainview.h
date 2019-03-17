@@ -3,160 +3,154 @@
 
 #include "model.h"
 
+#include <QImage>
 #include <QKeyEvent>
+#include <QMatrix4x4>
 #include <QMouseEvent>
-#include <QOpenGLWidget>
-#include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLDebugLogger>
+#include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShaderProgram>
+#include <QOpenGLWidget>
 #include <QTimer>
 #include <QVector3D>
-#include <QImage>
 #include <QVector>
 #include <memory>
-#include <QMatrix4x4>
 #include <vector>
 
 class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
-    Q_OBJECT
+  Q_OBJECT
 
-    QOpenGLDebugLogger *debugLogger;
-    QTimer timer; // timer used for animation
+  QOpenGLDebugLogger *debugLogger;
+  QTimer timer; // timer used for animation
 
-    QOpenGLShaderProgram normalShaderProgram,
-                         gouraudShaderProgram,
-                         phongShaderProgram;
+  QOpenGLShaderProgram normalShaderProgram, gouraudShaderProgram,
+      phongShaderProgram;
 
-    // Store the rotation applied to each shape
-    QQuaternion rotationFactor = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+  // Store the rotation applied to each shape
+  QQuaternion rotationFactor = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
 
-    // Store the translation applied to each shape
-    QVector3D translationFactor = {0,0,0};
+  // Store the translation applied to each shape
+  QVector3D translationFactor = {0, 0, 0};
 
+  // Store the properties of each object
+  struct ObjectProperties {
+    QQuaternion myRotation = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+    QVector3D myPosition = {0, 0, 0};
+    float mySpeed = 0;
+    unsigned int numVertices;
+    GLuint myVAO;
+    GLuint myVBO;
+    QVector<float> myMeshData;
+    GLuint myTextureID;
+  };
 
-    // Store the properties of each object
-    struct ObjectProperties {
-        QQuaternion myRotation = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
-        QVector3D myPosition = {0,0,0};
-        float mySpeed = 0;
-        unsigned int numVertices;
-        GLuint myVAO;
-        GLuint myVBO;
-        QVector<float> myMeshData;
-        GLuint myTextureID;
-    };
+  std::vector<ObjectProperties> objects;
 
-    std::vector<ObjectProperties> objects;
+  // Uniforms for the normal shader.
+  GLint uniformModelViewTransformNormal;
+  GLint uniformProjectionTransformNormal;
+  GLint uniformNormalTransformNormal;
 
-    // Uniforms for the normal shader.
-    GLint uniformModelViewTransformNormal;
-    GLint uniformProjectionTransformNormal;
-    GLint uniformNormalTransformNormal;
+  // Uniforms for the gouraud shader.
+  GLint uniformModelViewTransformGouraud;
+  GLint uniformProjectionTransformGouraud;
+  GLint uniformNormalTransformGouraud;
 
-    // Uniforms for the gouraud shader.
-    GLint uniformModelViewTransformGouraud;
-    GLint uniformProjectionTransformGouraud;
-    GLint uniformNormalTransformGouraud;
+  GLint uniformMaterialGouraud;
+  GLint uniformLightPositionGouraud;
+  GLint uniformLightColourGouraud;
 
-    GLint uniformMaterialGouraud;
-    GLint uniformLightPositionGouraud;
-    GLint uniformLightColourGouraud;
+  GLint uniformTextureSamplerGouraud;
 
-    GLint uniformTextureSamplerGouraud;
+  // Uniforms for the phong shader.
+  GLint uniformModelViewTransformPhong;
+  GLint uniformProjectionTransformPhong;
+  GLint uniformNormalTransformPhong;
 
-    // Uniforms for the phong shader.
-    GLint uniformModelViewTransformPhong;
-    GLint uniformProjectionTransformPhong;
-    GLint uniformNormalTransformPhong;
+  GLint uniformMaterialPhong;
+  GLint uniformLightPositionPhong;
+  GLint uniformLightColourPhong;
 
-    GLint uniformMaterialPhong;
-    GLint uniformLightPositionPhong;
-    GLint uniformLightColourPhong;
+  GLint uniformTextureSamplerPhong;
 
-    GLint uniformTextureSamplerPhong;
+  // Buffers
+  GLuint meshVAO;
+  GLuint meshVBO;
+  GLuint meshSize;
 
-    // Buffers
-    GLuint meshVAO;
-    GLuint meshVBO;
-    GLuint meshSize;
+  // Texture
+  GLuint texturePtr;
 
+  // Transforms
+  float scale = 1.f;
+  QVector3D rotation;
+  QMatrix4x4 projectionTransform;
+  QMatrix3x3 meshNormalTransform;
+  QMatrix4x4 meshTransform;
 
-    // Texture
-    GLuint texturePtr;
-
-    // Transforms
-    float scale = 1.f;
-    QVector3D rotation;
-    QMatrix4x4 projectionTransform;
-    QMatrix3x3 meshNormalTransform;
-    QMatrix4x4 meshTransform;
-
-    // Phong model constants.
-    QVector4D material = {0.5, 0.5, 1, 5};
-    QVector3D lightPosition = {1, 100, 1};
-    QVector3D lightColour = {1, 1, 1};
+  // Phong model constants.
+  QVector4D material = {0.5, 0.5, 1, 5};
+  QVector3D lightPosition = {1, 100, 1};
+  QVector3D lightColour = {1, 1, 1};
 
 public:
-    enum ShadingMode : GLuint
-    {
-        PHONG = 0, NORMAL, GOURAUD
-    };
+  enum ShadingMode : GLuint { PHONG = 0, NORMAL, GOURAUD };
 
-    MainView(QWidget *parent = 0);
-    ~MainView();
+  MainView(QWidget *parent = 0);
+  ~MainView();
 
-    // Functions for widget input events
-    void setRotation(int rotateX, int rotateY, int rotateZ);
-    void setScale(int scale);
-    void setShadingMode(ShadingMode shading);
-    void setRotationToggle(bool toggleOn);
+  // Functions for widget input events
+  void setRotation(int rotateX, int rotateY, int rotateZ);
+  void setScale(int scale);
+  void setShadingMode(ShadingMode shading);
+  void setRotationToggle(bool toggleOn);
 
 protected:
-    void initializeGL();
-    void resizeGL(int newWidth, int newHeight);
-    void paintGL();
+  void initializeGL();
+  void resizeGL(int newWidth, int newHeight);
+  void paintGL();
 
-    // Functions for keyboard input events
-    void keyPressEvent(QKeyEvent *ev);
-    void keyReleaseEvent(QKeyEvent *ev);
+  // Functions for keyboard input events
+  void keyPressEvent(QKeyEvent *ev);
+  void keyReleaseEvent(QKeyEvent *ev);
 
-    // Function for mouse input events
-    void mouseDoubleClickEvent(QMouseEvent *ev);
-    void mouseMoveEvent(QMouseEvent *ev);
-    void mousePressEvent(QMouseEvent *ev);
-    void mouseReleaseEvent(QMouseEvent *ev);
-    void wheelEvent(QWheelEvent *ev);
+  // Function for mouse input events
+  void mouseDoubleClickEvent(QMouseEvent *ev);
+  void mouseMoveEvent(QMouseEvent *ev);
+  void mousePressEvent(QMouseEvent *ev);
+  void mouseReleaseEvent(QMouseEvent *ev);
+  void wheelEvent(QWheelEvent *ev);
 
 private slots:
-    void onMessageLogged( QOpenGLDebugMessage Message );
+  void onMessageLogged(QOpenGLDebugMessage Message);
 
 private:
-    void createShaderProgram();
-    void loadMesh();
+  void createShaderProgram();
+  void loadMesh();
 
-    // Loads texture data into the buffer of texturePtr.
-    void loadTextures();
-    void loadTexture(QString file, GLuint texturePtr);
+  // Loads texture data into the buffer of texturePtr.
+  void loadTextures();
+  void loadTexture(QString file, GLuint texturePtr);
 
-    void destroyModelBuffers();
+  void destroyModelBuffers();
 
-    void updateProjectionTransform();
-    void updateModelTransforms();
+  void updateProjectionTransform();
+  void updateModelTransforms();
 
-    void updateNormalUniforms();
-    void updateGouraudUniforms();
-    void updatePhongUniforms();
+  void updateNormalUniforms();
+  void updateGouraudUniforms();
+  void updatePhongUniforms();
 
-    void updateRotation();
+  void updateRotation();
 
-    // Useful utility method to convert image to bytes.
-    QVector<quint8> imageToBytes(QImage image);
+  // Useful utility method to convert image to bytes.
+  QVector<quint8> imageToBytes(QImage image);
 
-    // The current shader to use.
-    ShadingMode currentShader = PHONG;
+  // The current shader to use.
+  ShadingMode currentShader = PHONG;
 
-    // Whether the user toggled the rotation on/off
-    bool rotationToggle = true;
+  // Whether the user toggled the rotation on/off
+  bool rotationToggle = true;
 };
 
 #endif // MAINVIEW_H

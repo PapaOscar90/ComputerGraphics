@@ -28,7 +28,19 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
     // Store the rotation applied to each shape
     QQuaternion rotationFactor = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+
+    // Store the translation applied to each shape
     QVector3D translationFactor = {0,0,0};
+
+    // Store the properties of each object
+    struct objectProperties {
+        QQuaternion myRotation = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+        QVector3D myPosition = {0,0,0};
+        float mySpeed = 0;
+        unsigned int numVertices;
+        GLuint myVAO;
+        GLuint myTextureID;
+    };
 
     // Uniforms for the normal shader.
     GLint uniformModelViewTransformNormal;
@@ -61,6 +73,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     GLuint meshVAO;
     GLuint meshVBO;
     GLuint meshSize;
+
 
     // Texture
     GLuint texturePtr;
@@ -135,6 +148,8 @@ private:
 
     // The current shader to use.
     ShadingMode currentShader = PHONG;
+
+    // Whether the user toggled the rotation on/off
     bool rotationToggle = true;
 };
 

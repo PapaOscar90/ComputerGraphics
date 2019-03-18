@@ -326,6 +326,7 @@ void MainView::updateProjectionTransform() {
 void MainView::updateModelTransforms(ObjectProperties &object) {
   meshTransform.setToIdentity();
   meshTransform.translate(object.myPosition);
+  meshTransform.translate(translationFactor);
   meshTransform.scale(object.scale);
 
   // If the rotation toggle is on, rotate constantly

@@ -134,7 +134,7 @@ private:
   void destroyModelBuffers();
 
   void updateProjectionTransform();
-  void updateModelTransforms(ObjectProperties object);
+  void updateModelTransforms(ObjectProperties &object);
 
   void updateNormalUniforms();
   void updateGouraudUniforms();

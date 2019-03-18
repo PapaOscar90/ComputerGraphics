@@ -74,6 +74,7 @@ void MainView::initializeGL() {
   loadTextures(":/textures/cat_diff.png", object);
   object.myPosition = {0, 0, -4};
   object.myRotation = {0.5, 0, 0};
+  object.myRotationSpeed = {0.5, 0, 0};
 
   objects.push_back(object);
 
@@ -255,7 +256,7 @@ void MainView::paintGL() {
 
     glBindVertexArray(object.myVAO);
     glDrawArrays(GL_TRIANGLES, 0, object.numVertices);
-    qDebug() << object.myPosition;
+    qDebug() << "Object rotation: " <<  object.myRotation;
     shaderProgram->release();
   }
 }
@@ -322,7 +323,7 @@ void MainView::updateProjectionTransform() {
   projectionTransform.perspective(60, aspect_ratio, 0.2f, 20);
 }
 
-void MainView::updateModelTransforms(ObjectProperties object) {
+void MainView::updateModelTransforms(ObjectProperties &object) {
   meshTransform.setToIdentity();
   meshTransform.translate(object.myPosition);
   meshTransform.scale(object.scale);
@@ -352,7 +353,6 @@ void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
 
     object.myRotation = {static_cast<float>(rotateX), static_cast<float>(rotateY),
                 static_cast<float>(rotateZ)};
-    updateModelTransforms(object);
   }
 }
 

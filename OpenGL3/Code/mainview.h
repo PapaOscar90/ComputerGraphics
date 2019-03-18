@@ -36,9 +36,9 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   struct ObjectProperties {
     QQuaternion myRotation = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
     QVector3D myPosition = {0, 0, 0};
-    QVector3D speeds = {-0.5,0,0};
+    QVector3D speeds = {0,0,0};
     float scale = 1.f;
-    unsigned int numVertices;
+    int numVertices;
     GLuint myVAO;
     GLuint myVBO;
     QVector<float> myMeshData;
@@ -141,6 +141,7 @@ private:
 
   void updateRotation();
   void updateModelPosition(ObjectProperties &object);
+  void updateModelSpeed(ObjectProperties &object);
 
   // Useful utility method to convert image to bytes.
   QVector<quint8> imageToBytes(QImage image);

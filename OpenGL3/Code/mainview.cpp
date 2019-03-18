@@ -82,6 +82,11 @@ void MainView::initializeGL() {
   object2.myPosition = {4, 2, -8};
 
   objects.push_back(object2);
+  object.myPosition = {-4, 2, -8};
+  object2.myPosition = {0,0,-8};
+  objects.push_back(object);
+  objects.push_back(object2);
+
 
   // Initialize transformations
   updateProjectionTransform();
@@ -312,7 +317,7 @@ void MainView::updateProjectionTransform() {
   float aspect_ratio =
       static_cast<float>(width()) / static_cast<float>(height());
   projectionTransform.setToIdentity();
-  projectionTransform.perspective(60, aspect_ratio, 0.2, 20);
+  projectionTransform.perspective(60, aspect_ratio, 0.2f, 20);
 }
 
 void MainView::updateModelTransforms(ObjectProperties object) {
@@ -322,7 +327,7 @@ void MainView::updateModelTransforms(ObjectProperties object) {
 
   // If the rotation toggle is on, rotate constantly
   if (rotationToggle)
-    rotation.setY(rotation.y() + 0.5);
+    rotation.setY(rotation.y() + 0.5f);
 
   meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
   meshNormalTransform = meshTransform.normalMatrix();
@@ -366,9 +371,16 @@ void MainView::setRotationToggle(bool toggleOn) {
 }
 
 void MainView::updateModelPosition(ObjectProperties &object){
-  object.myPosition.setX(object.myPosition.x() + object.speeds.x());
+  updateModelSpeed(object);
+  object.myPosition += object.speeds;
 }
 
+void MainView::updateModelSpeed(ObjectProperties &object){
+  object.speeds -= {0.0f, 0.0005f, 0.0f};
+  if(object.myPosition.y() <= 0){
+      object.speeds.setY(0.05f);
+  }
+}
 // --- Private helpers
 
 /**

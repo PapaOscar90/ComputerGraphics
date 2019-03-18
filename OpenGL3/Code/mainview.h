@@ -32,7 +32,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   // Store the translation applied to each shape
   QVector3D translationFactor = {0, 0, 0};
   QVector3D movementFactor = {0.0,0,0};
-  QVector3D cameraFactor = {-0.05,0,0};
+  QVector3D cameraFactor = {0,0,0};
 
   float mouseX = 0;
   float mouseY = 0;

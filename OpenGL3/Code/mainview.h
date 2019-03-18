@@ -127,13 +127,13 @@ private:
   void loadMesh(QString name, ObjectProperties &object);
 
   // Loads texture data into the buffer of texturePtr.
-  void loadTextures(ObjectProperties &object);
+  void loadTextures(QString textureName, ObjectProperties &object);
   void loadTexture(QString file, GLuint texturePtr);
 
   void destroyModelBuffers();
 
   void updateProjectionTransform();
-  void updateModelTransforms();
+  void updateModelTransforms(ObjectProperties object);
 
   void updateNormalUniforms();
   void updateGouraudUniforms();

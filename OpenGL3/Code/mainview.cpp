@@ -71,8 +71,9 @@ void MainView::initializeGL() {
 
   ObjectProperties object;
   loadMesh(":/models/cat.obj", object);
-  loadTextures(object);
+  loadTextures(":/textures/cat_diff.png", object);
   object.myPosition = {0,0,-4};
+
 
   objects.push_back(object);
   qDebug() << "Object 1 VAO/VBO" << objects.at(0).myVAO << ":" << object.myVAO << objects.at(0).myVBO << ":" <<object.myVBO;
@@ -80,16 +81,18 @@ void MainView::initializeGL() {
 
   ObjectProperties object2;
   loadMesh(":/models/cube.obj", object2);
-  loadTextures(object2);
-  object2.myPosition = {4,0,-4};
+  loadTextures(":/textures/rug_logo.png", object2);
+  object2.myPosition = {4,2,-8};
 
-  objects.push_back(object);
+  objects.push_back(object2);
   qDebug() << "Object 2 VAO/VBO" << objects.at(1).myVAO << ":" << object.myVAO << objects.at(1).myVBO << ":" <<object.myVBO;
 
-  qDebug() << "Object1 Size: " << objects.at(0).numVertices << ". Object2 Size: " << objects.at(1).numVertices;
+  qDebug() << "Objects- Size:" << objects.size() << ", Object1 position: " << objects.at(0).myPosition << ", 2: "<< objects.at(1).myPosition;
+  qDebug() << "Object0 Size: " << objects.at(0).numVertices << ". Object1 Size: " << objects.at(1).numVertices;
+
   // Initialize transformations
   updateProjectionTransform();
-  updateModelTransforms();
+
 
   // Start the timer for 60 updates per second
   timer.start(1000.0 / 60.0);
@@ -189,9 +192,9 @@ void MainView::loadMesh(QString name, ObjectProperties &object) {
   glEnableVertexAttribArray(2);
 }
 
-void MainView::loadTextures(ObjectProperties &object) {
+void MainView::loadTextures(QString textureName, ObjectProperties &object) {
   glGenTextures(1, &object.myTextureID);
-  loadTexture(":/textures/cat_diff.png", object.myTextureID);
+  loadTexture(textureName, object.myTextureID);
 }
 
 void MainView::loadTexture(QString file, GLuint texturePtr) {
@@ -224,37 +227,38 @@ void MainView::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Choose the selected shader.
-  QOpenGLShaderProgram *shaderProgram;
-  switch (currentShader) {
-  case NORMAL:
-    shaderProgram = &normalShaderProgram;
-    shaderProgram->bind();
-    updateNormalUniforms();
-    break;
-  case GOURAUD:
-    shaderProgram = &gouraudShaderProgram;
-    shaderProgram->bind();
-    updateGouraudUniforms();
-    break;
-  case PHONG:
-    shaderProgram = &phongShaderProgram;
-    shaderProgram->bind();
-    updatePhongUniforms();
-    break;
+
+  for(auto object : objects){
+      QOpenGLShaderProgram *shaderProgram;
+      updateModelTransforms(object);
+      switch (currentShader) {
+      case NORMAL:
+          shaderProgram = &normalShaderProgram;
+          shaderProgram->bind();
+          updateNormalUniforms();
+          break;
+      case GOURAUD:
+          shaderProgram = &gouraudShaderProgram;
+          shaderProgram->bind();
+          updateGouraudUniforms();
+          break;
+      case PHONG:
+          shaderProgram = &phongShaderProgram;
+          shaderProgram->bind();
+          updatePhongUniforms();
+          break;
+      }
+
+      // Set the texture and draw the mesh.
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_2D, object.myTextureID);
+
+      glBindVertexArray(object.myVAO);
+      glDrawArrays(GL_TRIANGLES, 0, object.numVertices);
+      qDebug() << meshTransform;
+      shaderProgram->release();
   }
 
-  for(int i=0; i<2; i++){
-    // Call for current frame movement
-    updateModelTransforms();
-
-    // Set the texture and draw the mesh.
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, objects.at(i).myTextureID);
-
-    glBindVertexArray(objects.at(i).myVAO);
-    glDrawArrays(GL_TRIANGLES, 0, objects.at(i).numVertices);
-  }
-  shaderProgram->release();
 
 }
 
@@ -320,10 +324,10 @@ void MainView::updateProjectionTransform() {
   projectionTransform.perspective(60, aspect_ratio, 0.2, 20);
 }
 
-void MainView::updateModelTransforms() {
+void MainView::updateModelTransforms(ObjectProperties object) {
   meshTransform.setToIdentity();
-  meshTransform.translate(objects.at(0).myPosition);
-  meshTransform.scale(objects.at(0).scale);
+  meshTransform.translate(object.myPosition);
+  meshTransform.scale(object.scale);
 
   // If the rotation toggle is on, rotate constantly
   if (rotationToggle)
@@ -331,8 +335,6 @@ void MainView::updateModelTransforms() {
 
   meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
   meshNormalTransform = meshTransform.normalMatrix();
-
-  update();
 }
 
 // --- OpenGL cleanup helpers
@@ -345,14 +347,18 @@ void MainView::destroyModelBuffers() {
 // --- Public interface
 
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
-  rotation = {static_cast<float>(rotateX), static_cast<float>(rotateY),
+  for(int i=0; i<2; i++){
+    rotation = {static_cast<float>(rotateX), static_cast<float>(rotateY),
               static_cast<float>(rotateZ)};
-  updateModelTransforms();
+    updateModelTransforms(objects.at(i));
+  }
 }
 
 void MainView::setScale(int newScale) {
-  objects.at(0).scale = static_cast<float>(newScale) / 100.f;
-  updateModelTransforms();
+  for(int i=0; i<2; i++){
+    objects.at(i).scale = static_cast<float>(newScale) / 100.f;
+    updateModelTransforms(objects.at(i));
+  }
 }
 
 void MainView::setShadingMode(ShadingMode shading) {

@@ -31,7 +31,7 @@ MainView::~MainView() {
 
   qDebug() << "MainView destructor";
 
-  glDeleteTextures(1, &object.myTextureID);
+  //glDeleteTextures(1, &object.myTextureID);
 
   destroyModelBuffers();
 }
@@ -67,18 +67,26 @@ void MainView::initializeGL() {
   glDepthFunc(GL_LEQUAL);
   glClearColor(0.0, 1.0, 0.0, 1.0);
 
-  objects.push_back(object);
-  qDebug() << objects.size();
-
   createShaderProgram();
 
-  loadMesh(":/models/cat.obj");
-  loadTextures(object.myTextureID);
+  ObjectProperties object;
+  loadMesh(":/models/cat.obj", object);
+  loadTextures(object);
   object.myPosition = {0,0,-4};
 
   objects.push_back(object);
-  qDebug() << "Object 1 VAO/VBO" << objects.at(1).myVAO << ":" << object.myVAO << objects.at(1).myVBO << ":" <<object.myVBO;
+  qDebug() << "Object 1 VAO/VBO" << objects.at(0).myVAO << ":" << object.myVAO << objects.at(0).myVBO << ":" <<object.myVBO;
 
+
+  ObjectProperties object2;
+  loadMesh(":/models/cube.obj", object2);
+  loadTextures(object2);
+  object2.myPosition = {4,0,-4};
+
+  objects.push_back(object);
+  qDebug() << "Object 2 VAO/VBO" << objects.at(1).myVAO << ":" << object.myVAO << objects.at(1).myVBO << ":" <<object.myVBO;
+
+  qDebug() << "Object1 Size: " << objects.at(0).numVertices << ". Object2 Size: " << objects.at(1).numVertices;
   // Initialize transformations
   updateProjectionTransform();
   updateModelTransforms();
@@ -147,7 +155,7 @@ void MainView::createShaderProgram() {
       phongShaderProgram.uniformLocation("textureSampler");
 }
 
-void MainView::loadMesh(QString name) {
+void MainView::loadMesh(QString name, ObjectProperties &object) {
   Model model(name);
   model.unitize();
   object.myMeshData = model.getVNTInterleaved();
@@ -155,13 +163,14 @@ void MainView::loadMesh(QString name) {
   object.numVertices = model.getVertices().size();
   meshSize = object.numVertices;
 
-  // Generate VAO
-  glGenVertexArrays(1, &object.myVAO);
-  glBindVertexArray(object.myVAO);
 
   // Generate VBO
   glGenBuffers(1, &object.myVBO);
   glBindBuffer(GL_ARRAY_BUFFER, object.myVBO);
+
+  // Generate VAO
+  glGenVertexArrays(1, &object.myVAO);
+  glBindVertexArray(object.myVAO);
 
   // Write the data to the buffer
   glBufferData(GL_ARRAY_BUFFER, object.myMeshData.size() * sizeof(float),
@@ -180,14 +189,11 @@ void MainView::loadMesh(QString name) {
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
                         (void *)(6 * sizeof(float)));
   glEnableVertexAttribArray(2);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
 }
 
-void MainView::loadTextures(GLuint &texturePtr) {
-  glGenTextures(1, &texturePtr);
-  loadTexture(":/textures/cat_diff.png", texturePtr);
+void MainView::loadTextures(ObjectProperties &object) {
+  glGenTextures(1, &object.myTextureID);
+  loadTexture(":/textures/cat_diff.png", object.myTextureID);
 }
 
 void MainView::loadTexture(QString file, GLuint texturePtr) {
@@ -239,7 +245,7 @@ void MainView::paintGL() {
     break;
   }
 
-  for(int i=1; i<2; i++){
+  for(int i=0; i<2; i++){
     // Call for current frame movement
     updateModelTransforms();
 
@@ -247,7 +253,7 @@ void MainView::paintGL() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, objects.at(i).myTextureID);
 
-    glBindVertexArray(objects.at(1).myVAO);
+    glBindVertexArray(objects.at(i).myVAO);
     glDrawArrays(GL_TRIANGLES, 0, objects.at(i).numVertices);
   }
   shaderProgram->release();
@@ -318,8 +324,8 @@ void MainView::updateProjectionTransform() {
 
 void MainView::updateModelTransforms() {
   meshTransform.setToIdentity();
-  meshTransform.translate(object.myPosition);
-  meshTransform.scale(object.scale);
+  meshTransform.translate(objects.at(0).myPosition);
+  meshTransform.scale(objects.at(0).scale);
 
   // If the rotation toggle is on, rotate constantly
   if (rotationToggle)
@@ -334,8 +340,8 @@ void MainView::updateModelTransforms() {
 // --- OpenGL cleanup helpers
 
 void MainView::destroyModelBuffers() {
-  glDeleteBuffers(1, &object.myVBO);
-  glDeleteVertexArrays(1, &object.myVAO);
+  glDeleteBuffers(1, &objects.at(0).myVBO);
+  glDeleteVertexArrays(1, &objects.at(0).myVAO);
 }
 
 // --- Public interface
@@ -347,7 +353,7 @@ void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
 }
 
 void MainView::setScale(int newScale) {
-  object.scale = static_cast<float>(newScale) / 100.f;
+  objects.at(0).scale = static_cast<float>(newScale) / 100.f;
   updateModelTransforms();
 }
 

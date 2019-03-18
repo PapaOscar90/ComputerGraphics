@@ -46,7 +46,6 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   };
 
   std::vector<ObjectProperties> objects;
-  ObjectProperties object;
 
   // Uniforms for the normal shader.
   GLint uniformModelViewTransformNormal;
@@ -125,10 +124,10 @@ private slots:
 
 private:
   void createShaderProgram();
-  void loadMesh(QString name);
+  void loadMesh(QString name, ObjectProperties &object);
 
   // Loads texture data into the buffer of texturePtr.
-  void loadTextures(GLuint &texturePtr);
+  void loadTextures(ObjectProperties &object);
   void loadTexture(QString file, GLuint texturePtr);
 
   void destroyModelBuffers();

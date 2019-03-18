@@ -85,7 +85,7 @@ void MainView::mouseMoveEvent(QMouseEvent *ev) {
       cameraFactor.setX(cameraFactor.x() - 0.5f);
       mouseY = ev->y();
   } else {
-      cameraFactor.setX(cameraFactor.x() + 0.5f;
+      cameraFactor.setX(cameraFactor.x() + 0.5f);
       mouseY = ev->y();
   }
   update();

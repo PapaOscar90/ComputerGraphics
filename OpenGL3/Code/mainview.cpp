@@ -79,11 +79,11 @@ void MainView::initializeGL() {
   ObjectProperties object2;
   loadMesh(":/models/cube.obj", object2);
   loadTextures(":/textures/rug_logo.png", object2);
-  object2.myPosition = {4, 2, -8};
+  object2.myPosition = {4, 7, -8};
 
   objects.push_back(object2);
-  object.myPosition = {-4, 2, -8};
-  object2.myPosition = {0,0,-8};
+  object.myPosition = {-4, 4, -8};
+  object2.myPosition = {0,1,-8};
   objects.push_back(object);
   objects.push_back(object2);
 
@@ -378,7 +378,7 @@ void MainView::updateModelPosition(ObjectProperties &object){
 void MainView::updateModelSpeed(ObjectProperties &object){
   object.speeds -= {0.0f, 0.0005f, 0.0f};
   if(object.myPosition.y() <= 0){
-      object.speeds.setY(0.05f);
+      object.speeds.setY(object.speeds.y()*-1);
   }
 }
 // --- Private helpers

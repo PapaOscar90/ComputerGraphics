@@ -34,7 +34,8 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
   // Store the properties of each object
   struct ObjectProperties {
-    QQuaternion myRotation = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
+    QVector3D myRotation = {0.0, 0.0, 0.0};
+    QVector3D myRotationSpeed = {0.0, 0.0, 0.0};
     QVector3D myPosition = {0, 0, 0};
     QVector3D speeds = {0,0,0};
     float scale = 1.f;

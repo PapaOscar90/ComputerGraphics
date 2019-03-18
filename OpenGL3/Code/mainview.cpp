@@ -73,6 +73,7 @@ void MainView::initializeGL() {
   loadMesh(":/models/cat.obj", object);
   loadTextures(":/textures/cat_diff.png", object);
   object.myPosition = {0, 0, -4};
+  object.myRotation = {0.5, 0, 0};
 
   objects.push_back(object);
 
@@ -80,6 +81,7 @@ void MainView::initializeGL() {
   loadMesh(":/models/cube.obj", object2);
   loadTextures(":/textures/rug_logo.png", object2);
   object2.myPosition = {4, 7, -8};
+  object2.myRotation = {0, 0, 0};
 
   objects.push_back(object2);
   object.myPosition = {-4, 4, -8};
@@ -327,8 +329,9 @@ void MainView::updateModelTransforms(ObjectProperties object) {
 
   // If the rotation toggle is on, rotate constantly
   if (rotationToggle)
-    rotation.setY(rotation.y() + 0.5f);
+    object.myRotation.setY(rotation.y() + 0.5f);
 
+  object.myRotation += object.myRotationSpeed;
   meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
   meshNormalTransform = meshTransform.normalMatrix();
 }
@@ -347,7 +350,7 @@ void MainView::destroyModelBuffers() {
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
   for (auto object : objects) {
 
-    rotation = {static_cast<float>(rotateX), static_cast<float>(rotateY),
+    object.myRotation = {static_cast<float>(rotateX), static_cast<float>(rotateY),
                 static_cast<float>(rotateZ)};
     updateModelTransforms(object);
   }

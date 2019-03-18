@@ -161,16 +161,14 @@ void MainView::loadMesh(QString name, ObjectProperties &object) {
   object.myMeshData = model.getVNTInterleaved();
 
   object.numVertices = model.getVertices().size();
-  meshSize = object.numVertices;
 
-
-  // Generate VBO
+  // Generate VBO/VAO
   glGenBuffers(1, &object.myVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, object.myVBO);
-
-  // Generate VAO
   glGenVertexArrays(1, &object.myVAO);
+
+  // Bind VBO/VAO
   glBindVertexArray(object.myVAO);
+  glBindBuffer(GL_ARRAY_BUFFER, object.myVBO);
 
   // Write the data to the buffer
   glBufferData(GL_ARRAY_BUFFER, object.myMeshData.size() * sizeof(float),

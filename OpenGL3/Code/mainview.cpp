@@ -329,10 +329,10 @@ void MainView::updateModelTransforms(ObjectProperties object) {
 
   // If the rotation toggle is on, rotate constantly
   if (rotationToggle)
-    object.myRotation.setY(rotation.y() + 0.5f);
+    object.myRotation.setY(object.myRotation.y() + 0.5f);
 
   object.myRotation += object.myRotationSpeed;
-  meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
+  meshTransform.rotate(QQuaternion::fromEulerAngles(object.myRotation));
   meshNormalTransform = meshTransform.normalMatrix();
 }
 

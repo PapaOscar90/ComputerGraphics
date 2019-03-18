@@ -220,8 +220,9 @@ void MainView::paintGL() {
 
   // Choose the selected shader.
 
-  for (auto object : objects) {
+  for (auto &object : objects) {
     QOpenGLShaderProgram *shaderProgram;
+    updateModelPosition(object);
     updateModelTransforms(object);
     switch (currentShader) {
     case NORMAL:
@@ -247,7 +248,7 @@ void MainView::paintGL() {
 
     glBindVertexArray(object.myVAO);
     glDrawArrays(GL_TRIANGLES, 0, object.numVertices);
-    qDebug() << meshTransform;
+    qDebug() << object.myPosition;
     shaderProgram->release();
   }
 }
@@ -331,7 +332,7 @@ void MainView::updateModelTransforms(ObjectProperties object) {
 
 void MainView::destroyModelBuffers() {
   for (auto object : objects) {
-    glDeleteBuffers(1, object.myVBO);
+    glDeleteBuffers(1, &object.myVBO);
     glDeleteVertexArrays(1, &object.myVAO);
   }
 }
@@ -362,6 +363,10 @@ void MainView::setShadingMode(ShadingMode shading) {
 void MainView::setRotationToggle(bool toggleOn) {
   qDebug() << "Change rotation toggle to " << toggleOn;
   rotationToggle = toggleOn;
+}
+
+void MainView::updateModelPosition(ObjectProperties &object){
+  object.myPosition.setX(object.myPosition.x() + object.speeds.x());
 }
 
 // --- Private helpers

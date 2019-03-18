@@ -36,8 +36,8 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   struct ObjectProperties {
     QQuaternion myRotation = QQuaternion::fromEulerAngles({0.0, 0.0, 0.0});
     QVector3D myPosition = {0, 0, 0};
+    QVector3D speeds = {-0.5,0,0};
     float scale = 1.f;
-    float mySpeed = 0;
     unsigned int numVertices;
     GLuint myVAO;
     GLuint myVBO;
@@ -140,6 +140,7 @@ private:
   void updatePhongUniforms();
 
   void updateRotation();
+  void updateModelPosition(ObjectProperties &object);
 
   // Useful utility method to convert image to bytes.
   QVector<quint8> imageToBytes(QImage image);
@@ -148,7 +149,7 @@ private:
   ShadingMode currentShader = PHONG;
 
   // Whether the user toggled the rotation on/off
-  bool rotationToggle = true;
+  bool rotationToggle = false;
 };
 
 #endif // MAINVIEW_H

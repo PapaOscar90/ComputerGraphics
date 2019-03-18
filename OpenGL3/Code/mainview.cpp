@@ -75,8 +75,6 @@ void MainView::initializeGL() {
   object.myPosition = {0, 0, -4};
 
   objects.push_back(object);
-  qDebug() << "Object 1 VAO/VBO" << objects.at(0).myVAO << ":" << object.myVAO
-           << objects.at(0).myVBO << ":" << object.myVBO;
 
   ObjectProperties object2;
   loadMesh(":/models/cube.obj", object2);
@@ -84,14 +82,6 @@ void MainView::initializeGL() {
   object2.myPosition = {4, 2, -8};
 
   objects.push_back(object2);
-  qDebug() << "Object 2 VAO/VBO" << objects.at(1).myVAO << ":" << object.myVAO
-           << objects.at(1).myVBO << ":" << object.myVBO;
-
-  qDebug() << "Objects- Size:" << objects.size()
-           << ", Object1 position: " << objects.at(0).myPosition
-           << ", 2: " << objects.at(1).myPosition;
-  qDebug() << "Object0 Size: " << objects.at(0).numVertices
-           << ". Object1 Size: " << objects.at(1).numVertices;
 
   // Initialize transformations
   updateProjectionTransform();
@@ -340,24 +330,27 @@ void MainView::updateModelTransforms(ObjectProperties object) {
 // --- OpenGL cleanup helpers
 
 void MainView::destroyModelBuffers() {
-  glDeleteBuffers(1, &objects.at(0).myVBO);
-  glDeleteVertexArrays(1, &objects.at(0).myVAO);
+  for (auto object : objects) {
+    glDeleteBuffers(1, object.myVBO);
+    glDeleteVertexArrays(1, &object.myVAO);
+  }
 }
 
 // --- Public interface
 
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
-  for (int i = 0; i < 2; i++) {
+  for (auto object : objects) {
+
     rotation = {static_cast<float>(rotateX), static_cast<float>(rotateY),
                 static_cast<float>(rotateZ)};
-    updateModelTransforms(objects.at(i));
+    updateModelTransforms(object);
   }
 }
 
 void MainView::setScale(int newScale) {
-  for (int i = 0; i < 2; i++) {
-    objects.at(i).scale = static_cast<float>(newScale) / 100.f;
-    updateModelTransforms(objects.at(i));
+  for (auto object : objects) {
+    object.scale = static_cast<float>(newScale) / 100.f;
+    updateModelTransforms(object);
   }
 }
 

@@ -256,7 +256,7 @@ void MainView::paintGL() {
 
     glBindVertexArray(object.myVAO);
     glDrawArrays(GL_TRIANGLES, 0, object.numVertices);
-    qDebug() << "Object rotation: " <<  object.myRotation;
+    //qDebug() << "Object rotation: " <<  object.myRotation;
     shaderProgram->release();
   }
 }
@@ -326,7 +326,7 @@ void MainView::updateProjectionTransform() {
 void MainView::updateModelTransforms(ObjectProperties &object) {
   meshTransform.setToIdentity();
   meshTransform.translate(object.myPosition);
-  meshTransform.translate(translationFactor);
+  updateUniversalTranslation(object);
   meshTransform.scale(object.scale);
 
   // If the rotation toggle is on, rotate constantly
@@ -351,7 +351,6 @@ void MainView::destroyModelBuffers() {
 
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ) {
   for (auto object : objects) {
-
     object.myRotation = {static_cast<float>(rotateX), static_cast<float>(rotateY),
                 static_cast<float>(rotateZ)};
   }
@@ -362,6 +361,10 @@ void MainView::setScale(int newScale) {
     object.scale = static_cast<float>(newScale) / 100.f;
     updateModelTransforms(object);
   }
+}
+
+void MainView::rotateAroundOrigin(float rotateX, float rotateY){
+  // TODO Implement mouse movement click and drag
 }
 
 void MainView::setShadingMode(ShadingMode shading) {
@@ -384,6 +387,10 @@ void MainView::updateModelSpeed(ObjectProperties &object){
   if(object.myPosition.y() <= 0){
       object.speeds.setY(object.speeds.y()*-1);
   }
+}
+
+void MainView::updateUniversalTranslation(ObjectProperties &object){
+  object.myPosition += movementFactor;
 }
 // --- Private helpers
 

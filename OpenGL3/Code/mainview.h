@@ -31,6 +31,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
   // Store the translation applied to each shape
   QVector3D translationFactor = {0, 0, 0};
+  QVector3D movementFactor = {0,0,0};
 
   // Store the properties of each object
   struct ObjectProperties {
@@ -141,6 +142,8 @@ private:
   void updatePhongUniforms();
 
   void updateRotation();
+  void rotateAroundOrigin(float rotateX, float rotateY);
+  void updateUniversalTranslation(ObjectProperties &object);
   void updateModelPosition(ObjectProperties &object);
   void updateModelSpeed(ObjectProperties &object);
 

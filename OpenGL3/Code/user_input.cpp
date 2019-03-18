@@ -7,6 +7,19 @@ void MainView::keyPressEvent(QKeyEvent *ev) {
   switch (ev->key()) {
   case 'A':
     qDebug() << "A pressed";
+    movementFactor.setX(-0.1f);
+    break;
+  case 'D':
+    qDebug() << "D pressed";
+    movementFactor.setX(0.1f);
+    break;
+  case 'W':
+    qDebug() << "W pressed";
+    movementFactor.setZ(0.1f);
+    break;
+  case 'S':
+    qDebug() << "S pressed";
+    movementFactor.setZ(-0.1f);
     break;
   default:
     // ev->key() is an integer. For alpha numeric characters keys it equivalent
@@ -25,6 +38,19 @@ void MainView::keyReleaseEvent(QKeyEvent *ev) {
   switch (ev->key()) {
   case 'A':
     qDebug() << "A released";
+    movementFactor.setX(0.0f);
+    break;
+  case 'D':
+    qDebug() << "D released";
+    movementFactor.setX(0.0f);
+    break;
+  case 'W':
+    qDebug() << "W released";
+    movementFactor.setZ(0.0f);
+    break;
+  case 'S':
+    qDebug() << "W released";
+    movementFactor.setZ(0.0f);
     break;
   default:
     qDebug() << ev->key() << "released";

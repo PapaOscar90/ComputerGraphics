@@ -73,6 +73,21 @@ void MainView::mouseDoubleClickEvent(QMouseEvent *ev) {
 void MainView::mouseMoveEvent(QMouseEvent *ev) {
   qDebug() << "x" << ev->x() << "y" << ev->y();
 
+  if (ev->x() > mouseX){
+      cameraFactor.setY(cameraFactor.y() - 0.5f);
+      mouseX = ev->x();
+  } else {
+      cameraFactor.setY(cameraFactor.y() + 0.5f);
+      mouseX = ev->x();
+  }
+
+  if (ev->y() > mouseY){
+      cameraFactor.setX(cameraFactor.x() - 0.5f);
+      mouseY = ev->y();
+  } else {
+      cameraFactor.setX(cameraFactor.x() + 0.5f;
+      mouseY = ev->y();
+  }
   update();
 }
 

@@ -325,6 +325,7 @@ void MainView::updateProjectionTransform() {
 
 void MainView::updateModelTransforms(ObjectProperties &object) {
   meshTransform.setToIdentity();
+  meshTransform.rotate(QQuaternion::fromEulerAngles(cameraFactor));
   meshTransform.translate(object.myPosition);
   updateUniversalTranslation(object);
   meshTransform.scale(object.scale);

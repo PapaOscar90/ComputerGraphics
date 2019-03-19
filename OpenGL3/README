@@ -1,8 +1,18 @@
-This is a README file
+# README file for OpenGL3 submission
 
-When submitting your assignment, describe (briefly) the changes you made and what difficulties you encountered in this file.
+## Description
+First we added a UI element that toggles rotation of objects. This is handy when viewing a single object and just want it to constantly rotate. A boolean can be added to change it to rotate the scene about a point if the user wants.
 
-Also describe what controls (key short-cuts, mouse clicks, mouse movement etc) and possible bonus assignments you implemented, so we can check them more easily.
+We then added multiple object support by storing all object properties in a struct, including position, rotation, speeds, VAO, etc. This allows a loop that iterates over each object and applies translations and rotations individually.
 
-If you have any suggestions/feedback for improving the practical assignments or support from teaching assistants, you may include it here OR post in anonymously on Nestor under Feedback.
+After that, we then added support for mouse and keyboard control, similar to our OpenGL1. WASD moves the camera, and left clicking and dragging rotates the view. It can be further refined, or changed to direct mouse control, depending on whether game style input or modeling controlers are needed.
+
+Our final submission contains a small scene that satisfies the guidelines: 2 meshes, 2 textures, 2 of each mesh, different bounce heights for animation, different base rotation speeds, and camera controls. We did not implement zoom.
+
+## Controls
+WASD - Movement
+LMB + Drag - Camera rotation
+
+## Feedback
+It was a good lab, but we had other projects to focus on for this week.
 

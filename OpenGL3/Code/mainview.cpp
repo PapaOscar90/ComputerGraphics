@@ -74,7 +74,7 @@ void MainView::initializeGL() {
   loadTextures(":/textures/cat_diff.png", object);
   object.myPosition = {0, 0, -4};
   object.myRotation = {0.5, 0, 0};
-  object.myRotationSpeed = {0.5, 0, 0};
+  object.myRotationSpeed = {0.5, 0.5, 0.5};
 
   objects.push_back(object);
 
@@ -82,7 +82,7 @@ void MainView::initializeGL() {
   loadMesh(":/models/cube.obj", object2);
   loadTextures(":/textures/rug_logo.png", object2);
   object2.myPosition = {4, 7, -8};
-  object2.myRotation = {0, 0, 0};
+  object2.myRotation = {-1, 0, 0};
 
   objects.push_back(object2);
   object.myPosition = {-4, 4, -8};

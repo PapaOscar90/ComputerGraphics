@@ -69,6 +69,7 @@ void MainView::initializeGL() {
 
   createShaderProgram();
 
+  // Create an object
   ObjectProperties object;
   loadMesh(":/models/cat.obj", object);
   loadTextures(":/textures/cat_diff.png", object);
@@ -76,17 +77,24 @@ void MainView::initializeGL() {
   object.myRotation = {0.5, 0, 0};
   object.myRotationSpeed = {0.5, 0.5, 0.5};
 
+  // Add object to objects to render
   objects.push_back(object);
 
+  // Create second object
   ObjectProperties object2;
   loadMesh(":/models/cube.obj", object2);
   loadTextures(":/textures/rug_logo.png", object2);
   object2.myPosition = {4, 7, -8};
   object2.myRotation = {-1, 0, 0};
 
+  // Add object
   objects.push_back(object2);
+
+  // Make minor adjustments, then add again to make copies
   object.myPosition = {-4, 4, -8};
   object2.myPosition = {0,1,-8};
+
+  // Add copies as new objects
   objects.push_back(object);
   objects.push_back(object2);
 
@@ -227,7 +235,6 @@ void MainView::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Choose the selected shader.
-
   for (auto &object : objects) {
     QOpenGLShaderProgram *shaderProgram;
     updateModelPosition(object);
@@ -250,13 +257,12 @@ void MainView::paintGL() {
       break;
     }
 
-    // Set the texture and draw the mesh.
+    // Set the texture and draw the mesh tied to the object.
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, object.myTextureID);
 
     glBindVertexArray(object.myVAO);
     glDrawArrays(GL_TRIANGLES, 0, object.numVertices);
-    //qDebug() << "Object rotation: " <<  object.myRotation;
     shaderProgram->release();
   }
 }
@@ -325,16 +331,18 @@ void MainView::updateProjectionTransform() {
 
 void MainView::updateModelTransforms(ObjectProperties &object) {
   meshTransform.setToIdentity();
+  // Applie camera orientation rotation
   meshTransform.rotate(QQuaternion::fromEulerAngles(cameraFactor));
   meshTransform.translate(object.myPosition);
   updateUniversalTranslation(object);
   meshTransform.scale(object.scale);
 
-  // If the rotation toggle is on, rotate constantly
+  // If the rotation toggle is on, rotate constantly for each object
   if (rotationToggle)
     object.myRotation.setY(object.myRotation.y() + 0.5f);
 
   object.myRotation += object.myRotationSpeed;
+  // Apply object rotation
   meshTransform.rotate(QQuaternion::fromEulerAngles(object.myRotation));
   meshNormalTransform = meshTransform.normalMatrix();
 }
@@ -364,10 +372,6 @@ void MainView::setScale(int newScale) {
   }
 }
 
-void MainView::rotateAroundOrigin(float rotateX, float rotateY){
-  // TODO Implement mouse movement click and drag
-}
-
 void MainView::setShadingMode(ShadingMode shading) {
   qDebug() << "Changed shading to" << shading;
   currentShader = shading;
@@ -378,11 +382,13 @@ void MainView::setRotationToggle(bool toggleOn) {
   rotationToggle = toggleOn;
 }
 
+// Update position after recalculating speed
 void MainView::updateModelPosition(ObjectProperties &object){
   updateModelSpeed(object);
   object.myPosition += object.speeds;
 }
 
+// Use simplified physics for this simple scene
 void MainView::updateModelSpeed(ObjectProperties &object){
   object.speeds -= {0.0f, 0.0005f, 0.0f};
   if(object.myPosition.y() <= 0){
@@ -390,6 +396,7 @@ void MainView::updateModelSpeed(ObjectProperties &object){
   }
 }
 
+// Update also for universal factor
 void MainView::updateUniversalTranslation(ObjectProperties &object){
   object.myPosition += movementFactor;
 }

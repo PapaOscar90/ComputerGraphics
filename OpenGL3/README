@@ -9,6 +9,16 @@ After that, we then added support for mouse and keyboard control, similar to our
 
 Our final submission contains a small scene that satisfies the guidelines for the first half: 2 meshes, 2 textures, 2 of each mesh, different bounce heights for animation, different base rotation speeds, and camera controls. We did not implement zoom (not needed).
 
+## Screenshots
+### MultipleObjects
+A simple render of MultipleObjects
+
+### ObjectsBouncing
+A GIF of the objects bouncing at different heights
+
+### IndivRotateUnivRotateMoving
+A GIF showing everything put together for guidelines satisfaction.
+
 ## Controls
 WASD - Movement
 LMB + Drag - Camera rotation
